@@ -1,0 +1,58 @@
+{
+	"info": {
+		"_postman_id": "9367aa56-42b3-4bb0-8e66-556c5e4bbed0",
+		"name": "ms-gsl",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Fase 1",
+			"item": [
+				{
+					"name": "gsl-entrega",
+					"item": [
+						{
+							"name": "All Entregas",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8001/entregas",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8001",
+									"path": [
+										"entregas"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Entrega by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8001/entregas/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8001",
+									"path": [
+										"entregas",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
