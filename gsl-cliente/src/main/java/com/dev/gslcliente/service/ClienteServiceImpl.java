@@ -7,10 +7,13 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.dev.gslcliente.entities.Cliente;
+import com.dev.gslcliente.enums.StatusCliente;
 import com.dev.gslcliente.errors.ClienteInvalidIdException;
 import com.dev.gslcliente.errors.ClienteNotFoundException;
+import com.dev.gslcliente.request.ClienteRequest;
 import com.dev.gslcliente.service.repositories.ClienteRepository;
 
 @Service
@@ -20,7 +23,18 @@ public class ClienteServiceImpl implements ClienteService {
 	private ClienteRepository repository;
 
 	@Override
-	public Cliente cadastrarCliente(@Valid Cliente cliente) {
+	public Cliente cadastrarCliente(@Valid ClienteRequest clienteRequest) {
+		Cliente cliente = new Cliente();
+		cliente.setCnpj(clienteRequest.getCnpj());
+		cliente.setDataInclusao(clienteRequest.getDataInclusao());
+		cliente.setEmail(clienteRequest.getEmail());
+		cliente.setNomeComercial(clienteRequest.getNomeComercial());
+		cliente.setRazaoSocial(clienteRequest.getRazaoSocial());
+		if (!StringUtils.hasText(clienteRequest.getStatus())) {
+			cliente.setStatus(StatusCliente.valueOf(clienteRequest.getStatus().toUpperCase()));
+		}
+		cliente.setTelefone(clienteRequest.getTelefone());
+		
 		return repository.save(cliente);
 	}
 
@@ -74,7 +88,7 @@ public class ClienteServiceImpl implements ClienteService {
 			throw new ClienteInvalidIdException("Identificador inválido:" + id);
 		}
 		if (!clienteExiste(id))
-			throw new ClienteNotFoundException("Estudante não encontrado para o ID: " + id);
+			throw new ClienteNotFoundException("Cliente não encontrado para o ID: " + id);
 	}
 
 }

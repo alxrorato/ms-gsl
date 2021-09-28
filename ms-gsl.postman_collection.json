@@ -51,6 +51,80 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "gsl-cliente",
+					"item": [
+						{
+							"name": "All Clientes",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8002/clientes",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8002",
+									"path": [
+										"clientes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cliente by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8002/clientes/buscarPorId/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8002",
+									"path": [
+										"clientes",
+										"buscarPorId",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cliente by id Copy",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"cnpj\": 65335780000176,\r\n  \"razaoSocial\": \"Supermercado ABC Ltda.\",\r\n  \"nomeComercial\": \"Supermercado ABC\",\r\n  \"email\": \"abc@gmail.com\",\r\n  \"telefone\": \"(11)98888-7777\",\r\n  \"status\": \"A\",\r\n  \"dataInclusao\": \"2021-09-27\",\r\n  \"logradouro\": \"Rua teste\",\r\n  \"numero\": 234,\r\n  \"complemento\": \"esquina\",\r\n  \"bairro\": \"Centro\",\r\n  \"cidade\": \"São Paulo\",\r\n  \"uf\": \"SP\",\r\n  \"cep\": \"01113300\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8002/clientes/add",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8002",
+									"path": [
+										"clientes",
+										"add"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		}

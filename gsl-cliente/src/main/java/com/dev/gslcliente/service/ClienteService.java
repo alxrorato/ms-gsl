@@ -5,10 +5,11 @@ import java.util.List;
 import javax.validation.Valid;
 
 import com.dev.gslcliente.entities.Cliente;
+import com.dev.gslcliente.request.ClienteRequest;
 
 public interface ClienteService {
 
-	Cliente cadastrarCliente(@Valid Cliente cliente);
+	Cliente cadastrarCliente(@Valid ClienteRequest cliente);
 	
 	List<Cliente> buscarClientes();
 	

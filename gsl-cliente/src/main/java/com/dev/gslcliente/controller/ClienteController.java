@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dev.gslcliente.entities.Cliente;
+import com.dev.gslcliente.request.ClienteRequest;
 import com.dev.gslcliente.service.ClienteService;
 
 @RestController
@@ -29,13 +30,13 @@ public class ClienteController {
 	
 	@PostMapping("add")
 	@Transactional(rollbackFor = Exception.class)
-	public ResponseEntity<?> adicionarEstudante(@Valid @RequestBody Cliente cliente) {
-		return new ResponseEntity<>(clienteService.cadastrarCliente(cliente), HttpStatus.CREATED);
+	public ResponseEntity<?> adicionarCliente(@Valid @RequestBody ClienteRequest clienteRequest) {
+		return new ResponseEntity<>(clienteService.cadastrarCliente(clienteRequest), HttpStatus.CREATED);
 	}
 
 	@PutMapping("atualizar")
-	public ResponseEntity<?> atualizarCliente(@Valid @RequestBody Cliente estudante) {
-		clienteService.atualizarCliente(estudante);
+	public ResponseEntity<?> atualizarCliente(@Valid @RequestBody Cliente cliente) {
+		clienteService.atualizarCliente(cliente);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
