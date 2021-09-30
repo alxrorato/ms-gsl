@@ -1,6 +1,8 @@
 package com.dev.gslcliente.enums;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import lombok.AllArgsConstructor;
@@ -15,6 +17,18 @@ public enum StatusCliente {
 	
 	private String codigo;
 	private String descricao;
+	
+	private static final Map<String, StatusCliente> statusByCodigo = new HashMap<>();
+	
+	static {
+		for (StatusCliente status : StatusCliente.values()) {
+			statusByCodigo.put(status.getCodigo(), status);
+		}
+	}
+	
+	public static StatusCliente getStatusByCodigo(String codigo) {
+		return statusByCodigo.get(codigo);
+	}
 	
 	public static String getCodigoByDescricao(String descricao) {
 		Optional<StatusCliente> statusCliente = 

@@ -80,7 +80,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8002/clientes/buscarPorId/1",
+									"raw": "http://localhost:8002/clientes/buscarPorId/2",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -89,20 +89,49 @@
 									"path": [
 										"clientes",
 										"buscarPorId",
-										"1"
+										"2"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "Cliente by id Copy",
+							"name": "Inserir Cliente",
 							"request": {
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"cnpj\": 65335780000176,\r\n  \"razaoSocial\": \"Supermercado ABC Ltda.\",\r\n  \"nomeComercial\": \"Supermercado ABC\",\r\n  \"email\": \"abc@gmail.com\",\r\n  \"telefone\": \"(11)98888-7777\",\r\n  \"status\": \"A\",\r\n  \"dataInclusao\": \"2021-09-27\",\r\n  \"logradouro\": \"Rua teste\",\r\n  \"numero\": 234,\r\n  \"complemento\": \"esquina\",\r\n  \"bairro\": \"Centro\",\r\n  \"cidade\": \"São Paulo\",\r\n  \"uf\": \"SP\",\r\n  \"cep\": \"01113300\"\r\n}",
+									"raw": "{\r\n  \"cnpj\": 65335780000176,\r\n  \"razaoSocial\": \"Supermercado ABC Ltda.\",\r\n  \"nomeComercial\": \"Supermercado ABC\",\r\n  \"email\": \"abc@gmail.com\",\r\n  \"telefone\": \"(11)98888-7777\",\r\n  \"endereco\": {\r\n        \"logradouro\": \"Rua teste\",\r\n        \"numero\": 234,\r\n        \"complemento\": \"esquina\",\r\n        \"bairro\": \"Centro\",\r\n        \"cidade\": \"São Paulo\",\r\n        \"uf\": \"SP\",\r\n        \"cep\": \"01113300\"\r\n  }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8002/clientes/add",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8002",
+									"path": [
+										"clientes",
+										"add"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Inserir Cliente 2",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"cnpj\": 65335780000176,\r\n  \"razaoSocial\": \"Farmacia DEF Ltda.\",\r\n  \"nomeComercial\": \"Farmacia DEF\",\r\n  \"email\": \"def@gmail.com\",\r\n  \"telefone\": \"(11)95555-66666\",\r\n  \"endereco\": {\r\n        \"logradouro\": \"Av. Paulista\",\r\n        \"numero\": 2,\r\n        \"complemento\": \"\",\r\n        \"bairro\": \"Consolação\",\r\n        \"cidade\": \"São Paulo\",\r\n        \"uf\": \"SP\",\r\n        \"cep\": \"01190909\"\r\n  }\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"

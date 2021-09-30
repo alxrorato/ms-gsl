@@ -14,6 +14,8 @@ public interface ClienteService {
 	List<Cliente> buscarClientes();
 	
 	Cliente buscarClienteById(Long id);
+
+	Cliente buscarClienteByCnpj(Long cnpj);
 	
 	List<Cliente> buscarClientesByNome(String nome);
 	
@@ -22,5 +24,5 @@ public interface ClienteService {
 	void atualizarCliente(@Valid Cliente cliente);
 	
 	void excluirClienteById(Long id);
-	
+
 }

@@ -3,7 +3,6 @@ package com.dev.gslcliente.request;
 import java.util.Date;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,13 +11,13 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClienteRequest {
+public class EnderecoRequest {
+	private String logradouro;
+	private String bairro;
+	private String cidade;
+	private String uf;
+	private String cep;
+	private Integer numero;
+	private String complemento;
 
-	private Long cnpj;
-	private String razaoSocial;
-	private String nomeComercial;
-	private String email;
-	private String telefone;
-	private EnderecoRequest endereco;
-	
 }

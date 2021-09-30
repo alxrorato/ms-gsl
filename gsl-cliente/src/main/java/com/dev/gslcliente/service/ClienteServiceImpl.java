@@ -1,5 +1,6 @@
 package com.dev.gslcliente.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,10 +8,11 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import com.dev.gslcliente.entities.Cliente;
+import com.dev.gslcliente.entities.Endereco;
 import com.dev.gslcliente.enums.StatusCliente;
+import com.dev.gslcliente.enums.UF;
 import com.dev.gslcliente.errors.ClienteInvalidIdException;
 import com.dev.gslcliente.errors.ClienteNotFoundException;
 import com.dev.gslcliente.request.ClienteRequest;
@@ -20,27 +22,40 @@ import com.dev.gslcliente.service.repositories.ClienteRepository;
 public class ClienteServiceImpl implements ClienteService {
 
 	@Autowired
-	private ClienteRepository repository;
-
+	private ClienteRepository clienteRepository;
+	
 	@Override
 	public Cliente cadastrarCliente(@Valid ClienteRequest clienteRequest) {
+		
+		verificaSeClienteExisteByCnpj(clienteRequest.getCnpj());
+		
 		Cliente cliente = new Cliente();
 		cliente.setCnpj(clienteRequest.getCnpj());
-		cliente.setDataInclusao(clienteRequest.getDataInclusao());
 		cliente.setEmail(clienteRequest.getEmail());
 		cliente.setNomeComercial(clienteRequest.getNomeComercial());
 		cliente.setRazaoSocial(clienteRequest.getRazaoSocial());
-		if (!StringUtils.hasText(clienteRequest.getStatus())) {
-			cliente.setStatus(StatusCliente.valueOf(clienteRequest.getStatus().toUpperCase()));
-		}
+		cliente.setStatus(StatusCliente.A);
+		cliente.setDataInclusao(LocalDateTime.now());
 		cliente.setTelefone(clienteRequest.getTelefone());
 		
-		return repository.save(cliente);
+		UF uf = UF.getUFBySigla(clienteRequest.getEndereco().getUf().toUpperCase());
+		Endereco endereco = new Endereco();
+		endereco.setLogradouro(clienteRequest.getEndereco().getLogradouro());
+		endereco.setNumero(clienteRequest.getEndereco().getNumero());
+		endereco.setComplemento(clienteRequest.getEndereco().getComplemento());
+		endereco.setBairro(clienteRequest.getEndereco().getBairro());
+		endereco.setCidade(clienteRequest.getEndereco().getCidade());
+		endereco.setUf(uf);
+		endereco.setCep(clienteRequest.getEndereco().getCep());
+		
+		cliente.setEndereco(endereco);
+		
+		return clienteRepository.save(cliente);
 	}
 
 	@Override
 	public List<Cliente> buscarClientes() {
-		Iterable<Cliente> it = repository.findAll();
+		Iterable<Cliente> it = clienteRepository.findAll();
 
 		List<Cliente> clientes = new ArrayList<Cliente>();
 
@@ -53,42 +68,61 @@ public class ClienteServiceImpl implements ClienteService {
 
 	@Override
 	public Cliente buscarClienteById(Long id) {
-		verificaSeClienteExiste(id);
-		return repository.findById(id).get();
+		verificaSeClienteExisteById(id);
+		return clienteRepository.findById(id).get();
 	}
 
 	@Override
 	public void atualizarCliente(@Valid Cliente cliente) {
-		verificaSeClienteExiste(cliente.getId());
-		repository.save(cliente);
+		verificaSeClienteExisteById(cliente.getId());
+		clienteRepository.save(cliente);
 	}
 
 	@Override
 	public void excluirClienteById(Long id) {
-		verificaSeClienteExiste(id);
-		repository.deleteById(id);
+		verificaSeClienteExisteById(id);
+		clienteRepository.deleteById(id);
+	}
+
+	@Override
+	public Cliente buscarClienteByCnpj(Long cnpj) {
+		List<Cliente> clientes = clienteRepository.findByCnpj(cnpj);
+		return (!clientes.isEmpty() && clientes.size() > 0) ? clientes.get(0) : null;
 	}
 
 	@Override
 	public List<Cliente> buscarClientesByNome(String nome) {
-		return repository.findByNomeComercial(nome);
+		return clienteRepository.findByNomeComercial(nome);
 	}
 
 	@Override
 	public List<Cliente> buscarClientesByContainsNome(String nome) {
-		return repository.findByNomeComercialIgnoreCaseContaining(nome);
+		return clienteRepository.findByNomeComercialIgnoreCaseContaining(nome);
 	}
 
-	private boolean clienteExiste(Long id) {
-		return(repository.findById(id).isPresent());
+	private boolean clienteExisteById(Long id) {
+		return(clienteRepository.findById(id).isPresent());
 	}
 
-	private void verificaSeClienteExiste(Long id) {
+	private void verificaSeClienteExisteById(Long id) {
 		if (id <= 0) {
 			throw new ClienteInvalidIdException("Identificador inválido:" + id);
 		}
-		if (!clienteExiste(id))
+		if (!clienteExisteById(id))
 			throw new ClienteNotFoundException("Cliente não encontrado para o ID: " + id);
 	}
 
+	private boolean clienteExisteByCnpj(Long cnpj) {
+		return(buscarClienteByCnpj(cnpj) != null ? true : false);
+	}
+
+	private void verificaSeClienteExisteByCnpj(Long cnpj) {
+		if (cnpj <= 0) {
+			throw new ClienteInvalidIdException("Cnpj inválido:" + cnpj);
+		}
+		if (clienteExisteByCnpj(cnpj)) {
+			//Criar Exception ClienteJaCadastrado
+			throw new ClienteNotFoundException("Já existe cliente cadastrado para o cnpj : " + cnpj);
+		}
+	}
 }

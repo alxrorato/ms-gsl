@@ -1,6 +1,8 @@
 package com.dev.gslcliente.enums;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import lombok.AllArgsConstructor;
@@ -39,6 +41,18 @@ public enum UF {
 	
 	private String sigla;
 	private String nome;
+
+	private static final Map<String, UF> ufBySigla = new HashMap<>();
+	
+	static {
+		for (UF uf : UF.values()) {
+			ufBySigla.put(uf.getSigla(), uf);
+		}
+	}
+	
+	public static UF getUFBySigla(String sigla) {
+		return ufBySigla.get(sigla);
+	}
 	
 	public static String getSiglaByNomeDescricao(String nome) {
 		Optional<UF> uf = 

@@ -61,7 +61,7 @@ public class Endereco implements Serializable {
 	private UF uf;
 
 	@NotBlank
-	@Size(min = 9, max = 9, message = "{Size.endereco.cep}")
+	@Size(min = 8, max = 9, message = "{Size.endereco.cep}")
 	@Column(nullable = false, length = 9)
 	private String cep;
 	
