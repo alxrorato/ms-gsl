@@ -17,6 +17,8 @@ public interface ClienteService {
 
 	Cliente buscarClienteByCnpj(Long cnpj);
 	
+	Cliente buscarClienteByCnpj(Long cnpj, boolean geraExceptionSeNaoExistir);
+	
 	List<Cliente> buscarClientesByNome(String nome);
 	
 	List<Cliente> buscarClientesByContainsNome(String nome);

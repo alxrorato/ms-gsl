@@ -13,7 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import com.dev.gslcliente.enums.StatusCliente;
 
@@ -29,19 +31,24 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "tb_cliente")
+@Table(name = "tb_cliente", uniqueConstraints = 
+	@UniqueConstraint(columnNames = "cnpj", name = "cnpj_uk"))
 public class Cliente {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) 
 	private Long id;
+	@NotNull
 	private Long cnpj;
+	@NotNull
 	private String razaoSocial;
 	private String nomeComercial;
 	private String email;
 	private String telefone;
+	@NotNull
 	@Enumerated(EnumType.STRING)
 	private StatusCliente status;
+	@NotNull
 	private LocalDateTime dataInclusao;
 	private LocalDateTime dataExclusao;
 	@Valid

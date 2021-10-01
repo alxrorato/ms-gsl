@@ -55,7 +55,7 @@ public class ClienteController {
 	
 	@GetMapping(path = "buscarPorCnpj/{cnpj}")
 	public ResponseEntity<?> buscarClientesByCnpj(@PathVariable Long cnpj) {
-		return new ResponseEntity<>(clienteService.buscarClienteByCnpj(cnpj), HttpStatus.OK);
+		return new ResponseEntity<>(clienteService.buscarClienteByCnpj(cnpj, true), HttpStatus.OK);
 	}
 
 	@GetMapping(path = "buscarPorNome/{nome}")

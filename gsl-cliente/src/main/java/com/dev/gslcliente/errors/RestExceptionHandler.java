@@ -61,6 +61,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
     
+	@ExceptionHandler(ClienteJaExisteException.class)
+    public ResponseEntity<Object> handleResourceIntegrityException(
+    		ClienteJaExisteException ex, WebRequest request) {
+
+        Map<String, Object> body = bodyResponse(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
     private Map<String, Object> bodyResponse(HttpStatus status, String message) {
 
     	Map<String, Object> body = new LinkedHashMap<>();

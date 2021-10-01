@@ -61,14 +61,15 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8002/clientes",
+									"raw": "http://localhost:8002/clientes/listar",
 									"protocol": "http",
 									"host": [
 										"localhost"
 									],
 									"port": "8002",
 									"path": [
-										"clientes"
+										"clientes",
+										"listar"
 									]
 								}
 							},
@@ -90,6 +91,27 @@
 										"clientes",
 										"buscarPorId",
 										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cliente by Cnpj",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8002/clientes/buscarPorCnpj/65335780000176",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8002",
+									"path": [
+										"clientes",
+										"buscarPorCnpj",
+										"65335780000176"
 									]
 								}
 							},

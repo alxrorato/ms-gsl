@@ -7,6 +7,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.dev.gslcliente.entities.Cliente;
@@ -14,6 +15,7 @@ import com.dev.gslcliente.entities.Endereco;
 import com.dev.gslcliente.enums.StatusCliente;
 import com.dev.gslcliente.enums.UF;
 import com.dev.gslcliente.errors.ClienteInvalidIdException;
+import com.dev.gslcliente.errors.ClienteJaExisteException;
 import com.dev.gslcliente.errors.ClienteNotFoundException;
 import com.dev.gslcliente.request.ClienteRequest;
 import com.dev.gslcliente.service.repositories.ClienteRepository;
@@ -49,7 +51,7 @@ public class ClienteServiceImpl implements ClienteService {
 		endereco.setCep(clienteRequest.getEndereco().getCep());
 		
 		cliente.setEndereco(endereco);
-		
+
 		return clienteRepository.save(cliente);
 	}
 
@@ -91,6 +93,15 @@ public class ClienteServiceImpl implements ClienteService {
 	}
 
 	@Override
+	public Cliente buscarClienteByCnpj(Long cnpj, boolean geraExceptionSeNaoExistir) {
+		List<Cliente> clientes = clienteRepository.findByCnpj(cnpj);
+		if (clientes.isEmpty() || clientes.size() == 0) {
+			throw new ClienteNotFoundException("Cliente não encontrado para o CNPJ: " + cnpj);
+		}
+		return clientes.get(0);
+	}
+	
+	@Override
 	public List<Cliente> buscarClientesByNome(String nome) {
 		return clienteRepository.findByNomeComercial(nome);
 	}
@@ -121,8 +132,7 @@ public class ClienteServiceImpl implements ClienteService {
 			throw new ClienteInvalidIdException("Cnpj inválido:" + cnpj);
 		}
 		if (clienteExisteByCnpj(cnpj)) {
-			//Criar Exception ClienteJaCadastrado
-			throw new ClienteNotFoundException("Já existe cliente cadastrado para o cnpj : " + cnpj);
+			throw new ClienteJaExisteException("Já existe cliente cadastrado para o cnpj : " + cnpj);
 		}
 	}
 }
