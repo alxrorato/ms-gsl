@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,10 +22,16 @@ import com.dev.gslcliente.entities.Cliente;
 import com.dev.gslcliente.request.ClienteRequest;
 import com.dev.gslcliente.service.ClienteService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping("/clientes")
+@Slf4j
 public class ClienteController {
 
+	@Autowired
+	private Environment env;
+	
 	@Autowired
 	private ClienteService clienteService;
 	
@@ -49,12 +56,15 @@ public class ClienteController {
 
 	@GetMapping(value = "buscarPorId/{id}")
 	public ResponseEntity<Cliente> buscarClienteById(@PathVariable Long id) {
+		log.info("PORT = " + env.getProperty("local.server.port"));
 		Cliente cliente = clienteService.buscarClienteById(id);
 		return ResponseEntity.ok(cliente);
 	}
 	
 	@GetMapping(path = "buscarPorCnpj/{cnpj}")
 	public ResponseEntity<?> buscarClientesByCnpj(@PathVariable Long cnpj) {
+		log.info("PORT = " + env.getProperty("local.server.port"));
+		log.info("Buscando cliente pelo cnpj [{}] dentro do gsl-cliente", cnpj);
 		return new ResponseEntity<>(clienteService.buscarClienteByCnpj(cnpj, true), HttpStatus.OK);
 	}
 

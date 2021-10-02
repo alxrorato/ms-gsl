@@ -1,30 +1,19 @@
-package com.dev.gslentrega.response;
-
-import java.io.Serializable;
-
-import com.dev.gslentrega.enums.UF;
+package com.dev.gslentrega.request;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class Endereco implements Serializable {
-
-	private static final long serialVersionUID = -2515059053089546417L;
-	
-	private Long id;	
+public class EnderecoRequest {
 	private String logradouro;
 	private String bairro;
 	private String cidade;
-	private UF uf;
+	private String uf;
 	private String cep;
 	private Integer numero;
 	private String complemento;

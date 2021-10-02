@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.dev.gslentrega.response.Cliente;
 
 @Component
-@FeignClient(name = "gsl-cliente", url = "localhost:8002", path = "/clientes")
+@FeignClient(name = "gsl-cliente", path = "/clientes")
 public interface ClienteFeignClient {
 
 	@GetMapping(path = "buscarPorCnpj/{cnpj}")
