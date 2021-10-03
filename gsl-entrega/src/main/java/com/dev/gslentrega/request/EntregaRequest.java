@@ -32,18 +32,17 @@ import lombok.Setter;
 public class EntregaRequest {
 
 	private Long cnpjCliente;
-	private Long cpfCnpjDestinatario;
 	private int tipoDocumentoDestinatario; //1-cpf; 2-cnpj
 	private Long documentoDestinatario;
 	private EnderecoRequest enderecoOrigem;
 	private EnderecoRequest enderecoDestino;
-	private LocalDateTime dataSolicitacao;
+	//private LocalDateTime dataSolicitacao;
 	private List<CargaRequest> cargas;
 	private String naturezaPrestacao; // Ex.: 16556 - Transporte a estabelecimento comercial 
-	private String situacaoTributaria; //Ex.: 00 - Tributação normal do ICMS
-	private Double baseCalculoImposto; // == valor total do serviço
-	private Double aliquotaIcms; // Ex.: 7%
-	private Double valorIcms; // baseCalculoImposto * aliquotaIcms / 100
+	//private String situacaoTributaria; //Ex.: 00 - Tributação normal do ICMS
+	//private Double baseCalculoImposto; // == valor total do serviço
+	//private Double aliquotaIcms; // Ex.: 7%
+	//private Double valorIcms; // baseCalculoImposto * aliquotaIcms / 100
 	private String observacoes;
 	
 }

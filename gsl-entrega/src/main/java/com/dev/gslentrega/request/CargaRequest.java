@@ -15,6 +15,7 @@ public class CargaRequest {
 	private Integer quantidade;
 	private String especie;
 	private Double peso;
+	private Double volume;
 	private Double valor;
 	private String notaFiscal;
 

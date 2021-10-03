@@ -15,6 +15,7 @@ import com.dev.gslentrega.entities.EnderecoDestino;
 import com.dev.gslentrega.entities.EnderecoOrigem;
 import com.dev.gslentrega.entities.Entrega;
 import com.dev.gslentrega.enums.StatusEntrega;
+import com.dev.gslentrega.enums.StatusPagamento;
 import com.dev.gslentrega.enums.TipoDocumento;
 import com.dev.gslentrega.enums.UF;
 import com.dev.gslentrega.errors.ClienteNotFoundException;
@@ -90,6 +91,7 @@ public class EntregaServiceImpl implements EntregaService {
 		entrega.setEnderecoDestino(enderecoDestino);
 		entrega.setDataSolicitacao(LocalDateTime.now());
 		entrega.setDataPrevisao(null); // Calcular
+		entrega.setStatusPagamento(StatusPagamento.PENDENTE);
 		entrega.setStatusEntrega(StatusEntrega.EM_ANALISE);
 		entrega.setValor(null); //calcular
 		entrega.setCargas(getCargasRequest(entregaRequest)); //grava a lista do request
