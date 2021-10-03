@@ -2,6 +2,7 @@ package com.dev.gslentrega.request;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.EnumType;
@@ -37,7 +38,7 @@ public class EntregaRequest {
 	private EnderecoRequest enderecoOrigem;
 	private EnderecoRequest enderecoDestino;
 	private LocalDateTime dataSolicitacao;
-	private CargaRequest carga;
+	private List<CargaRequest> cargas;
 	private String naturezaPrestacao; // Ex.: 16556 - Transporte a estabelecimento comercial 
 	private String situacaoTributaria; //Ex.: 00 - Tributação normal do ICMS
 	private Double baseCalculoImposto; // == valor total do serviço

@@ -6,9 +6,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.dev.gslentrega.enums.UF;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -34,6 +34,10 @@ public class Carga implements Serializable {
 	private Integer quantidade;
 	private String especie;
 	private Double peso;
+	private Double volume; // em m3
 	private Double valor;
 	private String notaFiscal;
+	@ManyToOne
+	@JoinColumn(name = "id_entrega_fk")
+	private Entrega entrega;
 }

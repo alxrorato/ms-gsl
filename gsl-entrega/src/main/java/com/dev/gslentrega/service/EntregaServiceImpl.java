@@ -1,6 +1,7 @@
 package com.dev.gslentrega.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -8,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dev.gslentrega.entities.Carga;
 import com.dev.gslentrega.entities.Endereco;
 import com.dev.gslentrega.entities.EnderecoDestino;
 import com.dev.gslentrega.entities.EnderecoOrigem;
@@ -18,6 +20,7 @@ import com.dev.gslentrega.enums.UF;
 import com.dev.gslentrega.errors.ClienteNotFoundException;
 import com.dev.gslentrega.feignclients.ClienteFeignClient;
 import com.dev.gslentrega.repositories.EntregaRepository;
+import com.dev.gslentrega.request.CargaRequest;
 import com.dev.gslentrega.request.EntregaRequest;
 import com.dev.gslentrega.response.Cliente;
 
@@ -89,9 +92,38 @@ public class EntregaServiceImpl implements EntregaService {
 		entrega.setDataPrevisao(null); // Calcular
 		entrega.setStatusEntrega(StatusEntrega.EM_ANALISE);
 		entrega.setValor(null); //calcular
-		entrega.setCarga(null); //mudar p/ oneToMany, pois pode ser uma lista
+		entrega.setCargas(getCargasRequest(entregaRequest)); //grava a lista do request
+		entrega.setValorFrete(entrega.getValorFretePeso()); //Calcular
+		entrega.setNaturezaPrestacao(null); //todo
+		entrega.setSituacaoTributaria(null);//todo
+		entrega.setBaseCalculoImposto(null); //valor total do servico (calcular)
+		entrega.setAliquotaIcms(null); //definir
+		entrega.setValorIcms(null);//calcular
+		entrega.setObservacoes(null);
 
 		return entregaRepository.save(entrega);
+	}
+
+	private List<Carga> getCargasRequest(EntregaRequest entregaRequest) {
+		List<CargaRequest> cargaRequests = entregaRequest.getCargas();
+		if (cargaRequests == null) {
+			return null;
+		}
+		
+		List<Carga> list = new ArrayList<>(cargaRequests.size());
+		for (CargaRequest cargaRequest : cargaRequests) {
+			Carga carga = new Carga();
+			carga.setEspecie(cargaRequest.getEspecie());
+			carga.setNatureza(cargaRequest.getNatureza());
+			carga.setNotaFiscal(cargaRequest.getNotaFiscal());
+			carga.setPeso(cargaRequest.getPeso());
+			carga.setQuantidade(cargaRequest.getQuantidade());
+			carga.setVolume(cargaRequest.getVolume());
+			carga.setValor(cargaRequest.getValor());
+			carga.setNotaFiscal(cargaRequest.getNotaFiscal());
+			list.add(carga);
+		}
+		return list;
 	}
 
 	private void verificaSeClienteExisteByCnpj(Long cnpjCliente) {
