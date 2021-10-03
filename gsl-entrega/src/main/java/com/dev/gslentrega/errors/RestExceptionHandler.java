@@ -43,7 +43,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	            .collect(Collectors.toList());
 	}	
 
-	// Tratamento específico para cliente não encontrado quando pesquisado por um id inexistente
 	@ExceptionHandler(ClienteNotFoundException.class)
     public ResponseEntity<Object> handleResourceNotFoundException(
     		ClienteNotFoundException ex, WebRequest request) {
@@ -52,7 +51,15 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 	
-    private Map<String, Object> bodyResponse(HttpStatus status, String message) {
+	@ExceptionHandler(ServicoIndisponivelException.class)
+    public ResponseEntity<Object> handleResourceUnavailableException(
+    		ServicoIndisponivelException ex, WebRequest request) {
+
+        Map<String, Object> body = bodyResponse(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
+	private Map<String, Object> bodyResponse(HttpStatus status, String message) {
 
     	Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", new Date());

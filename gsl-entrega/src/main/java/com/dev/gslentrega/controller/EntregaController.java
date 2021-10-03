@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dev.gslentrega.entities.Entrega;
+import com.dev.gslentrega.errors.ServicoIndisponivelException;
 import com.dev.gslentrega.request.EntregaRequest;
 import com.dev.gslentrega.response.Cliente;
 import com.dev.gslentrega.service.EntregaService;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -48,6 +50,7 @@ public class EntregaController {
 		return ResponseEntity.ok(entrega);
 	}
 
+	@HystrixCommand(fallbackMethod = "getClienteAlternativo")
 	@GetMapping(value = "/getCliente/{cnpj}")
 	public ResponseEntity<Cliente> getCliente(@PathVariable Long cnpj) {
 		log.info("Dentro do endpoint getCliente no gsl-entrega buscando pelo cnpj [{}]", cnpj);
@@ -55,4 +58,12 @@ public class EntregaController {
 		return ResponseEntity.ok(cliente);
 	}
 
+	//TODO implementar resposta amigavel de serviço indisponivel
+	public ResponseEntity<Cliente> getClienteAlternativo(Long cnpj) {
+		log.info("Dentro do metodo endpoint getCliente getClienteAlternativo");
+		//Cliente cliente = new Cliente();
+		//return ResponseEntity.ok(cliente);
+		throw new ServicoIndisponivelException("Serviço de clientes indisponível. Tente mais tarde.");
+		//return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE);
+	}
 }

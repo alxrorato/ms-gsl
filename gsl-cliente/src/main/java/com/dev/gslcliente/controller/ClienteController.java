@@ -65,6 +65,14 @@ public class ClienteController {
 	public ResponseEntity<?> buscarClientesByCnpj(@PathVariable Long cnpj) {
 		log.info("PORT = " + env.getProperty("local.server.port"));
 		log.info("Buscando cliente pelo cnpj [{}] dentro do gsl-cliente", cnpj);
+		//teste p/ estourar o timeout do balancemanto de carga, que no Ribbon o padrão é de 1s
+		/*
+		try {
+			Thread.sleep(3000L);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		*/
 		return new ResponseEntity<>(clienteService.buscarClienteByCnpj(cnpj, true), HttpStatus.OK);
 	}
 
