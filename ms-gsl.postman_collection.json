@@ -111,12 +111,12 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8002/clientes/listar",
+									"raw": "http://localhost:8001/clientes/listar",
 									"protocol": "http",
 									"host": [
 										"localhost"
 									],
-									"port": "8002",
+									"port": "8001",
 									"path": [
 										"clientes",
 										"listar"
@@ -131,12 +131,12 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8002/clientes/buscarPorId/1",
+									"raw": "http://localhost:8001/clientes/buscarPorId/1",
 									"protocol": "http",
 									"host": [
 										"localhost"
 									],
-									"port": "8002",
+									"port": "8001",
 									"path": [
 										"clientes",
 										"buscarPorId",
@@ -152,16 +152,16 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8002/clientes/buscarPorCnpj/65335780000176",
+									"raw": "http://localhost:8001/clientes/buscarPorCnpj/23871292000133",
 									"protocol": "http",
 									"host": [
 										"localhost"
 									],
-									"port": "8002",
+									"port": "8001",
 									"path": [
 										"clientes",
 										"buscarPorCnpj",
-										"65335780000176"
+										"23871292000133"
 									]
 								}
 							},
