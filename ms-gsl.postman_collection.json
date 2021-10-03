@@ -228,6 +228,239 @@
 					]
 				}
 			]
+		},
+		{
+			"name": "Fase 2",
+			"item": [
+				{
+					"name": "gsl-entrega",
+					"item": [
+						{
+							"name": "All Entregas",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8765/gsl-entrega/entregas",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8765",
+									"path": [
+										"gsl-entrega",
+										"entregas"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Entrega by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8765/gsl-entrega/entregas/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8765",
+									"path": [
+										"gsl-entrega",
+										"entregas",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Cliente",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8765/gsl-entrega/entregas/getCliente/46048362000153",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8765",
+									"path": [
+										"gsl-entrega",
+										"entregas",
+										"getCliente",
+										"46048362000153"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Solicitar Entrega",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"cnpjCliente\": 20243276000108,\r\n  \"tipoDocumentoDestinatario\": 1,\r\n  \"documentoDestinatario\": 48116028030,\r\n  \"enderecoOrigem\": {\r\n        \"logradouro\": \"Rua Origem\",\r\n        \"numero\": 111,\r\n        \"complemento\": \"esquina\",\r\n        \"bairro\": \"Centro\",\r\n        \"cidade\": \"São Paulo\",\r\n        \"uf\": \"SP\",\r\n        \"cep\": \"01113500\"\r\n  },\r\n  \"enderecoDestino\": {\r\n        \"logradouro\": \"Rua Destino\",\r\n        \"numero\": 999,\r\n        \"complemento\": \"\",\r\n        \"bairro\": \"Meireles\",\r\n        \"cidade\": \"Fortaleza\",\r\n        \"uf\": \"CE\",\r\n        \"cep\": \"92333400\"\r\n  },\r\n  \"cargas\": [\r\n      {\r\n    \t\"natureza\": \"granel\",\r\n\t    \"quantidade\": 2,\r\n\t    \"especie\": \"alimentos\",\r\n\t    \"peso\": 2,\r\n        \"volume\": 3,\r\n\t    \"valor\": 40.0,\r\n\t    \"notaFiscal\": \"NF0001\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"geral\",\r\n\t    \"quantidade\": 3,\r\n\t    \"especie\": \"brinquedos\",\r\n\t    \"peso\": 3,\r\n        \"volume\": 5,\r\n\t    \"valor\": 100.0,\r\n\t    \"notaFiscal\": \"NF0002\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"perigosa\",\r\n\t    \"quantidade\": 3,\r\n\t    \"especie\": \"substancias oxidantes\",\r\n\t    \"peso\": 50,\r\n        \"volume\": 2,\r\n\t    \"valor\": 1500.0,\r\n\t    \"notaFiscal\": \"NF0003\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"frigorificada\",\r\n\t    \"quantidade\": 20,\r\n\t    \"especie\": \"frutas\",\r\n\t    \"peso\": 45,\r\n        \"volume\": 5,\r\n\t    \"valor\": 555.0,\r\n\t    \"notaFiscal\": \"NF0004\"\r\n      }\r\n  ],\r\n  \"naturezaPrestacao\": \"16556 - Transporte a estabelecimento comercial\",\r\n  \"observacoes\": \"contem parte da carga de natureza perigosa\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8765/gsl-entrega/entregas/solicitar",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8765",
+									"path": [
+										"gsl-entrega",
+										"entregas",
+										"solicitar"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "gsl-cliente",
+					"item": [
+						{
+							"name": "All Clientes",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8765/gsl-cliente/clientes/listar",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8765",
+									"path": [
+										"gsl-cliente",
+										"clientes",
+										"listar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cliente by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8765/gsl-cliente/clientes/buscarPorId/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8765",
+									"path": [
+										"gsl-cliente",
+										"clientes",
+										"buscarPorId",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cliente by Cnpj",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8765/gsl-cliente/clientes/buscarPorCnpj/23871292000133",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8765",
+									"path": [
+										"gsl-cliente",
+										"clientes",
+										"buscarPorCnpj",
+										"23871292000133"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Inserir Cliente",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"cnpj\": 65335780000176,\r\n  \"razaoSocial\": \"Supermercado ABC Ltda.\",\r\n  \"nomeComercial\": \"Supermercado ABC\",\r\n  \"email\": \"abc@gmail.com\",\r\n  \"telefone\": \"(11)98888-7777\",\r\n  \"endereco\": {\r\n        \"logradouro\": \"Rua teste\",\r\n        \"numero\": 234,\r\n        \"complemento\": \"esquina\",\r\n        \"bairro\": \"Centro\",\r\n        \"cidade\": \"São Paulo\",\r\n        \"uf\": \"SP\",\r\n        \"cep\": \"01113300\"\r\n  }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8765/gsl-cliente/clientes/add",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8765",
+									"path": [
+										"gsl-cliente",
+										"clientes",
+										"add"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Inserir Cliente 2",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"cnpj\": 65335780000176,\r\n  \"razaoSocial\": \"Farmacia DEF Ltda.\",\r\n  \"nomeComercial\": \"Farmacia DEF\",\r\n  \"email\": \"def@gmail.com\",\r\n  \"telefone\": \"(11)95555-66666\",\r\n  \"endereco\": {\r\n        \"logradouro\": \"Av. Paulista\",\r\n        \"numero\": 2,\r\n        \"complemento\": \"\",\r\n        \"bairro\": \"Consolação\",\r\n        \"cidade\": \"São Paulo\",\r\n        \"uf\": \"SP\",\r\n        \"cep\": \"01190909\"\r\n  }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8765/gsl-cliente/clientes/add",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8765",
+									"path": [
+										"gsl-cliente",
+										"clientes",
+										"add"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
 		}
 	]
 }
