@@ -9,6 +9,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -68,7 +69,7 @@ public class Entrega implements Serializable {
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private StatusPagamento statusPagamento;
-	@OneToMany(mappedBy = "entrega")
+	@OneToMany(mappedBy = "entrega", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Carga> cargas;
 	//private Frete frete;
 	/* Calcular:

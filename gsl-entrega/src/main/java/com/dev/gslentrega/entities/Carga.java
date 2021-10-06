@@ -37,7 +37,7 @@ public class Carga implements Serializable {
 	private Double volume; // em m3
 	private Double valor;
 	private String notaFiscal;
-	@ManyToOne
-	@JoinColumn(name = "id_entrega_fk")
+	@ManyToOne(optional = true)
+	//@JoinColumn(name = "id_entrega_fk")
 	private Entrega entrega;
 }
