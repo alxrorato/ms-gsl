@@ -711,6 +711,27 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Actuator refresh",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8765/gsl-cliente/actuator/refresh",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8765",
+									"path": [
+										"gsl-cliente",
+										"actuator",
+										"refresh"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
