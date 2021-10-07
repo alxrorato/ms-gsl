@@ -690,6 +690,27 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Show cliente configs on console",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8765/gsl-cliente/clientes/configs",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8765",
+									"path": [
+										"gsl-cliente",
+										"clientes",
+										"configs"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
