@@ -1,34 +1,32 @@
-package com.dev.gsluser.controller;
+package com.dev.gsloauth.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dev.gsluser.entities.User;
-import com.dev.gsluser.service.UserService;
-
+import com.dev.gsloauth.entities.User;
+import com.dev.gsloauth.service.UserService;
 
 @RestController
 @RequestMapping(value = "/users")
 public class UserController {
 
 	@Autowired
-	private UserService userService;
-	
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<User> findById(@PathVariable Long id) {
-		User user = userService.findById(id);
-		return ResponseEntity.ok(user);
-	}	
+	private UserService service;
 
 	@GetMapping(value = "/search")
 	public ResponseEntity<User> findByEmail(@RequestParam String email) {
-		User user = userService.findByEmail(email);
-		return ResponseEntity.ok(user);
+		try {
+			User user = service.findByEmail(email);
+			return ResponseEntity.ok(user);
+		}
+		catch (IllegalArgumentException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
 	}
 
 }

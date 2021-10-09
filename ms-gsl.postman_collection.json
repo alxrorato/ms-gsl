@@ -1152,6 +1152,38 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "gsl-oauth",
+					"item": [
+						{
+							"name": "User by email",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8765/gsl-oauth/users/search?email=alexandre@gmail.com",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8765",
+									"path": [
+										"gsl-oauth",
+										"users",
+										"search"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "alexandre@gmail.com"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		}
