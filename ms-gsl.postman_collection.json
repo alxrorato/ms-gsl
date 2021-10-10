@@ -791,6 +791,16 @@
 						{
 							"name": "All Entregas",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzM5OTAxOTAsInVzZXJfbmFtZSI6Imx1Y2FzQGdtYWlsLmNvbSIsImF1dGhvcml0aWVzIjpbIlJPTEVfQ09MQUJPUkFET1IiXSwianRpIjoiY2JmNDQ3NzEtZmFmOC00ODQyLWFkYmQtOTk0NWM5MDZjZDBjIiwiY2xpZW50X2lkIjoibXlhcHBuYW1lMTIzIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl19.ttuLFZT65ZLhBKfOxNoL9FTNp6Ktd1VVZthF7dkBDpA",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
@@ -889,6 +899,16 @@
 						{
 							"name": "All Clientes",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzM5OTAxOTAsInVzZXJfbmFtZSI6Imx1Y2FzQGdtYWlsLmNvbSIsImF1dGhvcml0aWVzIjpbIlJPTEVfQ09MQUJPUkFET1IiXSwianRpIjoiY2JmNDQ3NzEtZmFmOC00ODQyLWFkYmQtOTk0NWM5MDZjZDBjIiwiY2xpZW50X2lkIjoibXlhcHBuYW1lMTIzIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl19.ttuLFZT65ZLhBKfOxNoL9FTNp6Ktd1VVZthF7dkBDpA",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
@@ -1211,12 +1231,12 @@
 									"urlencoded": [
 										{
 											"key": "username",
-											"value": "jose@gmail.com",
+											"value": "cristina@gmail.com",
 											"type": "text"
 										},
 										{
 											"key": "password",
-											"value": "123456",
+											"value": "123458",
 											"type": "text"
 										},
 										{
