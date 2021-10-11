@@ -796,7 +796,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzM5OTAxOTAsInVzZXJfbmFtZSI6Imx1Y2FzQGdtYWlsLmNvbSIsImF1dGhvcml0aWVzIjpbIlJPTEVfQ09MQUJPUkFET1IiXSwianRpIjoiY2JmNDQ3NzEtZmFmOC00ODQyLWFkYmQtOTk0NWM5MDZjZDBjIiwiY2xpZW50X2lkIjoibXlhcHBuYW1lMTIzIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl19.ttuLFZT65ZLhBKfOxNoL9FTNp6Ktd1VVZthF7dkBDpA",
+											"value": "{{token}}",
 											"type": "string"
 										}
 									]
@@ -804,12 +804,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8765/gsl-entrega/entregas",
-									"protocol": "http",
+									"raw": "{{api-gateway}}/gsl-entrega/entregas",
 									"host": [
-										"localhost"
+										"{{api-gateway}}"
 									],
-									"port": "8765",
 									"path": [
 										"gsl-entrega",
 										"entregas"
@@ -821,15 +819,23 @@
 						{
 							"name": "Entrega by id",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8765/gsl-entrega/entregas/1",
-									"protocol": "http",
+									"raw": "{{api-gateway}}/gsl-entrega/entregas/1",
 									"host": [
-										"localhost"
+										"{{api-gateway}}"
 									],
-									"port": "8765",
 									"path": [
 										"gsl-entrega",
 										"entregas",
@@ -842,15 +848,23 @@
 						{
 							"name": "Get Cliente",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8765/gsl-entrega/entregas/getCliente/46048362000153",
-									"protocol": "http",
+									"raw": "{{api-gateway}}/gsl-entrega/entregas/getCliente/46048362000153",
 									"host": [
-										"localhost"
+										"{{api-gateway}}"
 									],
-									"port": "8765",
 									"path": [
 										"gsl-entrega",
 										"entregas",
@@ -864,6 +878,16 @@
 						{
 							"name": "Solicitar Entrega",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "POST",
 								"header": [],
 								"body": {
@@ -876,12 +900,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8765/gsl-entrega/entregas/solicitar",
-									"protocol": "http",
+									"raw": "{{api-gateway}}/gsl-entrega/entregas/solicitar",
 									"host": [
-										"localhost"
+										"{{api-gateway}}"
 									],
-									"port": "8765",
 									"path": [
 										"gsl-entrega",
 										"entregas",
@@ -904,7 +926,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzM5OTAxOTAsInVzZXJfbmFtZSI6Imx1Y2FzQGdtYWlsLmNvbSIsImF1dGhvcml0aWVzIjpbIlJPTEVfQ09MQUJPUkFET1IiXSwianRpIjoiY2JmNDQ3NzEtZmFmOC00ODQyLWFkYmQtOTk0NWM5MDZjZDBjIiwiY2xpZW50X2lkIjoibXlhcHBuYW1lMTIzIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl19.ttuLFZT65ZLhBKfOxNoL9FTNp6Ktd1VVZthF7dkBDpA",
+											"value": "{{token}}",
 											"type": "string"
 										}
 									]
@@ -912,12 +934,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8765/gsl-cliente/clientes/listar",
-									"protocol": "http",
+									"raw": "{{api-gateway}}/gsl-cliente/clientes/listar",
 									"host": [
-										"localhost"
+										"{{api-gateway}}"
 									],
-									"port": "8765",
 									"path": [
 										"gsl-cliente",
 										"clientes",
@@ -930,15 +950,23 @@
 						{
 							"name": "Cliente by id",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8765/gsl-cliente/clientes/buscarPorId/1",
-									"protocol": "http",
+									"raw": "{{api-gateway}}/gsl-cliente/clientes/buscarPorId/1",
 									"host": [
-										"localhost"
+										"{{api-gateway}}"
 									],
-									"port": "8765",
 									"path": [
 										"gsl-cliente",
 										"clientes",
@@ -952,15 +980,23 @@
 						{
 							"name": "Cliente by Cnpj",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8765/gsl-cliente/clientes/buscarPorCnpj/23871292000133",
-									"protocol": "http",
+									"raw": "{{api-gateway}}/gsl-cliente/clientes/buscarPorCnpj/23871292000133",
 									"host": [
-										"localhost"
+										"{{api-gateway}}"
 									],
-									"port": "8765",
 									"path": [
 										"gsl-cliente",
 										"clientes",
@@ -974,6 +1010,16 @@
 						{
 							"name": "Inserir Cliente",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "POST",
 								"header": [],
 								"body": {
@@ -986,12 +1032,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8765/gsl-cliente/clientes/add",
-									"protocol": "http",
+									"raw": "{{api-gateway}}/gsl-cliente/clientes/add",
 									"host": [
-										"localhost"
+										"{{api-gateway}}"
 									],
-									"port": "8765",
 									"path": [
 										"gsl-cliente",
 										"clientes",
@@ -1004,6 +1048,16 @@
 						{
 							"name": "Inserir Cliente 2",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "POST",
 								"header": [],
 								"body": {
@@ -1016,12 +1070,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8765/gsl-cliente/clientes/add",
-									"protocol": "http",
+									"raw": "{{api-gateway}}/gsl-cliente/clientes/add",
 									"host": [
-										"localhost"
+										"{{api-gateway}}"
 									],
-									"port": "8765",
 									"path": [
 										"gsl-cliente",
 										"clientes",
@@ -1034,15 +1086,23 @@
 						{
 							"name": "Show cliente configs on console",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8765/gsl-cliente/clientes/configs",
-									"protocol": "http",
+									"raw": "{{api-gateway}}/gsl-cliente/clientes/configs",
 									"host": [
-										"localhost"
+										"{{api-gateway}}"
 									],
-									"port": "8765",
 									"path": [
 										"gsl-cliente",
 										"clientes",
@@ -1055,15 +1115,23 @@
 						{
 							"name": "Actuator refresh",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "POST",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8765/gsl-cliente/actuator/refresh",
-									"protocol": "http",
+									"raw": "{{api-gateway}}/gsl-cliente/actuator/refresh",
 									"host": [
-										"localhost"
+										"{{api-gateway}}"
 									],
-									"port": "8765",
 									"path": [
 										"gsl-cliente",
 										"actuator",
@@ -1081,15 +1149,23 @@
 						{
 							"name": "gsl-cliente configs default profile",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8888/gsl-cliente/default",
-									"protocol": "http",
+									"raw": "{{config-host}}/gsl-cliente/default",
 									"host": [
-										"localhost"
+										"{{config-host}}"
 									],
-									"port": "8888",
 									"path": [
 										"gsl-cliente",
 										"default"
@@ -1101,15 +1177,23 @@
 						{
 							"name": "gsl-cliente configs test profile",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8888/gsl-cliente/test",
-									"protocol": "http",
+									"raw": "{{config-host}}/gsl-cliente/test",
 									"host": [
-										"localhost"
+										"{{config-host}}"
 									],
-									"port": "8888",
 									"path": [
 										"gsl-cliente",
 										"test"
@@ -1126,15 +1210,23 @@
 						{
 							"name": "User by id",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8765/gsl-user/users/4",
-									"protocol": "http",
+									"raw": "{{api-gateway}}/gsl-user/users/4",
 									"host": [
-										"localhost"
+										"{{api-gateway}}"
 									],
-									"port": "8765",
 									"path": [
 										"gsl-user",
 										"users",
@@ -1147,15 +1239,23 @@
 						{
 							"name": "User by email",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8765/gsl-user/users/search?email=lucas@gmail.com",
-									"protocol": "http",
+									"raw": "{{api-gateway}}/gsl-user/users/search?email=lucas@gmail.com",
 									"host": [
-										"localhost"
+										"{{api-gateway}}"
 									],
-									"port": "8765",
 									"path": [
 										"gsl-user",
 										"users",
@@ -1180,17 +1280,22 @@
 							"name": "User by email",
 							"request": {
 								"auth": {
-									"type": "noauth"
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
 								},
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8765/gsl-oauth/users/search?email=alexandre@gmail.com",
-									"protocol": "http",
+									"raw": "{{api-gateway}}/gsl-oauth/users/search?email=alexandre@gmail.com",
 									"host": [
-										"localhost"
+										"{{api-gateway}}"
 									],
-									"port": "8765",
 									"path": [
 										"gsl-oauth",
 										"users",
@@ -1208,18 +1313,33 @@
 						},
 						{
 							"name": "Login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (responseCode.code >= 200 && responseCode.code < 300) {\r",
+											"    var json = JSON.parse(responseBody);\r",
+											"    postman.setEnvironmentVariable('token', json.access_token);\r",
+											"}\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
 							"request": {
 								"auth": {
 									"type": "basic",
 									"basic": [
 										{
 											"key": "password",
-											"value": "myappsecret123",
+											"value": "{{client-secret}}",
 											"type": "string"
 										},
 										{
 											"key": "username",
-											"value": "myappname123",
+											"value": "{{client-name}}",
 											"type": "string"
 										}
 									]
@@ -1231,12 +1351,12 @@
 									"urlencoded": [
 										{
 											"key": "username",
-											"value": "cristina@gmail.com",
+											"value": "{{username}}",
 											"type": "text"
 										},
 										{
 											"key": "password",
-											"value": "123458",
+											"value": "{{password}}",
 											"type": "text"
 										},
 										{
@@ -1247,12 +1367,10 @@
 									]
 								},
 								"url": {
-									"raw": "http://localhost:8765/gsl-oauth/oauth/token",
-									"protocol": "http",
+									"raw": "{{api-gateway}}/gsl-oauth/oauth/token",
 									"host": [
-										"localhost"
+										"{{api-gateway}}"
 									],
-									"port": "8765",
 									"path": [
 										"gsl-oauth",
 										"oauth",
