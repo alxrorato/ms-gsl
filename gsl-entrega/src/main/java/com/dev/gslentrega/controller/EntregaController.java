@@ -44,12 +44,18 @@ public class EntregaController {
 		return ResponseEntity.ok(list);
 	}	
 
-	@GetMapping(value = "/{id}")
+	@GetMapping(value = "/buscarPorId/{id}")
 	public ResponseEntity<Entrega> findById(@PathVariable Long id) {
 		Entrega entrega = entregaService.buscarEntregaById(id);
 		return ResponseEntity.ok(entrega);
 	}
 
+	@GetMapping(value = "/buscarPorCodigoSolicitacao/{codigoSolicitacao}")
+	public ResponseEntity<Entrega> findByCodigoSolicitacao(@PathVariable Long codigoSolicitacao) {
+		Entrega entrega = entregaService.buscarEntregaByCodigoSolicitacao(codigoSolicitacao);
+		return ResponseEntity.ok(entrega);
+	}
+	
 	@HystrixCommand(fallbackMethod = "getClienteAlternativo")
 	@GetMapping(value = "/getCliente/{cnpj}")
 	public ResponseEntity<Cliente> getCliente(@PathVariable Long cnpj) {

@@ -17,4 +17,6 @@ public interface EntregaService {
 	Cliente getCliente(Long cnpj);
 
 	Entrega cadastrarEntrega(@Valid EntregaRequest entregaRequest);
+	
+	Entrega buscarEntregaByCodigoSolicitacao(Long codigoSolicitacao);
 }

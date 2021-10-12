@@ -6,4 +6,5 @@ import com.dev.gslentrega.entities.Entrega;
 
 public interface EntregaRepository extends JpaRepository<Entrega, Long>{
 
+	Entrega findByCodigoSolicitacao(Long codigoSolicitacao);
 }

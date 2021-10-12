@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dev.gslentrega.entities.Carga;
-import com.dev.gslentrega.entities.Endereco;
 import com.dev.gslentrega.entities.EnderecoDestino;
 import com.dev.gslentrega.entities.EnderecoOrigem;
 import com.dev.gslentrega.entities.Entrega;
@@ -19,11 +18,13 @@ import com.dev.gslentrega.enums.StatusPagamento;
 import com.dev.gslentrega.enums.TipoDocumento;
 import com.dev.gslentrega.enums.UF;
 import com.dev.gslentrega.errors.ClienteNotFoundException;
+import com.dev.gslentrega.errors.EntregaNotFoundException;
 import com.dev.gslentrega.feignclients.ClienteFeignClient;
 import com.dev.gslentrega.repositories.EntregaRepository;
 import com.dev.gslentrega.request.CargaRequest;
 import com.dev.gslentrega.request.EntregaRequest;
 import com.dev.gslentrega.response.Cliente;
+import com.dev.gslentrega.utils.RandomUtils;
 
 @Service
 public class EntregaServiceImpl implements EntregaService {
@@ -39,9 +40,19 @@ public class EntregaServiceImpl implements EntregaService {
 		return entregaRepository.findAll();
 	}
 
+	private static final long START_RANDOM_NUMBER = 100000000000L;
+	private static final long END_RANDOM_NUMBER = 999999999999L;	
+	
 	@Override
 	public Entrega buscarEntregaById(Long id) {
+		verificaSeEntregaExisteById(id);
 		return entregaRepository.findById(id).get();
+	}
+
+	@Override
+	public Entrega buscarEntregaByCodigoSolicitacao(Long codigoSolicitacao) {
+		verificaSeEntregaExisteByCodigoSolicitacao(codigoSolicitacao);
+		return entregaRepository.findByCodigoSolicitacao(codigoSolicitacao);
 	}
 
 	public boolean clienteExists(Long cnpj) {
@@ -82,7 +93,7 @@ public class EntregaServiceImpl implements EntregaService {
 		enderecoDestino.setCep(entregaRequest.getEnderecoDestino().getCep());
 
 		Entrega entrega = new Entrega();
-		entrega.setCodigoSolicitacao(null); //Gerar
+		entrega.setCodigoSolicitacao(getNovoCodigoSolicitacao(START_RANDOM_NUMBER, END_RANDOM_NUMBER));
 		entrega.setCnpjCliente(entregaRequest.getCnpjCliente());
 		entrega.setTipoDocumentoDestinatario(entregaRequest.getTipoDocumentoDestinatario() == 1 
 				? TipoDocumento.CPF : TipoDocumento.CNPJ);
@@ -134,4 +145,36 @@ public class EntregaServiceImpl implements EntregaService {
 		}
 		
 	}
+
+	private boolean codigoSolicitacaoExists(long codigoSolicitacao) {
+		return entregaRepository.findByCodigoSolicitacao(codigoSolicitacao) != null ? true : false;
+	}
+	
+	private Long getNovoCodigoSolicitacao(long startRandomNumber, long endRandomNumber) {
+		long newCode;
+		
+		do {
+			newCode = RandomUtils.getRandomNumber(startRandomNumber, endRandomNumber);
+		} while (codigoSolicitacaoExists(newCode));
+		return newCode;
+	}
+
+	private void verificaSeEntregaExisteById(Long id) {
+		if (!entregaExisteById(id))
+			throw new EntregaNotFoundException("Entrega não encontrada para o ID: " + id);
+	}
+
+	private boolean entregaExisteById(Long id) {
+		return(entregaRepository.findById(id).isPresent());
+	}
+
+	private void verificaSeEntregaExisteByCodigoSolicitacao(Long codigoSolicitacao) {
+		if (!entregaExisteByCodigoSolicitacao(codigoSolicitacao))
+			throw new EntregaNotFoundException("Entrega não encontrada para o código de solicitação: " + codigoSolicitacao);
+	}
+
+	private boolean entregaExisteByCodigoSolicitacao(Long codigoSolicitacao) {
+		return entregaRepository.findByCodigoSolicitacao(codigoSolicitacao) != null ? true : false;
+	}
+
 }

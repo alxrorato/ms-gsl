@@ -17,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -36,7 +37,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "tb_entrega")
+@Table(name = "tb_entrega", uniqueConstraints = 
+	@UniqueConstraint(columnNames = "codigoSolicitacao", name = "cod_solic_uk"))
 public class Entrega implements Serializable {
 
 	private static final long serialVersionUID = -6034382672775937921L;
@@ -69,7 +71,7 @@ public class Entrega implements Serializable {
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private StatusPagamento statusPagamento;
-	@OneToMany(mappedBy = "entrega", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(/*mappedBy = "entrega", */fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Carga> cargas;
 	//private Frete frete;
 	/* Calcular:

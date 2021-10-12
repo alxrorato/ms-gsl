@@ -832,14 +832,45 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{api-gateway}}/gsl-entrega/entregas/1",
+									"raw": "{{api-gateway}}/gsl-entrega/entregas/buscarPorId/1",
 									"host": [
 										"{{api-gateway}}"
 									],
 									"path": [
 										"gsl-entrega",
 										"entregas",
+										"buscarPorId",
 										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Entrega by Codigo Solicitacao",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{api-gateway}}/gsl-entrega/entregas/buscarPorCodigoSolicitacao/676831576526",
+									"host": [
+										"{{api-gateway}}"
+									],
+									"path": [
+										"gsl-entrega",
+										"entregas",
+										"buscarPorCodigoSolicitacao",
+										"676831576526"
 									]
 								}
 							},

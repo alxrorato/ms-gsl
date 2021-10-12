@@ -51,6 +51,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 	
+	@ExceptionHandler(EntregaNotFoundException.class)
+    public ResponseEntity<Object> handleResourceNotFoundException(
+    		EntregaNotFoundException ex, WebRequest request) {
+
+        Map<String, Object> body = bodyResponse(HttpStatus.NOT_FOUND, ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+	
 	@ExceptionHandler(ServicoIndisponivelException.class)
     public ResponseEntity<Object> handleResourceUnavailableException(
     		ServicoIndisponivelException ex, WebRequest request) {
