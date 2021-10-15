@@ -48,6 +48,8 @@ public class EntregaServiceImpl implements EntregaService {
 	private static final String SITUACAO_TRIBUTARIA = "00 - Tributação normal ICMS";
 	private static final Double PESO_CUBADO_EM_KG_PARA_1M3 = 300.0;
 	private static final Double ALIQUOTA_ICMS = 12.0;
+	private static final Double TAXA_SEGURO = 0.03;
+	private static final Double IOF = 7.38;
 	
 	@Override
 	public Entrega buscarEntregaById(Long id) {
@@ -113,12 +115,13 @@ public class EntregaServiceImpl implements EntregaService {
 		entrega.setStatusEntrega(StatusEntrega.EM_ANALISE);
 		entrega.setCargas(getCargasRequest(entregaRequest)); //grava a lista do request
 		entrega.setValorFrete(getValorFretePeso(entrega.getCargas()));
-		entrega.setValor(entrega.getValorFrete()); // será igual ao valor do frete
+		entrega.setValorTotal(entrega.getValorFrete()); // será igual ao valor do frete
 		entrega.setNaturezaPrestacao(entregaRequest.getNaturezaPrestacao());
 		entrega.setSituacaoTributaria(SITUACAO_TRIBUTARIA);
-		entrega.setBaseCalculoImposto(null); //valor total do servico (calcular)
+		entrega.setBaseCalculoImposto(entrega.getValorTotal()); // será igual ao valor total do servico
 		entrega.setAliquotaIcms(ALIQUOTA_ICMS); //12% da base de cálculo
-		entrega.setValorIcms(null);//calcular
+		entrega.setValorIcms(getValorIcmsCalculado(entrega.getBaseCalculoImposto(), ALIQUOTA_ICMS));
+		entrega.setValorTotalSeguroCarga(getValorTotalSeguroCarga(entrega.getCargas()));
 		entrega.setObservacoes(null);
 
 		return entregaRepository.save(entrega);
@@ -175,6 +178,35 @@ public class EntregaServiceImpl implements EntregaService {
 		return volume * PESO_CUBADO_EM_KG_PARA_1M3;
 	}
 	
+	private Double getValorIcmsCalculado(Double valor, Double aliquota) {
+		return valor * aliquota / 100;
+	}
+
+	/* Cálculo do seguro da carga
+	Consideramos uma taxa fixa de 0,03% .
+
+	Valor da IS = R$ 2.000.000,00
+
+	Resultado:
+	Prêmio Líquido = R$ 2.000.000,00 * 0,03% = R$ 600,00, portanto abaixo do prêmio mínimo , será cobrado R$ 600,00.
+	Prêmio Total = Prêmio Liquido + IOF ( 7,38%);
+	IOF = 600,00 * 7,38% = 44,28
+	Prêmio Total = R$ 600,00 + R$ 44,28 = R$ 644,28
+	Total do Prêmio Bruto = RCTR-C (acidente) + RCF-DC (carga) = 644,28 + 644,28
+	Obs.: para efeito da Poc assumiremos que as regras de cálculo para acidente e roubo serão as mesmas  
+	*/
+	private Double getValorTotalSeguroCarga(List<Carga> cargas) {
+		Double valorTotalCarga = getValorTotalCarga(cargas);
+		Double valorPremioLiquido = valorTotalCarga * TAXA_SEGURO;
+		Double valorIof = valorPremioLiquido * IOF/100;
+		Double valorPremioTotal = valorPremioLiquido + valorIof;
+		return valorPremioTotal * 2.0; //multiplica por 2 porque serão 2 seguros: RCTR-C (acidente) + RCF-DC (carga)
+	}
+	
+	private Double getValorTotalCarga(List<Carga> cargas) {
+		return cargas.stream().mapToDouble(Carga::getValor).sum();
+	}
+
 	private void verificaSeClienteExisteByCnpj(Long cnpjCliente) {
 		if (getCliente(cnpjCliente) == null) {
 			throw new ClienteNotFoundException("Cliente não cadastrado para o cnpj : " + cnpjCliente);

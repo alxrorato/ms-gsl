@@ -68,7 +68,7 @@ public class Entrega implements Serializable {
 	private StatusEntrega statusEntrega;
 	private Date dataAlteracao;
 	private Date dataExclusao;
-	private Double valor;
+	private Double valorTotal;
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private StatusPagamento statusPagamento;
@@ -81,6 +81,7 @@ public class Entrega implements Serializable {
 	private Double baseCalculoImposto; // == valor total do serviço
 	private Double aliquotaIcms; // Ex.: 7%
 	private Double valorIcms; // baseCalculoImposto * aliquotaIcms / 100
+	private Double valorTotalSeguroCarga;
 	private String observacoes;
 	
 }
