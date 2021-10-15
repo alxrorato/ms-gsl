@@ -1,6 +1,7 @@
 package com.dev.gslentrega.entities;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -60,7 +61,7 @@ public class Entrega implements Serializable {
 	private EnderecoDestino enderecoDestino;
 	@NotNull
 	private LocalDateTime dataSolicitacao;
-	private LocalDateTime dataPrevisao;
+	private LocalDate dataPrevisao;
 	private LocalDateTime dataConclusao;
 	@NotNull
 	@Enumerated(EnumType.STRING)
@@ -74,15 +75,7 @@ public class Entrega implements Serializable {
 	@OneToMany(/*mappedBy = "entrega", */fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Carga> cargas;
 	//private Frete frete;
-	/* Calcular:
-	 * 1) Peso cubado: considerar que 1m3 <==> 300kg
-	 * 				 volumeTotalCarga * fator de cubagem (300 kg/m3)
-	 * 2) Valor Frete peso: 1,50 * (MAX(peso total da Carga, peso Cubado))
-	 * Ex.: VolumeTotalCarga = 20m3, pesoTotalCarga=500Kg, PrecoPorkg=1,50
-	 *      Peso Cubado = 20 * 300 = 6000Kg. pesoCubado ficou maior que o pesoTotalCarga
-	 *      ValorFretePeso = 1,50 * 6000 = 9.000 
-	 */
-	private double valorFrete;   
+	private Double valorFrete;   
 	private String naturezaPrestacao; // Ex.: 16556 - Transporte a estabelecimento comercial 
 	private String situacaoTributaria; //Ex.: 00 - Tributação normal do ICMS
 	private Double baseCalculoImposto; // == valor total do serviço
@@ -90,13 +83,4 @@ public class Entrega implements Serializable {
 	private Double valorIcms; // baseCalculoImposto * aliquotaIcms / 100
 	private String observacoes;
 	
-	//TODO
-	public Double getPesoCubado() {
-		return 1.0;
-	}
-	
-	public Double getValorFretePeso() {
-		return 2.0;
-	}
-
 }

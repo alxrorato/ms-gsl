@@ -2,7 +2,9 @@ package com.dev.gslentrega.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -24,6 +26,7 @@ import com.dev.gslentrega.repositories.EntregaRepository;
 import com.dev.gslentrega.request.CargaRequest;
 import com.dev.gslentrega.request.EntregaRequest;
 import com.dev.gslentrega.response.Cliente;
+import com.dev.gslentrega.utils.MockUtils;
 import com.dev.gslentrega.utils.RandomUtils;
 
 @Service
@@ -42,6 +45,9 @@ public class EntregaServiceImpl implements EntregaService {
 
 	private static final long START_RANDOM_NUMBER = 100000000000L;
 	private static final long END_RANDOM_NUMBER = 999999999999L;	
+	private static final String SITUACAO_TRIBUTARIA = "00 - Tributação normal ICMS";
+	private static final Double PESO_CUBADO_EM_KG_PARA_1M3 = 300.0;
+	private static final Double ALIQUOTA_ICMS = 12.0;
 	
 	@Override
 	public Entrega buscarEntregaById(Long id) {
@@ -101,16 +107,17 @@ public class EntregaServiceImpl implements EntregaService {
 		entrega.setEnderecoOrigem(enderecoOrigem);
 		entrega.setEnderecoDestino(enderecoDestino);
 		entrega.setDataSolicitacao(LocalDateTime.now());
-		entrega.setDataPrevisao(null); // Calcular
+		entrega.setDataPrevisao(MockUtils.getDataPrevisaoEntrega(entrega.getDataSolicitacao(), enderecoOrigem, 
+				enderecoDestino, MockUtils.getDistancia()));
 		entrega.setStatusPagamento(StatusPagamento.PENDENTE);
 		entrega.setStatusEntrega(StatusEntrega.EM_ANALISE);
-		entrega.setValor(null); //calcular
 		entrega.setCargas(getCargasRequest(entregaRequest)); //grava a lista do request
-		entrega.setValorFrete(entrega.getValorFretePeso()); //Calcular
-		entrega.setNaturezaPrestacao(null); //todo
-		entrega.setSituacaoTributaria(null);//todo
+		entrega.setValorFrete(getValorFretePeso(entrega.getCargas()));
+		entrega.setValor(entrega.getValorFrete()); // será igual ao valor do frete
+		entrega.setNaturezaPrestacao(entregaRequest.getNaturezaPrestacao());
+		entrega.setSituacaoTributaria(SITUACAO_TRIBUTARIA);
 		entrega.setBaseCalculoImposto(null); //valor total do servico (calcular)
-		entrega.setAliquotaIcms(null); //definir
+		entrega.setAliquotaIcms(ALIQUOTA_ICMS); //12% da base de cálculo
 		entrega.setValorIcms(null);//calcular
 		entrega.setObservacoes(null);
 
@@ -139,6 +146,35 @@ public class EntregaServiceImpl implements EntregaService {
 		return list;
 	}
 
+	/* Calcular:
+	 * 1) Peso cubado: considerar que 1m3 <==> 300kg
+	 * 				 volumeTotalCarga * fator de cubagem (300 kg/m3)
+	 * 2) Valor Frete peso: 1,50 * (MAX(peso total da Carga, peso Cubado))
+	 * Ex.: VolumeTotalCarga = 20m3, pesoTotalCarga=500Kg, PrecoPorkg=1,50
+	 *      Peso Cubado = 20 * 300 = 6000Kg. pesoCubado ficou maior que o pesoTotalCarga
+	 *      ValorFretePeso = 1,50 * 6000 = 9.000 
+	 */
+	//TODO
+	private Double getValorFretePeso(List<Carga> cargas) {
+		Double pesoTotal = getPesoTotalCarga(cargas);
+		Double volumeTotal = getVolumeTotalCarga(cargas);
+		Double precoPorKg = MockUtils.getPrecoPorKg(pesoTotal);
+		Double pesoCubado = getPesoCubadoCarga(volumeTotal);
+		return precoPorKg * Math.max(pesoTotal, pesoCubado);
+	}
+
+	private Double getPesoTotalCarga(List<Carga> cargas) {
+		return cargas.stream().mapToDouble(Carga::getPeso).sum();
+	}
+	
+	private Double getVolumeTotalCarga(List<Carga> cargas) {
+		return cargas.stream().mapToDouble(Carga::getVolume).sum();
+	}
+	
+	private Double getPesoCubadoCarga(Double volume) {
+		return volume * PESO_CUBADO_EM_KG_PARA_1M3;
+	}
+	
 	private void verificaSeClienteExisteByCnpj(Long cnpjCliente) {
 		if (getCliente(cnpjCliente) == null) {
 			throw new ClienteNotFoundException("Cliente não cadastrado para o cnpj : " + cnpjCliente);
