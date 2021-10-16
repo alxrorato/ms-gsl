@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -57,12 +58,14 @@ public class MockUtils {
 	}
 	
 	public static Double getPrecoPorKg(Double pesoCarga) {
+		Map<Double, Double> mapFretePorkgOrdenado = new TreeMap<Double, Double>();
+		mapFretePorkgOrdenado.putAll(TABELA_PRECO_PRETE_POR_KG);		
 		Double valuePreco = 1.0;
-		Set<Double> keys = TABELA_PRECO_PRETE_POR_KG.keySet();
+		Set<Double> keys = mapFretePorkgOrdenado.keySet();
 		Iterator<Double> i = keys.iterator();
 		while (i.hasNext()) {
 			Double keyPeso = (Double)i.next();
-			valuePreco = TABELA_PRECO_PRETE_POR_KG.get(keyPeso);
+			valuePreco = mapFretePorkgOrdenado.get(keyPeso);
 			System.out.println("Key: " + keyPeso + " - Value: " + valuePreco);
 			if (pesoCarga < keyPeso) {
 				break;
