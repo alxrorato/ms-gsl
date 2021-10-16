@@ -15,7 +15,6 @@ import javax.validation.constraints.NotNull;
 import com.dev.gslentrega.entities.Carga;
 import com.dev.gslentrega.entities.EnderecoDestino;
 import com.dev.gslentrega.entities.EnderecoOrigem;
-import com.dev.gslentrega.entities.Frete;
 import com.dev.gslentrega.enums.StatusEntrega;
 import com.dev.gslentrega.enums.StatusPagamento;
 import com.dev.gslentrega.enums.TipoDocumento;

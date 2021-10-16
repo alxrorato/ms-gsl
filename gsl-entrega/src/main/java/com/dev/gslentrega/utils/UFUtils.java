@@ -17,7 +17,7 @@ public class UFUtils {
 	public static final List<String> REGIAO_SUDESTE = Arrays.asList("ES", "MG", "RJ", "SP");
 	public static final List<String> REGIAO_SUL = Arrays.asList("PR", "SC", "RS");
 	
-	public String getRegiaoByUf(String uf) {
+	public static String getRegiaoByUf(String uf) {
 		if (REGIAO_NORTE.contains(uf)) {
 			return NORTE;
 		} else if (REGIAO_NORDESTE.contains(uf)) {

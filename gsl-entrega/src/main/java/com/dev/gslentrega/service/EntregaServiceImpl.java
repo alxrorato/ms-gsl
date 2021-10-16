@@ -9,7 +9,9 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.dev.gslentrega.entities.Carga;
 import com.dev.gslentrega.entities.EnderecoDestino;
@@ -26,12 +28,23 @@ import com.dev.gslentrega.repositories.EntregaRepository;
 import com.dev.gslentrega.request.CargaRequest;
 import com.dev.gslentrega.request.EntregaRequest;
 import com.dev.gslentrega.response.Cliente;
+import com.dev.gslentrega.response.ParceiraResponse;
 import com.dev.gslentrega.utils.MockUtils;
 import com.dev.gslentrega.utils.RandomUtils;
+import com.dev.gslentrega.utils.UFUtils;
 
 @Service
 public class EntregaServiceImpl implements EntregaService {
 
+	@Value("${gsl-parceira.host}")
+	private String parceiraHost;
+	
+	@Value("${cnpj.boaentrega}")
+	private String cnpjBoaEntrega;
+
+	@Autowired
+	private RestTemplate restTemplate;
+	
 	@Autowired
 	private ClienteFeignClient clienteFeignClient;
 	
@@ -122,9 +135,28 @@ public class EntregaServiceImpl implements EntregaService {
 		entrega.setAliquotaIcms(ALIQUOTA_ICMS); //12% da base de cálculo
 		entrega.setValorIcms(getValorIcmsCalculado(entrega.getBaseCalculoImposto(), ALIQUOTA_ICMS));
 		entrega.setValorTotalSeguroCarga(getValorTotalSeguroCarga(entrega.getCargas()));
-		entrega.setObservacoes(null);
+		entrega.setObservacoes(entregaRequest.getObservacoes());
+		entrega.setEntregaEmParceria(false);
+		
+		if (UFUtils.NORTE.equals(UFUtils.getRegiaoByUf(entrega.getEnderecoDestino().getUf().getSigla()))) {
+			ParceiraResponse parceiraResponse = getParceriaEntrega();
+			if (parceiraResponse.isSolicitacaoAceita()) {
+				entrega.setEntregaEmParceria(true);
+				entrega.setCnpjParceira(parceiraResponse.getCnpj());
+				entrega.setRazaoSocialParceira(parceiraResponse.getRazaoSocial());
+				entrega.setNomeComercialParceira(parceiraResponse.getNomeComercial());
+			}
+		}
 
 		return entregaRepository.save(entrega);
+	}
+
+	private ParceiraResponse getParceriaEntrega() {
+		Map<String, String> uriVariables = new HashMap<>();
+		uriVariables.put("cnpjSolicitante", cnpjBoaEntrega);
+		
+		ParceiraResponse parceiraResponse = restTemplate.getForObject(parceiraHost + "/parceira/solicitarParceria/{cnpjSolicitante}", ParceiraResponse.class, uriVariables);
+		return parceiraResponse;
 	}
 
 	private List<Carga> getCargasRequest(EntregaRequest entregaRequest) {

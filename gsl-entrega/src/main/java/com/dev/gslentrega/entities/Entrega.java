@@ -49,6 +49,7 @@ public class Entrega implements Serializable {
 	private Long id;
 	private Long codigoSolicitacao; 
 	private Long cnpjCliente;
+	@Enumerated(EnumType.STRING)
 	private TipoDocumento tipoDocumentoDestinatario;
 	private Long documentoDestinatario;
 	@Valid
@@ -82,6 +83,10 @@ public class Entrega implements Serializable {
 	private Double aliquotaIcms; // Ex.: 7%
 	private Double valorIcms; // baseCalculoImposto * aliquotaIcms / 100
 	private Double valorTotalSeguroCarga;
+	private boolean entregaEmParceria;
+	private Long cnpjParceira;
+	private String razaoSocialParceira;
+	private String nomeComercialParceira;
 	private String observacoes;
 	
 }

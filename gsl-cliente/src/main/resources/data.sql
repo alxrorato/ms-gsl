@@ -12,3 +12,6 @@ INSERT INTO tb_cliente (id, cnpj, razao_Social, nome_Comercial, email, telefone,
 
 INSERT INTO tb_endereco (id, logradouro, numero, complemento, bairro, cidade, uf, cep) values (5, 'Av. Candido Hartman', 900, '', 'Bigorrilho', 'Curitiba', 'PR', '82025160');
 INSERT INTO tb_cliente (id, cnpj, razao_Social, nome_Comercial, email, telefone, status, data_Inclusao, endereco_Id_Fk) VALUES (5, 46048362000153, 'Supermercado Barigui Ltda.', 'Supermercado Barigui', 'sup.barigui@gmail.com', '(41)95684-4897', 'A', '20210905 000000', 5);
+
+INSERT INTO tb_endereco (id, logradouro, numero, complemento, bairro, cidade, uf, cep) values (6, 'Rua Leonardo Malcher', 888, '', 'Centro', 'Manaus', 'AM', '69010170');
+INSERT INTO tb_cliente (id, cnpj, razao_Social, nome_Comercial, email, telefone, status, data_Inclusao, endereco_Id_Fk) VALUES (6, 80200396000150, 'Supermercado Manaus Ltda.', 'Supermercado Manaus', 'sup.manaus@gmail.com', '(92)97878-8989', 'A', '20211015 000000', 6);
