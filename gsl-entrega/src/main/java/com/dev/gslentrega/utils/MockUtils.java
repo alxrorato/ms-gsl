@@ -27,7 +27,11 @@ public class MockUtils {
 	//Mocks Google Maps
 
 	public static int getDistancia() {
-		return RandomUtils.getRandomNumber(DISTANCIA_LIMITE);
+		int distancia = 0;
+		do {
+			distancia = RandomUtils.getRandomNumber(DISTANCIA_LIMITE);
+		} while (distancia == 0);
+		return distancia;
 	}
 	
 	private static long getDaysPrevisaoEntrega(EnderecoOrigem enderecoOrigem, EnderecoDestino enderecoDestino, int distancia) {

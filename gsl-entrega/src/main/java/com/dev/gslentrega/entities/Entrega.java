@@ -64,9 +64,12 @@ public class Entrega implements Serializable {
 	private LocalDateTime dataSolicitacao;
 	private LocalDate dataPrevisao;
 	private LocalDateTime dataConclusao;
+	private int distanciaTotal;
+	private int distanciaPercorrida;
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private StatusEntrega statusEntrega;
+	private LocalDateTime dataStatusEntrega;
 	private Date dataAlteracao;
 	private Date dataExclusao;
 	private Double valorTotal;
@@ -75,7 +78,6 @@ public class Entrega implements Serializable {
 	private StatusPagamento statusPagamento;
 	@OneToMany(/*mappedBy = "entrega", */fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Carga> cargas;
-	//private Frete frete;
 	private Double valorFrete;   
 	private String naturezaPrestacao; // Ex.: 16556 - Transporte a estabelecimento comercial 
 	private String situacaoTributaria; //Ex.: 00 - Tributação normal do ICMS

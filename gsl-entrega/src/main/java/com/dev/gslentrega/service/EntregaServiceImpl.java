@@ -122,8 +122,9 @@ public class EntregaServiceImpl implements EntregaService {
 		entrega.setEnderecoOrigem(enderecoOrigem);
 		entrega.setEnderecoDestino(enderecoDestino);
 		entrega.setDataSolicitacao(LocalDateTime.now());
+		entrega.setDistanciaTotal(MockUtils.getDistancia());
 		entrega.setDataPrevisao(MockUtils.getDataPrevisaoEntrega(entrega.getDataSolicitacao(), enderecoOrigem, 
-				enderecoDestino, MockUtils.getDistancia()));
+				enderecoDestino, entrega.getDistanciaTotal()));
 		entrega.setStatusPagamento(StatusPagamento.PENDENTE);
 		entrega.setStatusEntrega(StatusEntrega.EM_ANALISE);
 		entrega.setCargas(getCargasRequest(entregaRequest)); //grava a lista do request
@@ -189,7 +190,6 @@ public class EntregaServiceImpl implements EntregaService {
 	 *      Peso Cubado = 20 * 300 = 6000Kg. pesoCubado ficou maior que o pesoTotalCarga
 	 *      ValorFretePeso = 1,50 * 6000 = 9.000 
 	 */
-	//TODO
 	private Double getValorFretePeso(List<Carga> cargas) {
 		Double pesoTotal = getPesoTotalCarga(cargas);
 		Double volumeTotal = getVolumeTotalCarga(cargas);
@@ -275,6 +275,14 @@ public class EntregaServiceImpl implements EntregaService {
 
 	private boolean entregaExisteByCodigoSolicitacao(Long codigoSolicitacao) {
 		return entregaRepository.findByCodigoSolicitacao(codigoSolicitacao) != null ? true : false;
+	}
+
+	@Override
+	public void atualizarEntregaByCodigoSolicitacao(Long codigoSolicitacao) {
+		Entrega entrega = buscarEntregaByCodigoSolicitacao(codigoSolicitacao);
+		entrega.setDataStatusEntrega(LocalDateTime.now());
+		entrega.setDistanciaPercorrida(entrega.getDistanciaTotal() - entrega.getDistanciaPercorrida());
+		entregaRepository.save(entrega);
 	}
 
 }

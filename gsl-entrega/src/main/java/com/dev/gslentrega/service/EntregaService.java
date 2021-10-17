@@ -19,4 +19,6 @@ public interface EntregaService {
 	Entrega cadastrarEntrega(@Valid EntregaRequest entregaRequest);
 	
 	Entrega buscarEntregaByCodigoSolicitacao(Long codigoSolicitacao);
+
+	void atualizarEntregaByCodigoSolicitacao(Long codigoSolicitacao);
 }
