@@ -1,5 +1,7 @@
 package com.dev.gslentrega.request;
 
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,9 +16,9 @@ public class CargaRequest {
 	private String natureza;
 	private Integer quantidade;
 	private String especie;
-	private Double peso;
-	private Double volume;
-	private Double valor;
+	private BigDecimal peso;
+	private BigDecimal volume;
+	private BigDecimal valor;
 	private String notaFiscal;
 
 }

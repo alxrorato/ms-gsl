@@ -6,6 +6,8 @@ import javax.validation.Valid;
 
 import com.dev.gslentrega.entities.Entrega;
 import com.dev.gslentrega.request.EntregaRequest;
+import com.dev.gslentrega.request.SolicitacaoRequest;
+import com.dev.gslentrega.response.AndamentoEntregaResponse;
 import com.dev.gslentrega.response.Cliente;
 
 public interface EntregaService {
@@ -20,5 +22,8 @@ public interface EntregaService {
 	
 	Entrega buscarEntregaByCodigoSolicitacao(Long codigoSolicitacao);
 
-	void atualizarEntregaByCodigoSolicitacao(Long codigoSolicitacao);
+	AndamentoEntregaResponse findProgressByRequestCode(Long codigoSolicitacao);
+
+	void atualizarEntrega(SolicitacaoRequest solicitacaoRequest);
+
 }

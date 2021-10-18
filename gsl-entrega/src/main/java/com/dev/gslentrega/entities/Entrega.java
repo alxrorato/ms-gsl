@@ -1,12 +1,13 @@
 package com.dev.gslentrega.entities;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -21,6 +22,9 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+
+import org.springframework.format.annotation.NumberFormat;
+import org.springframework.format.annotation.NumberFormat.Style;
 
 import com.dev.gslentrega.enums.StatusEntrega;
 import com.dev.gslentrega.enums.StatusPagamento;
@@ -64,27 +68,45 @@ public class Entrega implements Serializable {
 	private LocalDateTime dataSolicitacao;
 	private LocalDate dataPrevisao;
 	private LocalDateTime dataConclusao;
-	private int distanciaTotal;
-	private int distanciaPercorrida;
+	private BigDecimal distanciaTotal;
+	private BigDecimal distanciaPercorrida;
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private StatusEntrega statusEntrega;
 	private LocalDateTime dataStatusEntrega;
-	private Date dataAlteracao;
-	private Date dataExclusao;
-	private Double valorTotal;
+	private LocalDateTime dataAlteracao;
+	private LocalDateTime dataExclusao;
+	@NotNull
+	@NumberFormat(style = Style.CURRENCY, pattern = "#,##0.00")
+	@Column(nullable = false, columnDefinition = "DECIMAL(15,2) DEFAULT 0.00")
+	private BigDecimal valorTotal;
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private StatusPagamento statusPagamento;
 	@OneToMany(/*mappedBy = "entrega", */fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Carga> cargas;
-	private Double valorFrete;   
+	@NotNull
+	@NumberFormat(style = Style.CURRENCY, pattern = "#,##0.00")
+	@Column(nullable = false, columnDefinition = "DECIMAL(15,2) DEFAULT 0.00")
+	private BigDecimal valorFrete;   
 	private String naturezaPrestacao; // Ex.: 16556 - Transporte a estabelecimento comercial 
 	private String situacaoTributaria; //Ex.: 00 - Tributação normal do ICMS
-	private Double baseCalculoImposto; // == valor total do serviço
-	private Double aliquotaIcms; // Ex.: 7%
-	private Double valorIcms; // baseCalculoImposto * aliquotaIcms / 100
-	private Double valorTotalSeguroCarga;
+	@NotNull
+	@NumberFormat(style = Style.CURRENCY, pattern = "#,##0.00")
+	@Column(nullable = false, columnDefinition = "DECIMAL(15,2) DEFAULT 0.00")
+	private BigDecimal baseCalculoImposto; // == valor total do serviço
+	@NotNull
+	@NumberFormat(style = Style.CURRENCY, pattern = "#,##0.00")
+	@Column(nullable = false, columnDefinition = "DECIMAL(15,2) DEFAULT 0.00")
+	private BigDecimal aliquotaIcms; // Ex.: 7%
+	@NotNull
+	@NumberFormat(style = Style.CURRENCY, pattern = "#,##0.00")
+	@Column(nullable = false, columnDefinition = "DECIMAL(15,2) DEFAULT 0.00")
+	private BigDecimal valorIcms; // baseCalculoImposto * aliquotaIcms / 100
+	@NotNull
+	@NumberFormat(style = Style.CURRENCY, pattern = "#,##0.00")
+	@Column(nullable = false, columnDefinition = "DECIMAL(15,2) DEFAULT 0.00")
+	private BigDecimal valorTotalSeguroCarga;
 	private boolean entregaEmParceria;
 	private Long cnpjParceira;
 	private String razaoSocialParceira;

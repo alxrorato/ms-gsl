@@ -862,7 +862,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{api-gateway}}/gsl-entrega/entregas/buscarPorCodigoSolicitacao/676831576526",
+									"raw": "{{api-gateway}}/gsl-entrega/entregas/buscarPorCodigoSolicitacao/555000756211",
 									"host": [
 										"{{api-gateway}}"
 									],
@@ -870,7 +870,37 @@
 										"gsl-entrega",
 										"entregas",
 										"buscarPorCodigoSolicitacao",
-										"676831576526"
+										"555000756211"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Andamento da Entrega",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{api-gateway}}/gsl-entrega/entregas/findProgressByRequestCode/172872002285",
+									"host": [
+										"{{api-gateway}}"
+									],
+									"path": [
+										"gsl-entrega",
+										"entregas",
+										"findProgressByRequestCode",
+										"172872002285"
 									]
 								}
 							},
@@ -977,6 +1007,44 @@
 										"gsl-entrega",
 										"entregas",
 										"solicitar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Atualizar Por Código de Solicitação (distância percorrida e data de alteração)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"codigoSolicitacao\": 172872002285\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api-gateway}}/gsl-entrega/entregas/atualizarEntrega",
+									"host": [
+										"{{api-gateway}}"
+									],
+									"path": [
+										"gsl-entrega",
+										"entregas",
+										"atualizarEntrega"
 									]
 								}
 							},

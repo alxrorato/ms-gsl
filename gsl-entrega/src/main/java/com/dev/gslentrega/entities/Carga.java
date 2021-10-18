@@ -1,7 +1,9 @@
 package com.dev.gslentrega.entities;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,6 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.format.annotation.NumberFormat;
+import org.springframework.format.annotation.NumberFormat.Style;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -33,9 +39,18 @@ public class Carga implements Serializable {
 	private String natureza;
 	private Integer quantidade;
 	private String especie;
-	private Double peso;
-	private Double volume; // em m3
-	private Double valor;
+	@NotNull
+	@NumberFormat(style = Style.DEFAULT, pattern = "#,##0.00")
+	@Column(nullable = false, columnDefinition = "DECIMAL(15,2) DEFAULT 0.00")
+	private BigDecimal peso;
+	@NotNull
+	@NumberFormat(style = Style.DEFAULT, pattern = "#,##0.00")
+	@Column(nullable = false, columnDefinition = "DECIMAL(15,2) DEFAULT 0.00")
+	private BigDecimal volume; // em m3
+	@NotNull
+	@NumberFormat(style = Style.CURRENCY, pattern = "#,##0.00")
+	@Column(nullable = false, columnDefinition = "DECIMAL(15,2) DEFAULT 0.00")
+	private BigDecimal valor;
 	private String notaFiscal;
 	@ManyToOne(optional = true)
 	//@JoinColumn(name = "id_entrega_fk")

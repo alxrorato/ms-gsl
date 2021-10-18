@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dev.gslentrega.entities.Entrega;
 import com.dev.gslentrega.errors.ServicoIndisponivelException;
 import com.dev.gslentrega.request.EntregaRequest;
+import com.dev.gslentrega.request.SolicitacaoRequest;
+import com.dev.gslentrega.response.AndamentoEntregaResponse;
 import com.dev.gslentrega.response.Cliente;
 import com.dev.gslentrega.service.EntregaService;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
@@ -74,10 +76,16 @@ public class EntregaController {
 		//return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE);
 	}
 	
-	@PutMapping("atualizar")
-	public ResponseEntity<?> atualizarEntregaByCodigoSolicitacao(@PathVariable Long codigoSolicitacao) {
-		entregaService.atualizarEntregaByCodigoSolicitacao(codigoSolicitacao);
+	@PutMapping("atualizarEntrega")
+	public ResponseEntity<?> atualizarEntrega(@RequestBody SolicitacaoRequest solicitacaoRequest) {
+		entregaService.atualizarEntrega(solicitacaoRequest);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-
+	
+	@GetMapping(value = "/findProgressByRequestCode/{codigoSolicitacao}")
+	public ResponseEntity<AndamentoEntregaResponse> findProgressByRequestCode(@PathVariable Long codigoSolicitacao) {
+		AndamentoEntregaResponse andamentoEntregaResponse = entregaService.findProgressByRequestCode(codigoSolicitacao);
+		return ResponseEntity.ok(andamentoEntregaResponse);
+	}
+	
 }

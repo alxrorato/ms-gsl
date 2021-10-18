@@ -1,5 +1,8 @@
 package com.dev.gslentrega.utils;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.Random;
 
 public class RandomUtils {
@@ -18,4 +21,17 @@ public class RandomUtils {
     	return number;
     }
     
+    public static BigDecimal getRandomNumber(BigDecimal min, BigDecimal max) {
+    	
+    	   return min.add(new BigDecimal(Math.random()).multiply(max.subtract(min)))
+    			   .setScale(2, RoundingMode.HALF_UP)
+    			   /*.round(new MathContext(2, RoundingMode.HALF_UP))*/;
+     }
+/*
+    public static BigDecimal getRandomNumber(BigDecimal min, BigDecimal max) {
+    	
+   	   return min.add(new BigDecimal(Math.random()).multiply(max.subtract(min)))
+   			   .round(new MathContext(2, RoundingMode.HALF_UP));
+    }
+*/
 }

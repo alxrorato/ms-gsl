@@ -1,5 +1,6 @@
 package com.dev.gslentrega.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,8 +28,11 @@ import com.dev.gslentrega.feignclients.ClienteFeignClient;
 import com.dev.gslentrega.repositories.EntregaRepository;
 import com.dev.gslentrega.request.CargaRequest;
 import com.dev.gslentrega.request.EntregaRequest;
+import com.dev.gslentrega.request.SolicitacaoRequest;
+import com.dev.gslentrega.response.AndamentoEntregaResponse;
 import com.dev.gslentrega.response.Cliente;
 import com.dev.gslentrega.response.ParceiraResponse;
+import com.dev.gslentrega.utils.GeneralUtils;
 import com.dev.gslentrega.utils.MockUtils;
 import com.dev.gslentrega.utils.RandomUtils;
 import com.dev.gslentrega.utils.UFUtils;
@@ -59,10 +63,10 @@ public class EntregaServiceImpl implements EntregaService {
 	private static final long START_RANDOM_NUMBER = 100000000000L;
 	private static final long END_RANDOM_NUMBER = 999999999999L;	
 	private static final String SITUACAO_TRIBUTARIA = "00 - Tributação normal ICMS";
-	private static final Double PESO_CUBADO_EM_KG_PARA_1M3 = 300.0;
-	private static final Double ALIQUOTA_ICMS = 12.0;
-	private static final Double TAXA_SEGURO = 0.03;
-	private static final Double IOF = 7.38;
+	private static final BigDecimal PESO_CUBADO_EM_KG_PARA_1M3 = new BigDecimal(300.0);
+	private static final BigDecimal ALIQUOTA_ICMS = new BigDecimal(12.0);
+	private static final BigDecimal TAXA_SEGURO = new BigDecimal(0.03);
+	private static final BigDecimal IOF = new BigDecimal(7.38);
 	
 	@Override
 	public Entrega buscarEntregaById(Long id) {
@@ -122,7 +126,8 @@ public class EntregaServiceImpl implements EntregaService {
 		entrega.setEnderecoOrigem(enderecoOrigem);
 		entrega.setEnderecoDestino(enderecoDestino);
 		entrega.setDataSolicitacao(LocalDateTime.now());
-		entrega.setDistanciaTotal(MockUtils.getDistancia());
+		entrega.setDistanciaTotal(MockUtils.getDistancia(MockUtils.DISTANCIA_LIMITE));
+		entrega.setDistanciaPercorrida(GeneralUtils.ZERO);
 		entrega.setDataPrevisao(MockUtils.getDataPrevisaoEntrega(entrega.getDataSolicitacao(), enderecoOrigem, 
 				enderecoDestino, entrega.getDistanciaTotal()));
 		entrega.setStatusPagamento(StatusPagamento.PENDENTE);
@@ -190,28 +195,28 @@ public class EntregaServiceImpl implements EntregaService {
 	 *      Peso Cubado = 20 * 300 = 6000Kg. pesoCubado ficou maior que o pesoTotalCarga
 	 *      ValorFretePeso = 1,50 * 6000 = 9.000 
 	 */
-	private Double getValorFretePeso(List<Carga> cargas) {
-		Double pesoTotal = getPesoTotalCarga(cargas);
-		Double volumeTotal = getVolumeTotalCarga(cargas);
-		Double precoPorKg = MockUtils.getPrecoPorKg(pesoTotal);
-		Double pesoCubado = getPesoCubadoCarga(volumeTotal);
-		return precoPorKg * Math.max(pesoTotal, pesoCubado);
+	private BigDecimal getValorFretePeso(List<Carga> cargas) {
+		BigDecimal pesoTotal = getPesoTotalCarga(cargas);
+		BigDecimal volumeTotal = getVolumeTotalCarga(cargas);
+		BigDecimal precoPorKg = MockUtils.getPrecoPorKg(pesoTotal);
+		BigDecimal pesoCubado = getPesoCubadoCarga(volumeTotal);
+		return precoPorKg.multiply(pesoTotal.max(pesoCubado));
 	}
 
-	private Double getPesoTotalCarga(List<Carga> cargas) {
-		return cargas.stream().mapToDouble(Carga::getPeso).sum();
+	private BigDecimal getPesoTotalCarga(List<Carga> cargas) {
+		return cargas.stream().map(Carga::getPeso).reduce(BigDecimal.ZERO, BigDecimal::add);
 	}
 	
-	private Double getVolumeTotalCarga(List<Carga> cargas) {
-		return cargas.stream().mapToDouble(Carga::getVolume).sum();
+	private BigDecimal getVolumeTotalCarga(List<Carga> cargas) {
+		return cargas.stream().map(Carga::getVolume).reduce(BigDecimal.ZERO, BigDecimal::add);
 	}
 	
-	private Double getPesoCubadoCarga(Double volume) {
-		return volume * PESO_CUBADO_EM_KG_PARA_1M3;
+	private BigDecimal getPesoCubadoCarga(BigDecimal volume) {
+		return volume.multiply(PESO_CUBADO_EM_KG_PARA_1M3);
 	}
 	
-	private Double getValorIcmsCalculado(Double valor, Double aliquota) {
-		return valor * aliquota / 100;
+	private BigDecimal getValorIcmsCalculado(BigDecimal valor, BigDecimal aliquota) {
+		return valor.multiply(aliquota).divide(new BigDecimal(100));
 	}
 
 	/* Cálculo do seguro da carga
@@ -227,16 +232,16 @@ public class EntregaServiceImpl implements EntregaService {
 	Total do Prêmio Bruto = RCTR-C (acidente) + RCF-DC (carga) = 644,28 + 644,28
 	Obs.: para efeito da Poc assumiremos que as regras de cálculo para acidente e roubo serão as mesmas  
 	*/
-	private Double getValorTotalSeguroCarga(List<Carga> cargas) {
-		Double valorTotalCarga = getValorTotalCarga(cargas);
-		Double valorPremioLiquido = valorTotalCarga * TAXA_SEGURO;
-		Double valorIof = valorPremioLiquido * IOF/100;
-		Double valorPremioTotal = valorPremioLiquido + valorIof;
-		return valorPremioTotal * 2.0; //multiplica por 2 porque serão 2 seguros: RCTR-C (acidente) + RCF-DC (carga)
+	private BigDecimal getValorTotalSeguroCarga(List<Carga> cargas) {
+		BigDecimal valorTotalCarga = getValorTotalCarga(cargas);
+		BigDecimal valorPremioLiquido = valorTotalCarga.multiply(TAXA_SEGURO);
+		BigDecimal valorIof = valorPremioLiquido.multiply(IOF).divide(GeneralUtils.CEM);
+		BigDecimal valorPremioTotal = valorPremioLiquido.add(valorIof);
+		return valorPremioTotal.multiply(new BigDecimal(2)); //multiplica por 2 porque serão 2 seguros: RCTR-C (acidente) + RCF-DC (carga)
 	}
 	
-	private Double getValorTotalCarga(List<Carga> cargas) {
-		return cargas.stream().mapToDouble(Carga::getValor).sum();
+	private BigDecimal getValorTotalCarga(List<Carga> cargas) {
+		return cargas.stream().map(Carga::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
 	}
 
 	private void verificaSeClienteExisteByCnpj(Long cnpjCliente) {
@@ -278,11 +283,32 @@ public class EntregaServiceImpl implements EntregaService {
 	}
 
 	@Override
-	public void atualizarEntregaByCodigoSolicitacao(Long codigoSolicitacao) {
-		Entrega entrega = buscarEntregaByCodigoSolicitacao(codigoSolicitacao);
-		entrega.setDataStatusEntrega(LocalDateTime.now());
-		entrega.setDistanciaPercorrida(entrega.getDistanciaTotal() - entrega.getDistanciaPercorrida());
-		entregaRepository.save(entrega);
+	public void atualizarEntrega(SolicitacaoRequest solicitacaoRequest) {
+		atualizarPercurso(solicitacaoRequest.getCodigoSolicitacao());
 	}
 
+	@Override
+	public AndamentoEntregaResponse findProgressByRequestCode(Long codigoSolicitacao) {
+		atualizarPercurso(codigoSolicitacao);
+		Entrega entrega = buscarEntregaByCodigoSolicitacao(codigoSolicitacao);
+		BigDecimal distanciaApercorrer = entrega.getDistanciaTotal().subtract(entrega.getDistanciaPercorrida());
+		AndamentoEntregaResponse andamentoEntregaResponse = new AndamentoEntregaResponse();
+		andamentoEntregaResponse.setCodigoSolicitacao(codigoSolicitacao);
+		andamentoEntregaResponse.setDistanciaTotal(entrega.getDistanciaTotal());
+		andamentoEntregaResponse.setDistanciaPercorrida(entrega.getDistanciaPercorrida());
+		andamentoEntregaResponse.setDistanciaApercorrer(distanciaApercorrer);
+		andamentoEntregaResponse.setPercentualPercorrido(GeneralUtils.percentual(entrega.getDistanciaTotal(), 
+				entrega.getDistanciaPercorrida()));
+		andamentoEntregaResponse.setPercentualAPercorrer(GeneralUtils.percentual(entrega.getDistanciaTotal(), 
+				andamentoEntregaResponse.getDistanciaApercorrer()));
+		return andamentoEntregaResponse;
+	}
+
+	private void atualizarPercurso(Long codigoSolicitacao) {
+		Entrega entrega = buscarEntregaByCodigoSolicitacao(codigoSolicitacao);
+		entrega.setDataAlteracao(LocalDateTime.now());
+		entrega.setDistanciaPercorrida(MockUtils.getDistancia(entrega.getDistanciaTotal().subtract(entrega.getDistanciaPercorrida())));
+		entregaRepository.save(entrega);
+	}
+	
 }
