@@ -892,7 +892,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{api-gateway}}/gsl-entrega/entregas/findProgressByRequestCode/172872002285",
+									"raw": "{{api-gateway}}/gsl-entrega/entregas/findProgressByRequestCode/723386982277",
 									"host": [
 										"{{api-gateway}}"
 									],
@@ -900,7 +900,7 @@
 										"gsl-entrega",
 										"entregas",
 										"findProgressByRequestCode",
-										"172872002285"
+										"723386982277"
 									]
 								}
 							},

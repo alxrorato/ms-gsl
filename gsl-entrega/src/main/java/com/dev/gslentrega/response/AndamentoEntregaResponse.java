@@ -1,5 +1,6 @@
 package com.dev.gslentrega.response;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -20,7 +21,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class AndamentoEntregaResponse {
+public class AndamentoEntregaResponse implements Serializable {
+
+	private static final long serialVersionUID = 600305478199596589L;
 
 	private Long codigoSolicitacao;
 	private BigDecimal distanciaTotal;
@@ -29,4 +32,5 @@ public class AndamentoEntregaResponse {
 	private BigDecimal percentualPercorrido;
 	private BigDecimal percentualAPercorrer;
 	private String previsaoEntrega;
+	private LocalizacaoCarga localizacaoCarga;;
 }

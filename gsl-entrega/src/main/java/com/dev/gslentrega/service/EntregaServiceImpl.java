@@ -1,6 +1,7 @@
 package com.dev.gslentrega.service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +32,7 @@ import com.dev.gslentrega.request.EntregaRequest;
 import com.dev.gslentrega.request.SolicitacaoRequest;
 import com.dev.gslentrega.response.AndamentoEntregaResponse;
 import com.dev.gslentrega.response.Cliente;
+import com.dev.gslentrega.response.LocalizacaoCarga;
 import com.dev.gslentrega.response.ParceiraResponse;
 import com.dev.gslentrega.utils.GeneralUtils;
 import com.dev.gslentrega.utils.MockUtils;
@@ -67,6 +69,7 @@ public class EntregaServiceImpl implements EntregaService {
 	private static final BigDecimal ALIQUOTA_ICMS = new BigDecimal(12.0);
 	private static final BigDecimal TAXA_SEGURO = new BigDecimal(0.03);
 	private static final BigDecimal IOF = new BigDecimal(7.38);
+	private static final BigDecimal LIMITE_LATITUDE_LONGITUDE = new BigDecimal(99);
 	
 	@Override
 	public Entrega buscarEntregaById(Long id) {
@@ -237,7 +240,8 @@ public class EntregaServiceImpl implements EntregaService {
 		BigDecimal valorPremioLiquido = valorTotalCarga.multiply(TAXA_SEGURO);
 		BigDecimal valorIof = valorPremioLiquido.multiply(IOF).divide(GeneralUtils.CEM);
 		BigDecimal valorPremioTotal = valorPremioLiquido.add(valorIof);
-		return valorPremioTotal.multiply(new BigDecimal(2)); //multiplica por 2 porque serão 2 seguros: RCTR-C (acidente) + RCF-DC (carga)
+		//multiplica por 2 porque serão 2 seguros: RCTR-C (acidente) + RCF-DC (carga)
+		return valorPremioTotal.multiply(new BigDecimal(2)).setScale(2, RoundingMode.HALF_UP);
 	}
 	
 	private BigDecimal getValorTotalCarga(List<Carga> cargas) {
@@ -301,6 +305,12 @@ public class EntregaServiceImpl implements EntregaService {
 				entrega.getDistanciaPercorrida()));
 		andamentoEntregaResponse.setPercentualAPercorrer(GeneralUtils.percentual(entrega.getDistanciaTotal(), 
 				andamentoEntregaResponse.getDistanciaApercorrer()));
+		
+		LocalizacaoCarga localizacao = new LocalizacaoCarga(MockUtils.getLatitudeLongitude(LIMITE_LATITUDE_LONGITUDE),
+				MockUtils.getLatitudeLongitude(LIMITE_LATITUDE_LONGITUDE));
+		
+		andamentoEntregaResponse.setLocalizacaoCarga(localizacao);
+		
 		return andamentoEntregaResponse;
 	}
 

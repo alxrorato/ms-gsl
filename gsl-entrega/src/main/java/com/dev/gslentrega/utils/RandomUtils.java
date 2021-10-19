@@ -21,10 +21,10 @@ public class RandomUtils {
     	return number;
     }
     
-    public static BigDecimal getRandomNumber(BigDecimal min, BigDecimal max) {
+    public static BigDecimal getRandomNumber(BigDecimal min, BigDecimal max, int scale) {
     	
     	   return min.add(new BigDecimal(Math.random()).multiply(max.subtract(min)))
-    			   .setScale(2, RoundingMode.HALF_UP)
+    			   .setScale(scale, RoundingMode.HALF_UP)
     			   /*.round(new MathContext(2, RoundingMode.HALF_UP))*/;
      }
 /*

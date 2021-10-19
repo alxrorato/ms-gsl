@@ -16,6 +16,8 @@ import com.dev.gslentrega.entities.EnderecoOrigem;
 public class MockUtils {
 
 	public static final BigDecimal DISTANCIA_LIMITE = new BigDecimal(1500.0);
+	public static final int SCALE_2 = 2;
+	public static final int SCALE_4 = 4;
 	
 	/*
 	public static final Map<Double, Double> TABELA_PRECO_PRETE_POR_KG = Stream.of(new Object[][] { 
@@ -45,11 +47,19 @@ public class MockUtils {
 	public static BigDecimal getDistancia(BigDecimal limit) {
 		BigDecimal distancia = GeneralUtils.ZERO;
 		do {
-			distancia = RandomUtils.getRandomNumber(GeneralUtils.ZERO, limit);
+			distancia = RandomUtils.getRandomNumber(GeneralUtils.ZERO, limit, SCALE_2);
 		} while (distancia == GeneralUtils.ZERO);
 		return distancia;
 	}
 	
+	public static BigDecimal getLatitudeLongitude(BigDecimal limit) {
+		BigDecimal latitudeLongitude = GeneralUtils.ZERO;
+		do {
+			latitudeLongitude = RandomUtils.getRandomNumber(GeneralUtils.UM, limit, SCALE_4);
+		} while (latitudeLongitude == GeneralUtils.ZERO);
+		return latitudeLongitude;
+	}
+
 	private static long getDaysPrevisaoEntrega(EnderecoOrigem enderecoOrigem, EnderecoDestino enderecoDestino, BigDecimal distancia) {
 		if (enderecoOrigem.getUf().equals(enderecoDestino.getUf()) 
 				&& enderecoOrigem.getCidade().equals(enderecoDestino.getCidade())) {
