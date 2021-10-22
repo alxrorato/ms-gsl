@@ -24,12 +24,16 @@ import com.dev.gslentrega.enums.StatusPagamento;
 import com.dev.gslentrega.enums.TipoDocumento;
 import com.dev.gslentrega.enums.UF;
 import com.dev.gslentrega.errors.ClienteNotFoundException;
+import com.dev.gslentrega.errors.EntregaJaEstaEmAndamentoException;
+import com.dev.gslentrega.errors.EntregaJaFinalizadaException;
 import com.dev.gslentrega.errors.EntregaNotFoundException;
+import com.dev.gslentrega.errors.OperacaoNaoEfetuadaException;
 import com.dev.gslentrega.feignclients.ClienteFeignClient;
 import com.dev.gslentrega.repositories.EntregaRepository;
 import com.dev.gslentrega.request.CargaRequest;
 import com.dev.gslentrega.request.EntregaRequest;
 import com.dev.gslentrega.request.SolicitacaoRequest;
+import com.dev.gslentrega.request.StatusEntregaRequest;
 import com.dev.gslentrega.response.AndamentoEntregaResponse;
 import com.dev.gslentrega.response.Cliente;
 import com.dev.gslentrega.response.LocalizacaoCarga;
@@ -134,7 +138,7 @@ public class EntregaServiceImpl implements EntregaService {
 		entrega.setDataPrevisao(MockUtils.getDataPrevisaoEntrega(entrega.getDataSolicitacao(), enderecoOrigem, 
 				enderecoDestino, entrega.getDistanciaTotal()));
 		entrega.setStatusPagamento(StatusPagamento.PENDENTE);
-		entrega.setStatusEntrega(StatusEntrega.EM_ANALISE);
+		entrega.setStatusEntrega(StatusEntrega.ANALISE);
 		entrega.setCargas(getCargasRequest(entregaRequest)); //grava a lista do request
 		entrega.setValorFrete(getValorFretePeso(entrega.getCargas()));
 		entrega.setValorTotal(entrega.getValorFrete()); // será igual ao valor do frete
@@ -320,5 +324,39 @@ public class EntregaServiceImpl implements EntregaService {
 		entrega.setDistanciaPercorrida(MockUtils.getDistancia(entrega.getDistanciaTotal().subtract(entrega.getDistanciaPercorrida())));
 		entregaRepository.save(entrega);
 	}
-	
+
+	@Override
+	public void iniciarTransporte(Long codigoSolicitacao) {
+		Entrega entrega = buscarEntregaByCodigoSolicitacao(codigoSolicitacao);
+		/* Mudar p/ metodo coletarCarga
+		if (StatusPagamento.PENDENTE.equals(entrega.getStatusPagamento())) {
+			throw new OperacaoNaoEfetuadaException("Operação não efetuada. Motivo: pagamento pendente");			
+		}
+		*/
+		if (StatusEntrega.ROTEIRIZACAO.equals(entrega.getStatusEntrega())) {
+			entrega.setStatusEntrega(StatusEntrega.TRANSPORTE);
+			entrega.setDataStatusEntrega(LocalDateTime.now());
+			entrega.setDataAlteracao(LocalDateTime.now());
+			entregaRepository.save(entrega);
+		} else if (StatusEntrega.TRANSPORTE.equals(entrega.getStatusEntrega())) {
+			throw new OperacaoNaoEfetuadaException("Operação não efetuada. Motivo: transporte já foi iniciado.");
+		} else {
+			throw new OperacaoNaoEfetuadaException("Operação não efetuada. Motivo: " + entrega.getStatusEntrega().getDescricao());
+		}
+	}
+
+	@Override
+	public void finalizarEntrega(Long codigoSolicitacao) {
+		Entrega entrega = buscarEntregaByCodigoSolicitacao(codigoSolicitacao);
+		if (StatusEntrega.FINALIZADA.equals(entrega.getStatusEntrega())) {
+			throw new EntregaJaFinalizadaException("Operação não efetuada porque a entrega [" + codigoSolicitacao + "] já foi finalizada.");
+		} else if (StatusEntrega.ANALISE.equals(entrega.getStatusEntrega())) {
+			throw new EntregaJaEstaEmAndamentoException("Operação não efetuada porque o transporte da entrega [" + codigoSolicitacao + "] ainda não foi iniciado.");
+		}
+		entrega.setStatusEntrega(StatusEntrega.FINALIZADA);
+		entrega.setDataStatusEntrega(LocalDateTime.now());
+		entrega.setDataAlteracao(LocalDateTime.now());
+		entregaRepository.save(entrega);
+	}
+
 }

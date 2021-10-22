@@ -7,8 +7,12 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum StatusEntrega {
 
-	EM_ANALISE, 
-	EM_ANDAMENTO,
-	FINALIZADA;
+	ANALISE("entrega em análise"),
+	COLETA("entrega em coleta"),
+	ROTEIRIZACAO("entrega em roteirização"),
+	TRANSPORTE("entrega em transporte"),
+	DISTRIBUICAO("entrega em distribuição"),
+	FINALIZADA("entrega finalizada");
 	
+	public String descricao;
 }

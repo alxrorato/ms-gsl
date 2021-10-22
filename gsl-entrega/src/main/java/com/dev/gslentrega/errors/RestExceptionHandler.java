@@ -59,6 +59,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 	
+	@ExceptionHandler(OperacaoNaoEfetuadaException.class)
+    public ResponseEntity<Object> handleResourceUnavailableException(
+    		OperacaoNaoEfetuadaException ex, WebRequest request) {
+
+        Map<String, Object> body = bodyResponse(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
 	@ExceptionHandler(ServicoIndisponivelException.class)
     public ResponseEntity<Object> handleResourceUnavailableException(
     		ServicoIndisponivelException ex, WebRequest request) {

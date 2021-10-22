@@ -862,7 +862,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{api-gateway}}/gsl-entrega/entregas/buscarPorCodigoSolicitacao/555000756211",
+									"raw": "{{api-gateway}}/gsl-entrega/entregas/buscarPorCodigoSolicitacao/168715011403",
 									"host": [
 										"{{api-gateway}}"
 									],
@@ -870,7 +870,7 @@
 										"gsl-entrega",
 										"entregas",
 										"buscarPorCodigoSolicitacao",
-										"555000756211"
+										"168715011403"
 									]
 								}
 							},
@@ -1045,6 +1045,45 @@
 										"gsl-entrega",
 										"entregas",
 										"atualizarEntrega"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Iniciar Transporte (informar código de solicitação)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api-gateway}}/gsl-entrega/entregas/iniciarTransporte/938806853797",
+									"host": [
+										"{{api-gateway}}"
+									],
+									"path": [
+										"gsl-entrega",
+										"entregas",
+										"iniciarTransporte",
+										"938806853797"
 									]
 								}
 							},

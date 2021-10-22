@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -20,6 +21,7 @@ import com.dev.gslentrega.entities.Entrega;
 import com.dev.gslentrega.errors.ServicoIndisponivelException;
 import com.dev.gslentrega.request.EntregaRequest;
 import com.dev.gslentrega.request.SolicitacaoRequest;
+import com.dev.gslentrega.request.StatusEntregaRequest;
 import com.dev.gslentrega.response.AndamentoEntregaResponse;
 import com.dev.gslentrega.response.Cliente;
 import com.dev.gslentrega.service.EntregaService;
@@ -86,6 +88,18 @@ public class EntregaController {
 	public ResponseEntity<AndamentoEntregaResponse> findProgressByRequestCode(@PathVariable Long codigoSolicitacao) {
 		AndamentoEntregaResponse andamentoEntregaResponse = entregaService.findProgressByRequestCode(codigoSolicitacao);
 		return ResponseEntity.ok(andamentoEntregaResponse);
+	}
+	
+	@PatchMapping("iniciarTransporte/{codigoSolicitacao}")
+	public ResponseEntity<?> iniciarTransporte(@PathVariable Long codigoSolicitacao) {
+		entregaService.iniciarTransporte(codigoSolicitacao);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@PatchMapping("finalizarEntrega/{codigoSolicitacao}")
+	public ResponseEntity<?> finalizarEntrega(@PathVariable Long codigoSolicitacao) {
+		entregaService.finalizarEntrega(codigoSolicitacao);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 }

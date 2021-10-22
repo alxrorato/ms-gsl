@@ -26,4 +26,8 @@ public interface EntregaService {
 
 	void atualizarEntrega(SolicitacaoRequest solicitacaoRequest);
 
+	void iniciarTransporte(Long codigoSolicitacao);
+
+	void finalizarEntrega(Long codigoSolicitacao);
+
 }

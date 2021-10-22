@@ -67,7 +67,7 @@ public class Entrega implements Serializable {
 	@NotNull
 	private LocalDateTime dataSolicitacao;
 	private LocalDate dataPrevisao;
-	private LocalDateTime dataConclusao;
+	private LocalDateTime dataFinalizacao;
 	private BigDecimal distanciaTotal;
 	private BigDecimal distanciaPercorrida;
 	@NotNull
@@ -111,6 +111,7 @@ public class Entrega implements Serializable {
 	private Long cnpjParceira;
 	private String razaoSocialParceira;
 	private String nomeComercialParceira;
+	private String recebedorEntrega;
 	private String observacoes;
 	
 }
