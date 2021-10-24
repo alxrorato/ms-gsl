@@ -3,7 +3,9 @@ package com.dev.gslentrega.utils;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -18,6 +20,14 @@ public class MockUtils {
 	public static final BigDecimal DISTANCIA_LIMITE = new BigDecimal(1500.0);
 	public static final int SCALE_2 = 2;
 	public static final int SCALE_4 = 4;
+	
+	private static final List<String> RECEBEDORES_MERCADORIAS = Arrays.asList("Beatriz Cavalcanti Souza", "Carla Martins Souza", "portaria do condomínio",
+			"Carlos Castro Goncalves", "Sofia Araujo Lima", "Luan Silva Pereira", "Bruna Lima Azevedo", "Ryan Dias Costa",
+			"Enzo Rocha Oliveira", "Brenda Castro Alves", "Luana Pereira Azevedo", "André Martins Barbosa",
+			"Matilde Pereira Melo", "Vitoria Rocha Barros", "Júlio Goncalves Barbosa", "Pedro Ribeiro Carvalho",
+			"Felipe Carvalho Goncalves", "Caio Dias Sousa", "João Gomes Oliveira", "Vitória Silva Rocha", "Mateus Melo Cunha",
+			"Lucas Silva Lima", "Vitória Melo Dias", "Gabrielle Ferreira Rodrigues", "Isabela Correia Castro", "Mateus Martins Araujo", 
+			"Tiago Alves Carvalho", "Anna Barros Fernandes", "Sophia Gomes Oliveira", "Camila Rodrigues Ribeiro");
 	
 	/*
 	public static final Map<Double, Double> TABELA_PRECO_PRETE_POR_KG = Stream.of(new Object[][] { 
@@ -121,4 +131,10 @@ public class MockUtils {
 		return valuePreco;
 	}
 
+	public static String getRecebedorMercadoria() {
+		
+		return RECEBEDORES_MERCADORIAS.get(RandomUtils.getRandomNumber(RECEBEDORES_MERCADORIAS.size() - 1));
+		
+	}
+	
 }

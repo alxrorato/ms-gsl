@@ -8,7 +8,11 @@ import com.dev.gslentrega.entities.Entrega;
 import com.dev.gslentrega.request.EntregaRequest;
 import com.dev.gslentrega.request.SolicitacaoRequest;
 import com.dev.gslentrega.response.AndamentoEntregaResponse;
+import com.dev.gslentrega.response.CancelamentoResponse;
 import com.dev.gslentrega.response.Cliente;
+import com.dev.gslentrega.response.ConfirmacaoEntregaResponse;
+import com.dev.gslentrega.response.OperacaoEtapaResponse;
+import com.dev.gslentrega.response.PagamentoResponse;
 
 public interface EntregaService {
 
@@ -18,16 +22,28 @@ public interface EntregaService {
 	
 	Cliente getCliente(Long cnpj);
 
-	Entrega cadastrarEntrega(@Valid EntregaRequest entregaRequest);
-	
 	Entrega buscarEntregaByCodigoSolicitacao(Long codigoSolicitacao);
 
 	AndamentoEntregaResponse findProgressByRequestCode(Long codigoSolicitacao);
 
 	void atualizarEntrega(SolicitacaoRequest solicitacaoRequest);
 
-	void iniciarTransporte(Long codigoSolicitacao);
+	Entrega cadastrarEntrega(@Valid EntregaRequest entregaRequest);
 
-	void finalizarEntrega(Long codigoSolicitacao);
+	PagamentoResponse efetuarPagamento(Long codigoSolicitacao);
+
+	OperacaoEtapaResponse coletarCarga(Long codigoSolicitacao);
+
+	OperacaoEtapaResponse efetuarRoteirizacao(Long codigoSolicitacao);
+
+	OperacaoEtapaResponse iniciarTransporte(Long codigoSolicitacao);
+
+	OperacaoEtapaResponse distribuirNosCds(Long codigoSolicitacao);
+
+	OperacaoEtapaResponse iniciarLastMile(Long codigoSolicitacao);
+
+	ConfirmacaoEntregaResponse finalizarEntrega(Long codigoSolicitacao);
+
+	CancelamentoResponse cancelarEntrega(Long codigoSolicitacao);
 
 }

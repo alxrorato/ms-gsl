@@ -4,11 +4,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.validation.constraints.NotNull;
-
-import com.dev.gslentrega.enums.StatusEntrega;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
@@ -22,16 +17,16 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class ConfirmacaoEntregaResponse implements Serializable {
+public class PagamentoResponse implements Serializable {
 
-	private static final long serialVersionUID = 12807853540592816L;
+	private static final long serialVersionUID = 1516689618136550305L;
 
-	private Long codigoSolicitacao;
+	private Long codigoSolicitacaoEntrega;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
-	private LocalDateTime dataFinalizacao;
+	private LocalDateTime dataPagamento;
+	
+	private BigDecimal valorPago;
 	
 	private String mensagem;
-	
-	private String recebedorEntrega;
 }

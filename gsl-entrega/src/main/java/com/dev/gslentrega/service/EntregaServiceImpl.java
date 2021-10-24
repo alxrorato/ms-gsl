@@ -36,7 +36,10 @@ import com.dev.gslentrega.request.SolicitacaoRequest;
 import com.dev.gslentrega.request.StatusEntregaRequest;
 import com.dev.gslentrega.response.AndamentoEntregaResponse;
 import com.dev.gslentrega.response.Cliente;
+import com.dev.gslentrega.response.ConfirmacaoEntregaResponse;
 import com.dev.gslentrega.response.LocalizacaoCarga;
+import com.dev.gslentrega.response.OperacaoEtapaResponse;
+import com.dev.gslentrega.response.PagamentoResponse;
 import com.dev.gslentrega.response.ParceiraResponse;
 import com.dev.gslentrega.utils.GeneralUtils;
 import com.dev.gslentrega.utils.MockUtils;
@@ -138,7 +141,8 @@ public class EntregaServiceImpl implements EntregaService {
 		entrega.setDataPrevisao(MockUtils.getDataPrevisaoEntrega(entrega.getDataSolicitacao(), enderecoOrigem, 
 				enderecoDestino, entrega.getDistanciaTotal()));
 		entrega.setStatusPagamento(StatusPagamento.PENDENTE);
-		entrega.setStatusEntrega(StatusEntrega.ANALISE);
+		entrega.setStatusEntrega(StatusEntrega.SOLICITACAO);
+		entrega.setDataStatusEntrega(LocalDateTime.now());
 		entrega.setCargas(getCargasRequest(entregaRequest)); //grava a lista do request
 		entrega.setValorFrete(getValorFretePeso(entrega.getCargas()));
 		entrega.setValorTotal(entrega.getValorFrete()); // será igual ao valor do frete
@@ -326,37 +330,120 @@ public class EntregaServiceImpl implements EntregaService {
 	}
 
 	@Override
-	public void iniciarTransporte(Long codigoSolicitacao) {
+	public PagamentoResponse efetuarPagamento(Long codigoSolicitacao) {
 		Entrega entrega = buscarEntregaByCodigoSolicitacao(codigoSolicitacao);
-		/* Mudar p/ metodo coletarCarga
-		if (StatusPagamento.PENDENTE.equals(entrega.getStatusPagamento())) {
-			throw new OperacaoNaoEfetuadaException("Operação não efetuada. Motivo: pagamento pendente");			
+		if (StatusPagamento.CONFIRMADO.equals(entrega.getStatusPagamento())) {
+			throw new OperacaoNaoEfetuadaException("Pagamento já foi efetuado.");
 		}
-		*/
+		entrega.setStatusPagamento(StatusPagamento.CONFIRMADO);
+		entrega.setDataPagamento(LocalDateTime.now());
+		entrega.setDataAlteracao(LocalDateTime.now());
+		entregaRepository.save(entrega);
+		PagamentoResponse pagamentoResponse = new PagamentoResponse();
+		pagamentoResponse.setCodigoSolicitacaoEntrega(codigoSolicitacao);
+		pagamentoResponse.setDataPagamento(entrega.getDataPagamento());
+		pagamentoResponse.setValorPago(entrega.getValorTotal());
+		pagamentoResponse.setMensagem("Pagamento efetuado com sucesso");
+		return pagamentoResponse;
+	}
+
+	@Override
+	public OperacaoEtapaResponse coletarCarga(Long codigoSolicitacao) {
+		Entrega entrega = buscarEntregaByCodigoSolicitacao(codigoSolicitacao);
+		if (StatusEntrega.SOLICITACAO.equals(entrega.getStatusEntrega())) {
+			if (StatusPagamento.PENDENTE.equals(entrega.getStatusPagamento())) {
+				throw new OperacaoNaoEfetuadaException("Pagamento pendente. A coleta será iniciada somente após a confirmação do pagamento.");
+			}
+			alterarStatusEntrega(entrega, StatusEntrega.COLETA);
+			entregaRepository.save(entrega);
+		} else if (StatusEntrega.COLETA.equals(entrega.getStatusEntrega())) {
+			throw new OperacaoNaoEfetuadaException("Esta etapa já foi iniciada");
+		} else {
+			throw new OperacaoNaoEfetuadaException("Esta etapa já foi concluída");
+		}
+		return new OperacaoEtapaResponse(codigoSolicitacao, entrega.getDataStatusEntrega(), "Coleta da carga efetuada");
+	}
+
+	@Override
+	public OperacaoEtapaResponse efetuarRoteirizacao(Long codigoSolicitacao) {
+		Entrega entrega = buscarEntregaByCodigoSolicitacao(codigoSolicitacao);
+		if (StatusEntrega.COLETA.equals(entrega.getStatusEntrega())) {
+			alterarStatusEntrega(entrega, StatusEntrega.ROTEIRIZACAO);
+			entregaRepository.save(entrega);
+		} else if (StatusEntrega.ROTEIRIZACAO.equals(entrega.getStatusEntrega())) {
+			throw new OperacaoNaoEfetuadaException("Esta etapa já foi iniciada");
+		} else {
+			throw new OperacaoNaoEfetuadaException("Operação não efetuada. Motivo: " + entrega.getStatusEntrega().getDescricao());
+		}
+		return new OperacaoEtapaResponse(codigoSolicitacao, entrega.getDataStatusEntrega(), "Roteirização do transporte efetuada");
+	}
+
+	@Override
+	public OperacaoEtapaResponse iniciarTransporte(Long codigoSolicitacao) {
+		Entrega entrega = buscarEntregaByCodigoSolicitacao(codigoSolicitacao);
 		if (StatusEntrega.ROTEIRIZACAO.equals(entrega.getStatusEntrega())) {
-			entrega.setStatusEntrega(StatusEntrega.TRANSPORTE);
-			entrega.setDataStatusEntrega(LocalDateTime.now());
-			entrega.setDataAlteracao(LocalDateTime.now());
+			alterarStatusEntrega(entrega, StatusEntrega.TRANSPORTE);
 			entregaRepository.save(entrega);
 		} else if (StatusEntrega.TRANSPORTE.equals(entrega.getStatusEntrega())) {
 			throw new OperacaoNaoEfetuadaException("Operação não efetuada. Motivo: transporte já foi iniciado.");
 		} else {
 			throw new OperacaoNaoEfetuadaException("Operação não efetuada. Motivo: " + entrega.getStatusEntrega().getDescricao());
 		}
+		return new OperacaoEtapaResponse(codigoSolicitacao, entrega.getDataStatusEntrega(), "Transporte iniciado até o CD mais próximo do cliente final.");
 	}
 
 	@Override
-	public void finalizarEntrega(Long codigoSolicitacao) {
+	public OperacaoEtapaResponse distribuirNosCds(Long codigoSolicitacao) {
 		Entrega entrega = buscarEntregaByCodigoSolicitacao(codigoSolicitacao);
-		if (StatusEntrega.FINALIZADA.equals(entrega.getStatusEntrega())) {
-			throw new EntregaJaFinalizadaException("Operação não efetuada porque a entrega [" + codigoSolicitacao + "] já foi finalizada.");
-		} else if (StatusEntrega.ANALISE.equals(entrega.getStatusEntrega())) {
-			throw new EntregaJaEstaEmAndamentoException("Operação não efetuada porque o transporte da entrega [" + codigoSolicitacao + "] ainda não foi iniciado.");
+		if (StatusEntrega.TRANSPORTE.equals(entrega.getStatusEntrega())) {
+			alterarStatusEntrega(entrega, StatusEntrega.DISTRIBUICAO);
+			entregaRepository.save(entrega);
+		} else if (StatusEntrega.DISTRIBUICAO.equals(entrega.getStatusEntrega())) {
+			throw new OperacaoNaoEfetuadaException("A distribuição no CD já está em andamento.");
+		} else {
+			throw new OperacaoNaoEfetuadaException("Operação não efetuada. Motivo: " + entrega.getStatusEntrega().getDescricao());
 		}
-		entrega.setStatusEntrega(StatusEntrega.FINALIZADA);
-		entrega.setDataStatusEntrega(LocalDateTime.now());
-		entrega.setDataAlteracao(LocalDateTime.now());
-		entregaRepository.save(entrega);
+		return new OperacaoEtapaResponse(codigoSolicitacao, entrega.getDataStatusEntrega(), "Carga sendo distribída em CD próximo do cliente final.");
 	}
 
+	@Override
+	public OperacaoEtapaResponse iniciarLastMile(Long codigoSolicitacao) {
+		Entrega entrega = buscarEntregaByCodigoSolicitacao(codigoSolicitacao);
+		if (StatusEntrega.DISTRIBUICAO.equals(entrega.getStatusEntrega())) {
+			alterarStatusEntrega(entrega, StatusEntrega.LAST_MILE);
+			entregaRepository.save(entrega);
+		} else if (StatusEntrega.LAST_MILE.equals(entrega.getStatusEntrega())) {
+			throw new OperacaoNaoEfetuadaException("A entrega já saiu do CD e está a caminho do cliente final.");
+		} else {
+			throw new OperacaoNaoEfetuadaException("Operação não efetuada. Motivo: " + entrega.getStatusEntrega().getDescricao());
+		}
+		return new OperacaoEtapaResponse(codigoSolicitacao, entrega.getDataStatusEntrega(), "Last-Mile iniciado: a carga está a caminho do cliente final.");
+	}
+
+	@Override
+	public ConfirmacaoEntregaResponse finalizarEntrega(Long codigoSolicitacao) {
+		Entrega entrega = buscarEntregaByCodigoSolicitacao(codigoSolicitacao);
+		if (StatusEntrega.DISTRIBUICAO.equals(entrega.getStatusEntrega())) {
+			alterarStatusEntrega(entrega, StatusEntrega.FINALIZADA);
+			entregaRepository.save(entrega);
+		} else if (StatusEntrega.FINALIZADA.equals(entrega.getStatusEntrega())) {
+			throw new OperacaoNaoEfetuadaException("Operação não efetuada. Motivo: entrega já foi finalizada.");
+		} else {
+			throw new OperacaoNaoEfetuadaException("Operação não efetuada porque o transporte da entrega [" + codigoSolicitacao + "] ainda não foi iniciado.");
+		}
+		return new ConfirmacaoEntregaResponse(codigoSolicitacao, entrega.getDataFinalizacao(), "Mercadoria entregue ao cliente final.",
+				entrega.getRecebedorEntrega());
+	}
+	
+	private void alterarStatusEntrega(Entrega entrega, StatusEntrega novoStatus) {
+		entrega.setStatusEntrega(novoStatus);
+		entrega.setDataStatusEntrega(LocalDateTime.now());
+		entrega.setDataAlteracao(LocalDateTime.now());
+		if (StatusEntrega.FINALIZADA.equals(entrega.getStatusEntrega())) {
+			entrega.setDataFinalizacao(LocalDateTime.now());
+			entrega.setRecebedorEntrega(MockUtils.getRecebedorMercadoria());
+		} else if (StatusEntrega.FINALIZADA.equals(entrega.getStatusEntrega())) {
+			entrega.setDataCancelamento(LocalDateTime.now());
+		}
+	}
 }

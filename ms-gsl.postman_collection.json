@@ -892,7 +892,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{api-gateway}}/gsl-entrega/entregas/findProgressByRequestCode/723386982277",
+									"raw": "{{api-gateway}}/gsl-entrega/entregas/findProgressByRequestCode/340836361259",
 									"host": [
 										"{{api-gateway}}"
 									],
@@ -900,7 +900,7 @@
 										"gsl-entrega",
 										"entregas",
 										"findProgressByRequestCode",
-										"723386982277"
+										"340836361259"
 									]
 								}
 							},
@@ -1013,6 +1013,45 @@
 							"response": []
 						},
 						{
+							"name": "Efetuar Pagamento",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api-gateway}}/gsl-entrega/entregas/efetuarPagamento/340836361259",
+									"host": [
+										"{{api-gateway}}"
+									],
+									"path": [
+										"gsl-entrega",
+										"entregas",
+										"efetuarPagamento",
+										"340836361259"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Atualizar Por Código de Solicitação (distância percorrida e data de alteração)",
 							"request": {
 								"auth": {
@@ -1029,7 +1068,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"codigoSolicitacao\": 172872002285\r\n}",
+									"raw": "{\r\n  \"codigoSolicitacao\": 340836361259\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1075,7 +1114,7 @@
 									}
 								},
 								"url": {
-									"raw": "{{api-gateway}}/gsl-entrega/entregas/iniciarTransporte/938806853797",
+									"raw": "{{api-gateway}}/gsl-entrega/entregas/iniciarTransporte/340836361259",
 									"host": [
 										"{{api-gateway}}"
 									],
@@ -1083,7 +1122,7 @@
 										"gsl-entrega",
 										"entregas",
 										"iniciarTransporte",
-										"938806853797"
+										"340836361259"
 									]
 								}
 							},

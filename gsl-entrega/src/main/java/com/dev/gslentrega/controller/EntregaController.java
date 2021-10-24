@@ -37,12 +37,6 @@ public class EntregaController {
 	@Autowired
 	private EntregaService entregaService;
 	
-	@PostMapping("solicitar")
-	@Transactional(rollbackFor = Exception.class)
-	public ResponseEntity<?> solicitarEntrega(@Valid @RequestBody EntregaRequest entregaRequest) {
-		return new ResponseEntity<>(entregaService.cadastrarEntrega(entregaRequest), HttpStatus.CREATED);
-	}
-	
 	@GetMapping
 	public ResponseEntity<List<Entrega>> findAll() {
 		List<Entrega> list = entregaService.buscarEntregas();
@@ -90,16 +84,51 @@ public class EntregaController {
 		return ResponseEntity.ok(andamentoEntregaResponse);
 	}
 	
+	@PostMapping("solicitar")
+	@Transactional(rollbackFor = Exception.class)
+	public ResponseEntity<?> solicitarEntrega(@Valid @RequestBody EntregaRequest entregaRequest) {
+		return new ResponseEntity<>(entregaService.cadastrarEntrega(entregaRequest), HttpStatus.CREATED);
+	}
+
+	@PatchMapping("efetuarPagamento/{codigoSolicitacao}")
+	public ResponseEntity<?> efetuarPagamento(@PathVariable Long codigoSolicitacao) {
+		return new ResponseEntity<>(entregaService.efetuarPagamento(codigoSolicitacao), HttpStatus.OK);
+	}
+	
+	@PatchMapping("coletarCarga/{codigoSolicitacao}")
+	public ResponseEntity<?> coletarCarga(@PathVariable Long codigoSolicitacao) {
+		return new ResponseEntity<>(entregaService.coletarCarga(codigoSolicitacao), HttpStatus.OK);
+	}
+	
+	@PatchMapping("efetuarRoteirizacao/{codigoSolicitacao}")
+	public ResponseEntity<?> efetuarRoteirizacao(@PathVariable Long codigoSolicitacao) {
+		return new ResponseEntity<>(entregaService.efetuarRoteirizacao(codigoSolicitacao), HttpStatus.OK);
+	}
+
 	@PatchMapping("iniciarTransporte/{codigoSolicitacao}")
 	public ResponseEntity<?> iniciarTransporte(@PathVariable Long codigoSolicitacao) {
-		entregaService.iniciarTransporte(codigoSolicitacao);
-		return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<>(entregaService.iniciarTransporte(codigoSolicitacao), HttpStatus.OK);
+	}
+	
+	@PatchMapping("distribuirNosCds/{codigoSolicitacao}")
+	public ResponseEntity<?> distribuirNosCds(@PathVariable Long codigoSolicitacao) {
+		entregaService.distribuirNosCds(codigoSolicitacao);
+		return new ResponseEntity<>(entregaService.distribuirNosCds(codigoSolicitacao), HttpStatus.OK);
+	}
+	
+	@PatchMapping("iniciarLastMile/{codigoSolicitacao}")
+	public ResponseEntity<?> iniciarLastMile(@PathVariable Long codigoSolicitacao) {
+		entregaService.iniciarLastMile(codigoSolicitacao);
+		return new ResponseEntity<>(entregaService.iniciarLastMile(codigoSolicitacao), HttpStatus.OK);
 	}
 	
 	@PatchMapping("finalizarEntrega/{codigoSolicitacao}")
 	public ResponseEntity<?> finalizarEntrega(@PathVariable Long codigoSolicitacao) {
-		entregaService.finalizarEntrega(codigoSolicitacao);
-		return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<>(entregaService.finalizarEntrega(codigoSolicitacao), HttpStatus.OK);
 	}
 	
+	@PatchMapping("cancelarEntrega/{codigoSolicitacao}")
+	public ResponseEntity<?> cancelarEntrega(@PathVariable Long codigoSolicitacao) {
+		return new ResponseEntity<>(entregaService.cancelarEntrega(codigoSolicitacao), HttpStatus.OK);
+	}
 }

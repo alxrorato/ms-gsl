@@ -22,16 +22,15 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class ConfirmacaoEntregaResponse implements Serializable {
+public class OperacaoEtapaResponse implements Serializable {
 
-	private static final long serialVersionUID = 12807853540592816L;
 
+	private static final long serialVersionUID = 9051027870437338226L;
+	
 	private Long codigoSolicitacao;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
-	private LocalDateTime dataFinalizacao;
+	private LocalDateTime dataOperacao;
 	
 	private String mensagem;
-	
-	private String recebedorEntrega;
 }
