@@ -113,13 +113,11 @@ public class EntregaController {
 	
 	@PatchMapping("distribuirNosCds/{codigoSolicitacao}")
 	public ResponseEntity<?> distribuirNosCds(@PathVariable Long codigoSolicitacao) {
-		entregaService.distribuirNosCds(codigoSolicitacao);
 		return new ResponseEntity<>(entregaService.distribuirNosCds(codigoSolicitacao), HttpStatus.OK);
 	}
 	
 	@PatchMapping("iniciarLastMile/{codigoSolicitacao}")
 	public ResponseEntity<?> iniciarLastMile(@PathVariable Long codigoSolicitacao) {
-		entregaService.iniciarLastMile(codigoSolicitacao);
 		return new ResponseEntity<>(entregaService.iniciarLastMile(codigoSolicitacao), HttpStatus.OK);
 	}
 	

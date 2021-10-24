@@ -2,7 +2,10 @@ package com.dev.gslentrega.service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -304,17 +307,18 @@ public class EntregaServiceImpl implements EntregaService {
 	public AndamentoEntregaResponse findProgressByRequestCode(Long codigoSolicitacao) {
 		atualizarPercurso(codigoSolicitacao);
 		Entrega entrega = buscarEntregaByCodigoSolicitacao(codigoSolicitacao);
-		BigDecimal distanciaApercorrer = entrega.getDistanciaTotal().subtract(entrega.getDistanciaPercorrida());
 		AndamentoEntregaResponse andamentoEntregaResponse = new AndamentoEntregaResponse();
 		andamentoEntregaResponse.setCodigoSolicitacao(codigoSolicitacao);
 		andamentoEntregaResponse.setDistanciaTotal(entrega.getDistanciaTotal());
 		andamentoEntregaResponse.setDistanciaPercorrida(entrega.getDistanciaPercorrida());
-		andamentoEntregaResponse.setDistanciaApercorrer(distanciaApercorrer);
+		andamentoEntregaResponse.setDistanciaApercorrer(entrega.getDistanciaTotal().subtract(entrega.getDistanciaPercorrida()));
 		andamentoEntregaResponse.setPercentualPercorrido(GeneralUtils.percentual(entrega.getDistanciaTotal(), 
 				entrega.getDistanciaPercorrida()));
 		andamentoEntregaResponse.setPercentualAPercorrer(GeneralUtils.percentual(entrega.getDistanciaTotal(), 
 				andamentoEntregaResponse.getDistanciaApercorrer()));
-		andamentoEntregaResponse.setPrevisaoEntrega("verificar como calcular tempo previsto para entrega");
+		andamentoEntregaResponse.setStatus(entrega.getStatusEntrega().getDescricao());
+		andamentoEntregaResponse.setPrevisaoEntrega(montaTextoPrevisaoEntrega(entrega.getDataPrevisao(), 
+				entrega.getDataAlteracao() != null ? entrega.getDataAlteracao() : LocalDateTime.now()));
 		
 		LocalizacaoCarga localizacao = new LocalizacaoCarga(MockUtils.getLatitudeLongitude(LIMITE_LATITUDE_LONGITUDE),
 				MockUtils.getLatitudeLongitude(LIMITE_LATITUDE_LONGITUDE));
@@ -324,11 +328,36 @@ public class EntregaServiceImpl implements EntregaService {
 		return andamentoEntregaResponse;
 	}
 
+	private String montaTextoPrevisaoEntrega(LocalDateTime dataPrevisao, LocalDateTime dataConsulta) {
+		long dias = ChronoUnit.DAYS.between(dataConsulta.toLocalDate(), dataPrevisao.toLocalDate());
+		String textoPrevisaoEntrega = "Em " + dias + " dias";
+		/* teste */
+		dias = 0L;
+		dataConsulta = dataPrevisao.minusHours(2L).minusMinutes(30);
+		 /* */
+		
+     	if (dias == 0L) {
+			Duration duration = Duration.between(dataPrevisao, dataConsulta);
+			textoPrevisaoEntrega = "Hoje aproximadamente daqui a " + duration.toHours() + "horas e " + duration.toMinutes() + " minutos";
+		}
+     	return textoPrevisaoEntrega;
+	}
+
 	private void atualizarPercurso(Long codigoSolicitacao) {
 		Entrega entrega = buscarEntregaByCodigoSolicitacao(codigoSolicitacao);
-		entrega.setDataAlteracao(LocalDateTime.now());
-		entrega.setDistanciaPercorrida(MockUtils.getDistancia(entrega.getDistanciaTotal().subtract(entrega.getDistanciaPercorrida())));
-		entregaRepository.save(entrega);
+		BigDecimal distanciaApercorrer = entrega.getDistanciaTotal().subtract(entrega.getDistanciaPercorrida());
+
+		if (entrega.getStatusEntrega().getCodigo() >= StatusEntrega.TRANSPORTE.getCodigo()
+				&& entrega.getStatusEntrega().getCodigo() < StatusEntrega.FINALIZADA.getCodigo()
+				&& distanciaApercorrer.compareTo(GeneralUtils.UM) > 0) {
+			
+			entrega.setDistanciaPercorrida(entrega.getDistanciaPercorrida().add(
+					MockUtils.getDistancia(entrega.getDistanciaTotal().subtract(GeneralUtils.UM)
+							.subtract(entrega.getDistanciaPercorrida()))));
+			
+			entrega.setDataAlteracao(LocalDateTime.now());
+			entregaRepository.save(entrega);
+		} 
 	}
 
 	@Override
@@ -455,6 +484,7 @@ public class EntregaServiceImpl implements EntregaService {
 		if (StatusEntrega.FINALIZADA.equals(entrega.getStatusEntrega())) {
 			entrega.setDataFinalizacao(LocalDateTime.now());
 			entrega.setRecebedorEntrega(MockUtils.getRecebedorMercadoria());
+			entrega.setDistanciaPercorrida(entrega.getDistanciaTotal());
 		} else if (StatusEntrega.CANCELADA.equals(entrega.getStatusEntrega())) {
 			entrega.setDataCancelamento(LocalDateTime.now());
 			entrega.setMotivoCancelamento(MockUtils.getMotivoCancelamentoEntrega());

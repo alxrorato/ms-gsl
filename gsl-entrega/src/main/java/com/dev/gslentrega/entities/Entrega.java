@@ -77,7 +77,7 @@ public class Entrega implements Serializable {
 	private LocalDateTime dataSolicitacao;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-	private LocalDate dataPrevisao;
+	private LocalDateTime dataPrevisao;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
 	private LocalDateTime dataFinalizacao;

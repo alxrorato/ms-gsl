@@ -31,6 +31,7 @@ public class AndamentoEntregaResponse implements Serializable {
 	private BigDecimal distanciaApercorrer;
 	private BigDecimal percentualPercorrido;
 	private BigDecimal percentualAPercorrer;
+	private String status;
 	private String previsaoEntrega;
 	private LocalizacaoCarga localizacaoCarga;;
 }

@@ -60,7 +60,7 @@ public class MockUtils {
 		BigDecimal distancia = GeneralUtils.ZERO;
 		do {
 			distancia = RandomUtils.getRandomNumber(GeneralUtils.ZERO, limit, SCALE_2);
-		} while (distancia == GeneralUtils.ZERO);
+		} while (distancia.compareTo(GeneralUtils.ZERO) == 0);
 		return distancia;
 	}
 	
@@ -68,7 +68,7 @@ public class MockUtils {
 		BigDecimal latitudeLongitude = GeneralUtils.ZERO;
 		do {
 			latitudeLongitude = RandomUtils.getRandomNumber(GeneralUtils.UM, limit, SCALE_4);
-		} while (latitudeLongitude == GeneralUtils.ZERO);
+		} while (latitudeLongitude.compareTo(GeneralUtils.ZERO) == 0);
 		return latitudeLongitude;
 	}
 
@@ -92,11 +92,11 @@ public class MockUtils {
 		}
 	}
 	
-	public static LocalDate getDataPrevisaoEntrega(LocalDateTime dataSolicitacao, EnderecoOrigem enderecoOrigem, 
+	public static LocalDateTime getDataPrevisaoEntrega(LocalDateTime dataSolicitacao, EnderecoOrigem enderecoOrigem, 
 			EnderecoDestino enderecoDestino, BigDecimal distancia) {
 
 		return dataSolicitacao.plusDays(getDaysPrevisaoEntrega(enderecoOrigem, 
-				enderecoDestino, distancia)).toLocalDate();
+				enderecoDestino, distancia))/*.toLocalDate()*/;
 	}
 /*	
 	public static Double getPrecoPorKg(Double pesoCarga) {

@@ -1343,14 +1343,14 @@
 									}
 								},
 								"url": {
-									"raw": "{{api-gateway}}/gsl-entrega/entregas/finalizarEntrega/{{codigo-solicitacao}}",
+									"raw": "{{api-gateway}}/gsl-entrega/entregas/cancelarEntrega/{{codigo-solicitacao}}",
 									"host": [
 										"{{api-gateway}}"
 									],
 									"path": [
 										"gsl-entrega",
 										"entregas",
-										"finalizarEntrega",
+										"cancelarEntrega",
 										"{{codigo-solicitacao}}"
 									]
 								}
