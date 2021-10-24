@@ -35,6 +35,7 @@ import com.dev.gslentrega.request.EntregaRequest;
 import com.dev.gslentrega.request.SolicitacaoRequest;
 import com.dev.gslentrega.request.StatusEntregaRequest;
 import com.dev.gslentrega.response.AndamentoEntregaResponse;
+import com.dev.gslentrega.response.CancelamentoResponse;
 import com.dev.gslentrega.response.Cliente;
 import com.dev.gslentrega.response.ConfirmacaoEntregaResponse;
 import com.dev.gslentrega.response.LocalizacaoCarga;
@@ -313,6 +314,7 @@ public class EntregaServiceImpl implements EntregaService {
 				entrega.getDistanciaPercorrida()));
 		andamentoEntregaResponse.setPercentualAPercorrer(GeneralUtils.percentual(entrega.getDistanciaTotal(), 
 				andamentoEntregaResponse.getDistanciaApercorrer()));
+		andamentoEntregaResponse.setPrevisaoEntrega("verificar como calcular tempo previsto para entrega");
 		
 		LocalizacaoCarga localizacao = new LocalizacaoCarga(MockUtils.getLatitudeLongitude(LIMITE_LATITUDE_LONGITUDE),
 				MockUtils.getLatitudeLongitude(LIMITE_LATITUDE_LONGITUDE));
@@ -423,7 +425,7 @@ public class EntregaServiceImpl implements EntregaService {
 	@Override
 	public ConfirmacaoEntregaResponse finalizarEntrega(Long codigoSolicitacao) {
 		Entrega entrega = buscarEntregaByCodigoSolicitacao(codigoSolicitacao);
-		if (StatusEntrega.DISTRIBUICAO.equals(entrega.getStatusEntrega())) {
+		if (StatusEntrega.LAST_MILE.equals(entrega.getStatusEntrega())) {
 			alterarStatusEntrega(entrega, StatusEntrega.FINALIZADA);
 			entregaRepository.save(entrega);
 		} else if (StatusEntrega.FINALIZADA.equals(entrega.getStatusEntrega())) {
@@ -434,6 +436,17 @@ public class EntregaServiceImpl implements EntregaService {
 		return new ConfirmacaoEntregaResponse(codigoSolicitacao, entrega.getDataFinalizacao(), "Mercadoria entregue ao cliente final.",
 				entrega.getRecebedorEntrega());
 	}
+
+	@Override
+	public CancelamentoResponse cancelarEntrega(Long codigoSolicitacao) {
+		Entrega entrega = buscarEntregaByCodigoSolicitacao(codigoSolicitacao);
+		if (StatusEntrega.FINALIZADA.equals(entrega.getStatusEntrega())) {
+			throw new OperacaoNaoEfetuadaException("Cancelamento não permitido porque a entrega já foi finalizada. Favor contactar o atendimento ao cliente em caso de dúvidas.");
+		}
+		alterarStatusEntrega(entrega, StatusEntrega.FINALIZADA);
+		entregaRepository.save(entrega);
+		return new CancelamentoResponse(codigoSolicitacao, entrega.getDataCancelamento(), "Cancelamento efetuado com sucesso.", entrega.getMotivoCancelamento());
+	}
 	
 	private void alterarStatusEntrega(Entrega entrega, StatusEntrega novoStatus) {
 		entrega.setStatusEntrega(novoStatus);
@@ -442,8 +455,9 @@ public class EntregaServiceImpl implements EntregaService {
 		if (StatusEntrega.FINALIZADA.equals(entrega.getStatusEntrega())) {
 			entrega.setDataFinalizacao(LocalDateTime.now());
 			entrega.setRecebedorEntrega(MockUtils.getRecebedorMercadoria());
-		} else if (StatusEntrega.FINALIZADA.equals(entrega.getStatusEntrega())) {
+		} else if (StatusEntrega.CANCELADA.equals(entrega.getStatusEntrega())) {
 			entrega.setDataCancelamento(LocalDateTime.now());
+			entrega.setMotivoCancelamento(MockUtils.getMotivoCancelamentoEntrega());
 		}
 	}
 }

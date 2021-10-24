@@ -29,6 +29,8 @@ public class MockUtils {
 			"Lucas Silva Lima", "Vitória Melo Dias", "Gabrielle Ferreira Rodrigues", "Isabela Correia Castro", "Mateus Martins Araujo", 
 			"Tiago Alves Carvalho", "Anna Barros Fernandes", "Sophia Gomes Oliveira", "Camila Rodrigues Ribeiro");
 	
+	private static final List<String> MOTIVOS_CANCELAMENTOS_ENTREGAS = Arrays.asList("Desistência por parte do cliente", "Imprevisto durante o transporte", 
+			"Entrega iria demorar além do prazo previsto");
 	/*
 	public static final Map<Double, Double> TABELA_PRECO_PRETE_POR_KG = Stream.of(new Object[][] { 
 	     { 0.0, 1.0 }, 
@@ -137,4 +139,9 @@ public class MockUtils {
 		
 	}
 	
+	public static String getMotivoCancelamentoEntrega() {
+		
+		return MOTIVOS_CANCELAMENTOS_ENTREGAS.get(RandomUtils.getRandomNumber(MOTIVOS_CANCELAMENTOS_ENTREGAS.size() - 1));
+		
+	}
 }
