@@ -5,9 +5,11 @@ import java.util.List;
 import javax.validation.Valid;
 
 import com.dev.gslentrega.entities.Entrega;
+import com.dev.gslentrega.request.CalculoFreteRequest;
 import com.dev.gslentrega.request.EntregaRequest;
 import com.dev.gslentrega.request.SolicitacaoRequest;
 import com.dev.gslentrega.response.AndamentoEntregaResponse;
+import com.dev.gslentrega.response.CalculoFreteResponse;
 import com.dev.gslentrega.response.CancelamentoResponse;
 import com.dev.gslentrega.response.Cliente;
 import com.dev.gslentrega.response.ConfirmacaoEntregaResponse;
@@ -45,5 +47,7 @@ public interface EntregaService {
 	ConfirmacaoEntregaResponse finalizarEntrega(Long codigoSolicitacao);
 
 	CancelamentoResponse cancelarEntrega(Long codigoSolicitacao);
+
+	CalculoFreteResponse estimarCalculoFrete(@Valid CalculoFreteRequest calculoFreteRequest);
 
 }

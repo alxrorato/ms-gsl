@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,17 +26,16 @@ import com.dev.gslentrega.enums.StatusPagamento;
 import com.dev.gslentrega.enums.TipoDocumento;
 import com.dev.gslentrega.enums.UF;
 import com.dev.gslentrega.errors.ClienteNotFoundException;
-import com.dev.gslentrega.errors.EntregaJaEstaEmAndamentoException;
-import com.dev.gslentrega.errors.EntregaJaFinalizadaException;
 import com.dev.gslentrega.errors.EntregaNotFoundException;
 import com.dev.gslentrega.errors.OperacaoNaoEfetuadaException;
 import com.dev.gslentrega.feignclients.ClienteFeignClient;
 import com.dev.gslentrega.repositories.EntregaRepository;
+import com.dev.gslentrega.request.CalculoFreteRequest;
 import com.dev.gslentrega.request.CargaRequest;
 import com.dev.gslentrega.request.EntregaRequest;
 import com.dev.gslentrega.request.SolicitacaoRequest;
-import com.dev.gslentrega.request.StatusEntregaRequest;
 import com.dev.gslentrega.response.AndamentoEntregaResponse;
+import com.dev.gslentrega.response.CalculoFreteResponse;
 import com.dev.gslentrega.response.CancelamentoResponse;
 import com.dev.gslentrega.response.Cliente;
 import com.dev.gslentrega.response.ConfirmacaoEntregaResponse;
@@ -81,6 +79,8 @@ public class EntregaServiceImpl implements EntregaService {
 	private static final BigDecimal TAXA_SEGURO = new BigDecimal(0.03);
 	private static final BigDecimal IOF = new BigDecimal(7.38);
 	private static final BigDecimal LIMITE_LATITUDE_LONGITUDE = new BigDecimal(99);
+	private static final String PESO_CUBADO = "peso cubado";
+	private static final String PESO_TOTAL = "peso total";
 	
 	@Override
 	public Entrega buscarEntregaById(Long id) {
@@ -181,7 +181,32 @@ public class EntregaServiceImpl implements EntregaService {
 	}
 
 	private List<Carga> getCargasRequest(EntregaRequest entregaRequest) {
+		/* Testar pra ver se pode retirar esse codigo
 		List<CargaRequest> cargaRequests = entregaRequest.getCargas();
+		if (cargaRequests == null) {
+			return null;
+		}
+		
+		List<Carga> list = new ArrayList<>(cargaRequests.size());
+		for (CargaRequest cargaRequest : cargaRequests) {
+			Carga carga = new Carga();
+			carga.setEspecie(cargaRequest.getEspecie());
+			carga.setNatureza(cargaRequest.getNatureza());
+			carga.setNotaFiscal(cargaRequest.getNotaFiscal());
+			carga.setPeso(cargaRequest.getPeso());
+			carga.setQuantidade(cargaRequest.getQuantidade());
+			carga.setVolume(cargaRequest.getVolume());
+			carga.setValor(cargaRequest.getValor());
+			carga.setNotaFiscal(cargaRequest.getNotaFiscal());
+			list.add(carga);
+		}
+		return list;
+		*/
+		return getListCargaByListCargaRequest(entregaRequest.getCargaRequests());
+		
+	}
+
+	private List<Carga> getListCargaByListCargaRequest(List<CargaRequest> cargaRequests) {
 		if (cargaRequests == null) {
 			return null;
 		}
@@ -215,6 +240,11 @@ public class EntregaServiceImpl implements EntregaService {
 		BigDecimal volumeTotal = getVolumeTotalCarga(cargas);
 		BigDecimal precoPorKg = MockUtils.getPrecoPorKg(pesoTotal);
 		BigDecimal pesoCubado = getPesoCubadoCarga(volumeTotal);
+		return precoPorKg.multiply(pesoTotal.max(pesoCubado));
+	}
+
+	// Mesma calculo do método acima, mas este recebe como parâmetro os valores que compõe o cálculo
+	private BigDecimal getValorFretePeso(BigDecimal pesoTotal, BigDecimal precoPorKg, BigDecimal pesoCubado) {
 		return precoPorKg.multiply(pesoTotal.max(pesoCubado));
 	}
 
@@ -331,14 +361,9 @@ public class EntregaServiceImpl implements EntregaService {
 	private String montaTextoPrevisaoEntrega(LocalDateTime dataPrevisao, LocalDateTime dataConsulta) {
 		long dias = ChronoUnit.DAYS.between(dataConsulta.toLocalDate(), dataPrevisao.toLocalDate());
 		String textoPrevisaoEntrega = "Em " + dias + " dias";
-		/* teste */
-		dias = 0L;
-		dataConsulta = dataPrevisao.minusHours(2L).minusMinutes(30);
-		 /* */
-		
      	if (dias == 0L) {
-			Duration duration = Duration.between(dataPrevisao, dataConsulta);
-			textoPrevisaoEntrega = "Hoje aproximadamente daqui a " + duration.toHours() + "horas e " + duration.toMinutes() + " minutos";
+			Duration duration = Duration.between(dataConsulta, dataPrevisao);
+			textoPrevisaoEntrega = "Hoje aproximadamente daqui a " + duration.toHours() + "h" + duration.toMinutesPart();
 		}
      	return textoPrevisaoEntrega;
 	}
@@ -489,5 +514,19 @@ public class EntregaServiceImpl implements EntregaService {
 			entrega.setDataCancelamento(LocalDateTime.now());
 			entrega.setMotivoCancelamento(MockUtils.getMotivoCancelamentoEntrega());
 		}
+	}
+
+	@Override
+	public CalculoFreteResponse estimarCalculoFrete(@Valid CalculoFreteRequest calculoFreteRequest) {
+		List<Carga> cargas = getListCargaByListCargaRequest(calculoFreteRequest.getCargas());
+		BigDecimal pesoTotal = getPesoTotalCarga(cargas);
+		BigDecimal volumeTotal = getVolumeTotalCarga(cargas);
+		BigDecimal precoPorKg = MockUtils.getPrecoPorKg(pesoTotal);
+		BigDecimal pesoCubado = getPesoCubadoCarga(volumeTotal);
+		BigDecimal maxPeso = pesoTotal.max(pesoCubado);
+		BigDecimal valorFrete = getValorFretePeso(pesoTotal, precoPorKg, pesoCubado);
+		String pesoUtilizadoNoCalculo = (maxPeso.compareTo(pesoCubado) >= 0) ? PESO_CUBADO : PESO_TOTAL;
+		String observacao = "No cálculo foi considerado o " + pesoUtilizadoNoCalculo + " da carga";
+		return new CalculoFreteResponse(PESO_CUBADO_EM_KG_PARA_1M3, pesoTotal, volumeTotal, precoPorKg, pesoCubado, valorFrete, observacao);
 	}
 }

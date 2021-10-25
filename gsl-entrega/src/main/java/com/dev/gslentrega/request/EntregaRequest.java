@@ -36,7 +36,7 @@ public class EntregaRequest {
 	private EnderecoRequest enderecoOrigem;
 	private EnderecoRequest enderecoDestino;
 	//private LocalDateTime dataSolicitacao;
-	private List<CargaRequest> cargas;
+	private List<CargaRequest> cargaRequests/*cargas*/;
 	private String naturezaPrestacao; // Ex.: 16556 - Transporte a estabelecimento comercial 
 	//private String situacaoTributaria; //Ex.: 00 - Tributação normal do ICMS
 	//private Double baseCalculoImposto; // == valor total do serviço

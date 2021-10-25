@@ -20,10 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dev.gslentrega.entities.Entrega;
 import com.dev.gslentrega.errors.ServicoIndisponivelException;
+import com.dev.gslentrega.request.CalculoFreteRequest;
 import com.dev.gslentrega.request.EntregaRequest;
 import com.dev.gslentrega.request.SolicitacaoRequest;
 import com.dev.gslentrega.request.StatusEntregaRequest;
 import com.dev.gslentrega.response.AndamentoEntregaResponse;
+import com.dev.gslentrega.response.CalculoFreteResponse;
 import com.dev.gslentrega.response.Cliente;
 import com.dev.gslentrega.service.EntregaService;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
@@ -83,6 +85,12 @@ public class EntregaController {
 	public ResponseEntity<AndamentoEntregaResponse> findProgressByRequestCode(@PathVariable Long codigoSolicitacao) {
 		AndamentoEntregaResponse andamentoEntregaResponse = entregaService.findProgressByRequestCode(codigoSolicitacao);
 		return ResponseEntity.ok(andamentoEntregaResponse);
+	}
+
+	@GetMapping(value = "/estimarCalculoFrete")
+	public ResponseEntity<CalculoFreteResponse> estimarCalculoFrete(@Valid @RequestBody CalculoFreteRequest calculoFreteRequest) {
+		CalculoFreteResponse calculoFreteResponse = entregaService.estimarCalculoFrete(calculoFreteRequest);
+		return ResponseEntity.ok(calculoFreteResponse);
 	}
 	
 	@PostMapping("solicitar")
