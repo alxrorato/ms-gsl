@@ -527,6 +527,7 @@ public class EntregaServiceImpl implements EntregaService {
 		BigDecimal valorFrete = getValorFretePeso(pesoTotal, precoPorKg, pesoCubado);
 		String pesoUtilizadoNoCalculo = (maxPeso.compareTo(pesoCubado) >= 0) ? PESO_CUBADO : PESO_TOTAL;
 		String observacao = "No cálculo foi considerado o " + pesoUtilizadoNoCalculo + " da carga";
-		return new CalculoFreteResponse(PESO_CUBADO_EM_KG_PARA_1M3, pesoTotal, volumeTotal, precoPorKg, pesoCubado, valorFrete, observacao);
+		return new CalculoFreteResponse(PESO_CUBADO_EM_KG_PARA_1M3, pesoTotal, volumeTotal, precoPorKg, 
+				pesoCubado, valorFrete, observacao);
 	}
 }
