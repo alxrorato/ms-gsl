@@ -31,7 +31,7 @@ import lombok.Setter;
 public class EntregaRequest {
 
 	private Long cnpjCliente;
-	private int tipoDocumentoDestinatario; //1-cpf; 2-cnpj
+	private String tipoDocumentoDestinatario; // "CPF" ou "CNPJ"
 	private Long documentoDestinatario;
 	private EnderecoRequest enderecoOrigem;
 	private EnderecoRequest enderecoDestino;

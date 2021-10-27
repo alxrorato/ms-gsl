@@ -16,11 +16,10 @@ import lombok.Setter;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class Endereco implements Serializable {
+public class EnderecoAtorCte implements Serializable {
 
 	private static final long serialVersionUID = -2515059053089546417L;
 	
-	private Long id;	
 	private String logradouro;
 	private String bairro;
 	private String cidade;

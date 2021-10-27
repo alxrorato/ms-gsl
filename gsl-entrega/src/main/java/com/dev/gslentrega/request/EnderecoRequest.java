@@ -15,6 +15,6 @@ public class EnderecoRequest {
 	private String cidade;
 	private String uf;
 	private String cep;
-	private Integer numero;
+	private String numero;
 	private String complemento;
 }

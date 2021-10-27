@@ -13,6 +13,7 @@ import com.dev.gslentrega.response.CalculoFreteResponse;
 import com.dev.gslentrega.response.CancelamentoResponse;
 import com.dev.gslentrega.response.Cliente;
 import com.dev.gslentrega.response.ConfirmacaoEntregaResponse;
+import com.dev.gslentrega.response.EmissaoCteResponse;
 import com.dev.gslentrega.response.OperacaoEtapaResponse;
 import com.dev.gslentrega.response.PagamentoResponse;
 
@@ -49,5 +50,7 @@ public interface EntregaService {
 	CancelamentoResponse cancelarEntrega(Long codigoSolicitacao);
 
 	CalculoFreteResponse estimarCalculoFrete(@Valid CalculoFreteRequest calculoFreteRequest);
+
+	EmissaoCteResponse emitirCte(Long codigoSolicitacao);
 
 }

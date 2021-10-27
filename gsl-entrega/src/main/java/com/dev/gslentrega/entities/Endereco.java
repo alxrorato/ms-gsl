@@ -64,9 +64,8 @@ public class Endereco implements Serializable {
 	private String cep;
 	
 	@NotNull(message = "{NotNull.endereco.numero}")
-	@Digits(integer = 5, fraction = 0)
-	@Column(nullable = false, length = 5)
-	private Integer numero;
+	@Column(nullable = false, length = 10)
+	private String numero;
 	
 	@Size(max = 30)
 	private String complemento;

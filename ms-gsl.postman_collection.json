@@ -792,7 +792,7 @@
 							"name": "Jornada da Entrega",
 							"item": [
 								{
-									"name": "01.1 - Solicitar Entrega",
+									"name": "02.1 - Solicitar Entrega",
 									"event": [
 										{
 											"listen": "test",
@@ -822,7 +822,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"cnpjCliente\": 20243276000108,\r\n  \"tipoDocumentoDestinatario\": 1,\r\n  \"documentoDestinatario\": 48116028030,\r\n  \"enderecoOrigem\": {\r\n        \"logradouro\": \"Rua Origem\",\r\n        \"numero\": 111,\r\n        \"complemento\": \"esquina\",\r\n        \"bairro\": \"Centro\",\r\n        \"cidade\": \"São Paulo\",\r\n        \"uf\": \"SP\",\r\n        \"cep\": \"01113500\"\r\n  },\r\n  \"enderecoDestino\": {\r\n        \"logradouro\": \"Rua Destino\",\r\n        \"numero\": 999,\r\n        \"complemento\": \"\",\r\n        \"bairro\": \"Meireles\",\r\n        \"cidade\": \"Fortaleza\",\r\n        \"uf\": \"CE\",\r\n        \"cep\": \"92333400\"\r\n  },\r\n  \"cargaRequests\": [\r\n      {\r\n    \t\"natureza\": \"granel\",\r\n\t    \"quantidade\": 2,\r\n\t    \"especie\": \"alimentos\",\r\n\t    \"peso\": 2,\r\n        \"volume\": 3,\r\n\t    \"valor\": 40.0,\r\n\t    \"notaFiscal\": \"NF0001\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"geral\",\r\n\t    \"quantidade\": 3,\r\n\t    \"especie\": \"brinquedos\",\r\n\t    \"peso\": 3,\r\n        \"volume\": 5,\r\n\t    \"valor\": 100.0,\r\n\t    \"notaFiscal\": \"NF0002\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"perigosa\",\r\n\t    \"quantidade\": 3,\r\n\t    \"especie\": \"substancias oxidantes\",\r\n\t    \"peso\": 50,\r\n        \"volume\": 2,\r\n\t    \"valor\": 1500.0,\r\n\t    \"notaFiscal\": \"NF0003\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"frigorificada\",\r\n\t    \"quantidade\": 20,\r\n\t    \"especie\": \"frutas\",\r\n\t    \"peso\": 45,\r\n        \"volume\": 5,\r\n\t    \"valor\": 555.0,\r\n\t    \"notaFiscal\": \"NF0004\"\r\n      }\r\n  ],\r\n  \"naturezaPrestacao\": \"16556 - Transporte a estabelecimento comercial\",\r\n  \"observacoes\": \"contem parte da carga de natureza perigosa\"\r\n}",
+											"raw": "{\r\n  \"cnpjCliente\": 20243276000108,\r\n  \"tipoDocumentoDestinatario\": \"CPF\",\r\n  \"documentoDestinatario\": 48116028030,\r\n  \"enderecoOrigem\": {\r\n        \"logradouro\": \"Av. Ipiranga\",\r\n        \"numero\": 111,\r\n        \"complemento\": \"esquina\",\r\n        \"bairro\": \"Centro\",\r\n        \"cidade\": \"São Paulo\",\r\n        \"uf\": \"SP\",\r\n        \"cep\": \"01113500\"\r\n  },\r\n  \"enderecoDestino\": {\r\n        \"logradouro\": \"Rua Carlos Vasconcelos\",\r\n        \"numero\": 999,\r\n        \"complemento\": \"apto. 111-b\",\r\n        \"bairro\": \"Meireles\",\r\n        \"cidade\": \"Fortaleza\",\r\n        \"uf\": \"CE\",\r\n        \"cep\": \"92333400\"\r\n  },\r\n  \"cargaRequests\": [\r\n      {\r\n    \t\"natureza\": \"granel\",\r\n\t    \"quantidade\": 2,\r\n\t    \"especie\": \"alimentos\",\r\n\t    \"peso\": 2,\r\n        \"volume\": 3,\r\n\t    \"valor\": 40.0,\r\n\t    \"notaFiscal\": \"NF0001\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"geral\",\r\n\t    \"quantidade\": 3,\r\n\t    \"especie\": \"brinquedos\",\r\n\t    \"peso\": 3,\r\n        \"volume\": 5,\r\n\t    \"valor\": 100.0,\r\n\t    \"notaFiscal\": \"NF0002\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"perigosa\",\r\n\t    \"quantidade\": 3,\r\n\t    \"especie\": \"substancias oxidantes\",\r\n\t    \"peso\": 50,\r\n        \"volume\": 2,\r\n\t    \"valor\": 1500.0,\r\n\t    \"notaFiscal\": \"NF0003\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"frigorificada\",\r\n\t    \"quantidade\": 20,\r\n\t    \"especie\": \"frutas\",\r\n\t    \"peso\": 45,\r\n        \"volume\": 5,\r\n\t    \"valor\": 555.0,\r\n\t    \"notaFiscal\": \"NF0004\"\r\n      }\r\n  ],\r\n  \"naturezaPrestacao\": \"16556 - Transporte a estabelecimento comercial\",\r\n  \"observacoes\": \"contem parte da carga de natureza perigosa\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -844,7 +844,7 @@
 									"response": []
 								},
 								{
-									"name": "00.1 - Estimar Cálculo do Frete",
+									"name": "01.1 - Estimar Cálculo do Frete",
 									"event": [
 										{
 											"listen": "test",
@@ -899,7 +899,7 @@
 									"response": []
 								},
 								{
-									"name": "00.2 - Estimar Cálculo do Frete Copy",
+									"name": "01.2 - Estimar Cálculo do Frete",
 									"event": [
 										{
 											"listen": "test",
@@ -954,7 +954,7 @@
 									"response": []
 								},
 								{
-									"name": "01.2 - Solicitar Entrega Região Norte",
+									"name": "02.2 - Solicitar Entrega Região Norte",
 									"event": [
 										{
 											"listen": "test",
@@ -984,7 +984,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"cnpjCliente\": 80200396000150,\r\n  \"tipoDocumentoDestinatario\": 1,\r\n  \"documentoDestinatario\": 27365467096,\r\n  \"enderecoOrigem\": {\r\n        \"logradouro\": \"Rua Origem\",\r\n        \"numero\": 111,\r\n        \"complemento\": \"esquina\",\r\n        \"bairro\": \"Centro\",\r\n        \"cidade\": \"Manaus\",\r\n        \"uf\": \"AM\",\r\n        \"cep\": \"69000001\"\r\n  },\r\n  \"enderecoDestino\": {\r\n        \"logradouro\": \"Rua Correa Neto\",\r\n        \"numero\": 999,\r\n        \"complemento\": \"\",\r\n        \"bairro\": \"Alvorada\",\r\n        \"cidade\": \"Parintins\",\r\n        \"uf\": \"AM\",\r\n        \"cep\": \"69111400\"\r\n  },\r\n  \"cargaRequests\": [\r\n      {\r\n    \t\"natureza\": \"granel\",\r\n\t    \"quantidade\": 5,\r\n\t    \"especie\": \"alimentos\",\r\n\t    \"peso\": 3,\r\n        \"volume\": 2,\r\n\t    \"valor\": 57.0,\r\n\t    \"notaFiscal\": \"NF0005\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"geral\",\r\n\t    \"quantidade\": 1,\r\n\t    \"especie\": \"brinquedos\",\r\n\t    \"peso\": 1,\r\n        \"volume\": 2,\r\n\t    \"valor\": 78.0,\r\n\t    \"notaFiscal\": \"NF0006\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"perigosa\",\r\n\t    \"quantidade\": 1,\r\n\t    \"especie\": \"substancias oxidantes\",\r\n\t    \"peso\": 4,\r\n        \"volume\": 2,\r\n\t    \"valor\": 150.0,\r\n\t    \"notaFiscal\": \"NF0007\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"frigorificada\",\r\n\t    \"quantidade\": 11,\r\n\t    \"especie\": \"frutas\",\r\n\t    \"peso\": 3,\r\n        \"volume\": 2,\r\n\t    \"valor\": 127.0,\r\n\t    \"notaFiscal\": \"NF0008\"\r\n      }\r\n  ],\r\n  \"naturezaPrestacao\": \"16556 - Transporte a estabelecimento comercial\",\r\n  \"observacoes\": \"contem produtos perecíveis\"\r\n}",
+											"raw": "{\r\n  \"cnpjCliente\": 80200396000150,\r\n  \"tipoDocumentoDestinatario\": \"CPF\",\r\n  \"documentoDestinatario\": 27365467096,\r\n  \"enderecoOrigem\": {\r\n        \"logradouro\": \"Rua Origem\",\r\n        \"numero\": 111,\r\n        \"complemento\": \"esquina\",\r\n        \"bairro\": \"Centro\",\r\n        \"cidade\": \"Manaus\",\r\n        \"uf\": \"AM\",\r\n        \"cep\": \"69000001\"\r\n  },\r\n  \"enderecoDestino\": {\r\n        \"logradouro\": \"Rua Correa Neto\",\r\n        \"numero\": 999,\r\n        \"complemento\": \"\",\r\n        \"bairro\": \"Alvorada\",\r\n        \"cidade\": \"Parintins\",\r\n        \"uf\": \"AM\",\r\n        \"cep\": \"69111400\"\r\n  },\r\n  \"cargaRequests\": [\r\n      {\r\n    \t\"natureza\": \"granel\",\r\n\t    \"quantidade\": 5,\r\n\t    \"especie\": \"alimentos\",\r\n\t    \"peso\": 3,\r\n        \"volume\": 2,\r\n\t    \"valor\": 57.0,\r\n\t    \"notaFiscal\": \"NF0005\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"geral\",\r\n\t    \"quantidade\": 1,\r\n\t    \"especie\": \"brinquedos\",\r\n\t    \"peso\": 1,\r\n        \"volume\": 2,\r\n\t    \"valor\": 78.0,\r\n\t    \"notaFiscal\": \"NF0006\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"perigosa\",\r\n\t    \"quantidade\": 1,\r\n\t    \"especie\": \"substancias oxidantes\",\r\n\t    \"peso\": 4,\r\n        \"volume\": 2,\r\n\t    \"valor\": 150.0,\r\n\t    \"notaFiscal\": \"NF0007\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"frigorificada\",\r\n\t    \"quantidade\": 11,\r\n\t    \"especie\": \"frutas\",\r\n\t    \"peso\": 3,\r\n        \"volume\": 2,\r\n\t    \"valor\": 127.0,\r\n\t    \"notaFiscal\": \"NF0008\"\r\n      }\r\n  ],\r\n  \"naturezaPrestacao\": \"16556 - Transporte a estabelecimento comercial\",\r\n  \"observacoes\": \"contem produtos perecíveis\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -1045,7 +1045,46 @@
 									"response": []
 								},
 								{
-									"name": "03 - Coletar Carga",
+									"name": "Emitir Cte com Envio ao SFC",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"enderecoRemetente\": {\r\n        \"logradouro\": \"Av. Ipiranga\",\r\n        \"numero\": 111,\r\n        \"complemento\": \"esquina\",\r\n        \"bairro\": \"Centro\",\r\n        \"cidade\": \"São Paulo\",\r\n        \"uf\": \"SP\",\r\n        \"cep\": \"01113500\"\r\n  },\r\n  \"enderecoDestinatario\": {\r\n        \"logradouro\": \"Rua Carlos Vasconcelos\",\r\n        \"numero\": 999,\r\n        \"complemento\": \"apto. 111-b\",\r\n        \"bairro\": \"Meireles\",\r\n        \"cidade\": \"Fortaleza\",\r\n        \"uf\": \"CE\",\r\n        \"cep\": \"92333400\"\r\n  },\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{api-gateway}}/gsl-entrega/entregas/emitirCte/{{codigo-solicitacao}}",
+											"host": [
+												"{{api-gateway}}"
+											],
+											"path": [
+												"gsl-entrega",
+												"entregas",
+												"emitirCte",
+												"{{codigo-solicitacao}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "04 - Coletar Carga",
 									"request": {
 										"auth": {
 											"type": "bearer",
@@ -1084,7 +1123,7 @@
 									"response": []
 								},
 								{
-									"name": "04 - Efetuar Roteirização",
+									"name": "05 - Efetuar Roteirização",
 									"request": {
 										"auth": {
 											"type": "bearer",
@@ -1123,7 +1162,7 @@
 									"response": []
 								},
 								{
-									"name": "05 - Iniciar Transporte",
+									"name": "06 - Iniciar Transporte",
 									"request": {
 										"auth": {
 											"type": "bearer",
@@ -1162,7 +1201,7 @@
 									"response": []
 								},
 								{
-									"name": "06 - Distribuir nos CDs",
+									"name": "07 - Distribuir nos CDs",
 									"request": {
 										"auth": {
 											"type": "bearer",
@@ -1201,7 +1240,7 @@
 									"response": []
 								},
 								{
-									"name": "07 - Iniciar Last Mile",
+									"name": "08 - Iniciar Last Mile",
 									"request": {
 										"auth": {
 											"type": "bearer",
@@ -1240,7 +1279,7 @@
 									"response": []
 								},
 								{
-									"name": "08 - Finalizar Entrega",
+									"name": "09 - Finalizar Entrega",
 									"request": {
 										"auth": {
 											"type": "bearer",

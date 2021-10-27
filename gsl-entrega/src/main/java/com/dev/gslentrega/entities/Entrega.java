@@ -29,6 +29,7 @@ import org.springframework.format.annotation.NumberFormat.Style;
 import com.dev.gslentrega.enums.StatusEntrega;
 import com.dev.gslentrega.enums.StatusPagamento;
 import com.dev.gslentrega.enums.TipoDocumento;
+import com.dev.gslentrega.enums.TipoModal;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
@@ -145,6 +146,10 @@ public class Entrega implements Serializable {
 	@Column(nullable = false, columnDefinition = "DECIMAL(15,2) DEFAULT 0.00")
 	private BigDecimal valorTotalSeguroCarga;
 	
+	private Long numeroApoliceSeguroCarga;
+	
+	private Long numeroAverbacaoSeguroCarga;
+	
 	private boolean entregaEmParceria;
 	
 	private Long cnpjParceira;
@@ -155,6 +160,12 @@ public class Entrega implements Serializable {
 	
 	private String recebedorEntrega;
 	
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	private TipoModal tipoModal;
+
+	private boolean cteEmitido;
+
 	private String observacoes;
 	
 }

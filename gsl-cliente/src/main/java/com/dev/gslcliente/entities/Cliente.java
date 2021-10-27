@@ -44,6 +44,7 @@ public class Cliente {
 	private String nomeComercial;
 	private String email;
 	private String telefone;
+	private String inscricaoEstadual;
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private StatusCliente status;

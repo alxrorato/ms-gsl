@@ -6,6 +6,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,7 @@ import com.dev.gslentrega.entities.Entrega;
 import com.dev.gslentrega.enums.StatusEntrega;
 import com.dev.gslentrega.enums.StatusPagamento;
 import com.dev.gslentrega.enums.TipoDocumento;
+import com.dev.gslentrega.enums.TipoModal;
 import com.dev.gslentrega.enums.UF;
 import com.dev.gslentrega.errors.ClienteNotFoundException;
 import com.dev.gslentrega.errors.EntregaNotFoundException;
@@ -38,8 +40,16 @@ import com.dev.gslentrega.response.AndamentoEntregaResponse;
 import com.dev.gslentrega.response.CalculoFreteResponse;
 import com.dev.gslentrega.response.CancelamentoResponse;
 import com.dev.gslentrega.response.Cliente;
+import com.dev.gslentrega.response.ComponenteValor;
+import com.dev.gslentrega.response.ComponentesValorPrestacaoServico;
 import com.dev.gslentrega.response.ConfirmacaoEntregaResponse;
+import com.dev.gslentrega.response.Dacte;
+import com.dev.gslentrega.response.DadosAtorCte;
+import com.dev.gslentrega.response.DadosSeguroCarga;
+import com.dev.gslentrega.response.EmissaoCteResponse;
+import com.dev.gslentrega.response.EnderecoAtorCte;
 import com.dev.gslentrega.response.LocalizacaoCarga;
+import com.dev.gslentrega.response.NaturezaPrestacao;
 import com.dev.gslentrega.response.OperacaoEtapaResponse;
 import com.dev.gslentrega.response.PagamentoResponse;
 import com.dev.gslentrega.response.ParceiraResponse;
@@ -66,13 +76,14 @@ public class EntregaServiceImpl implements EntregaService {
 	@Autowired
 	private EntregaRepository entregaRepository;
 	
-	@Override
-	public List<Entrega> buscarEntregas() {
-		return entregaRepository.findAll();
-	}
-
-	private static final long START_RANDOM_NUMBER = 100000000000L;
-	private static final long END_RANDOM_NUMBER = 999999999999L;	
+	private static final long START_RANDOM_NUMBER_SOLICITACAO = 100000000000L;
+	private static final long END_RANDOM_NUMBER_SOLICITACAO = 999999999999L;	
+	private static final long START_RANDOM_NUMBER_APOLICE = 1000000000L;
+	private static final long END_RANDOM_NUMBER_APOLICE = 9999999999L;	
+	private static final long START_RANDOM_NUMBER_AVERBACAO = 100000L;
+	private static final long END_RANDOM_NUMBER_AVERBACAO = 9999999L;	
+	private static final long START_RANDOM_NUMBER_PROTOCOLO_AUTORIZACAO_USO = 100000000000000L;
+	private static final long END_RANDOM_NUMBER_PROTOCOLO_AUTORIZACAO_USO = 999999999999999L;	
 	private static final String SITUACAO_TRIBUTARIA = "00 - Tributação normal ICMS";
 	private static final BigDecimal PESO_CUBADO_EM_KG_PARA_1M3 = new BigDecimal(300.0);
 	private static final BigDecimal ALIQUOTA_ICMS = new BigDecimal(12.0);
@@ -81,7 +92,20 @@ public class EntregaServiceImpl implements EntregaService {
 	private static final BigDecimal LIMITE_LATITUDE_LONGITUDE = new BigDecimal(99);
 	private static final String PESO_CUBADO = "peso cubado";
 	private static final String PESO_TOTAL = "peso total";
+	private static final String TITULO_DACTE = "Documento Auxiliar do Conhecimento de Transporte Eletrônico";
+	private static final int LIMIT_RANDOM_MODELO_DACTE = 60;
+	private static final int SERIE_DACTE = 1;
+	private static final String FOLHA_DACTE = "1/1";
+	private static final String TEXTO_CHAVE_ACESSO = "Consulta de autenticidade no portal nacional do CT-2, no site da Sefaz Autorizadora, ou em http://cte.fazenda.gov.br";
+	private static final int TIPO_ENDERECO_ORIGEM = 1;
+	private static final int TIPO_ENDERECO_DESTINO = 2;
+	private static final String FRETE_VALOR = "Frete Valor";
 	
+	@Override
+	public List<Entrega> buscarEntregas() {
+		return entregaRepository.findAll();
+	}
+
 	@Override
 	public Entrega buscarEntregaById(Long id) {
 		verificaSeEntregaExisteById(id);
@@ -109,7 +133,6 @@ public class EntregaServiceImpl implements EntregaService {
 	public Entrega cadastrarEntrega(@Valid EntregaRequest entregaRequest) {
 
 		verificaSeClienteExisteByCnpj(entregaRequest.getCnpjCliente());
-		
 
 		UF ufOrigem = UF.getUFBySigla(entregaRequest.getEnderecoOrigem().getUf().toUpperCase());
 		EnderecoOrigem enderecoOrigem = new EnderecoOrigem();
@@ -132,9 +155,9 @@ public class EntregaServiceImpl implements EntregaService {
 		enderecoDestino.setCep(entregaRequest.getEnderecoDestino().getCep());
 
 		Entrega entrega = new Entrega();
-		entrega.setCodigoSolicitacao(getNovoCodigoSolicitacao(START_RANDOM_NUMBER, END_RANDOM_NUMBER));
+		entrega.setCodigoSolicitacao(getNovoCodigoSolicitacao(START_RANDOM_NUMBER_SOLICITACAO, END_RANDOM_NUMBER_SOLICITACAO));
 		entrega.setCnpjCliente(entregaRequest.getCnpjCliente());
-		entrega.setTipoDocumentoDestinatario(entregaRequest.getTipoDocumentoDestinatario() == 1 
+		entrega.setTipoDocumentoDestinatario(GeneralUtils.CPF.equals(entregaRequest.getTipoDocumentoDestinatario()) 
 				? TipoDocumento.CPF : TipoDocumento.CNPJ);
 		entrega.setDocumentoDestinatario(entregaRequest.getDocumentoDestinatario());
 		entrega.setEnderecoOrigem(enderecoOrigem);
@@ -156,6 +179,11 @@ public class EntregaServiceImpl implements EntregaService {
 		entrega.setAliquotaIcms(ALIQUOTA_ICMS); //12% da base de cálculo
 		entrega.setValorIcms(getValorIcmsCalculado(entrega.getBaseCalculoImposto(), ALIQUOTA_ICMS));
 		entrega.setValorTotalSeguroCarga(getValorTotalSeguroCarga(entrega.getCargas()));
+		entrega.setNumeroApoliceSeguroCarga(RandomUtils.getRandomNumber(START_RANDOM_NUMBER_APOLICE, END_RANDOM_NUMBER_APOLICE));
+		entrega.setNumeroAverbacaoSeguroCarga(RandomUtils.getRandomNumber(START_RANDOM_NUMBER_AVERBACAO, END_RANDOM_NUMBER_AVERBACAO));
+
+		entrega.setTipoModal(TipoModal.RODOVIARIO);
+		entrega.setCteEmitido(false);
 		entrega.setObservacoes(entregaRequest.getObservacoes());
 		entrega.setEntregaEmParceria(false);
 		
@@ -181,29 +209,8 @@ public class EntregaServiceImpl implements EntregaService {
 	}
 
 	private List<Carga> getCargasRequest(EntregaRequest entregaRequest) {
-		/* Testar pra ver se pode retirar esse codigo
-		List<CargaRequest> cargaRequests = entregaRequest.getCargas();
-		if (cargaRequests == null) {
-			return null;
-		}
-		
-		List<Carga> list = new ArrayList<>(cargaRequests.size());
-		for (CargaRequest cargaRequest : cargaRequests) {
-			Carga carga = new Carga();
-			carga.setEspecie(cargaRequest.getEspecie());
-			carga.setNatureza(cargaRequest.getNatureza());
-			carga.setNotaFiscal(cargaRequest.getNotaFiscal());
-			carga.setPeso(cargaRequest.getPeso());
-			carga.setQuantidade(cargaRequest.getQuantidade());
-			carga.setVolume(cargaRequest.getVolume());
-			carga.setValor(cargaRequest.getValor());
-			carga.setNotaFiscal(cargaRequest.getNotaFiscal());
-			list.add(carga);
-		}
-		return list;
-		*/
+
 		return getListCargaByListCargaRequest(entregaRequest.getCargaRequests());
-		
 	}
 
 	private List<Carga> getListCargaByListCargaRequest(List<CargaRequest> cargaRequests) {
@@ -529,5 +536,93 @@ public class EntregaServiceImpl implements EntregaService {
 		String observacao = "No cálculo foi considerado o " + pesoUtilizadoNoCalculo + " da carga";
 		return new CalculoFreteResponse(PESO_CUBADO_EM_KG_PARA_1M3, pesoTotal, volumeTotal, precoPorKg, 
 				pesoCubado, valorFrete, observacao);
+	}
+
+	@Override
+	public EmissaoCteResponse emitirCte(Long codigoSolicitacao) {
+		Entrega entrega = buscarEntregaByCodigoSolicitacao(codigoSolicitacao);
+		/* O Dacte é a Receita Federal quem devolve essas informações junto com as do CT-e */
+		Dacte dacte = new Dacte();
+		dacte.setTitulo(TITULO_DACTE);
+		dacte.setModelo(RandomUtils.getNonZeroRandomNumber(LIMIT_RANDOM_MODELO_DACTE));
+		dacte.setSerie(SERIE_DACTE);
+		dacte.setFolha(FOLHA_DACTE);
+		dacte.setDataHoraEmissao(LocalDateTime.now());
+		dacte.setInscricaoSulframa(null);
+		dacte.setChaveAcesso(MockUtils.getChaveAcesoDacte());
+		dacte.setTextoChaveAcesso(TEXTO_CHAVE_ACESSO);
+		dacte.setNumeroProtocoloAutorizacaoUso(
+				RandomUtils.getRandomNumber(START_RANDOM_NUMBER_PROTOCOLO_AUTORIZACAO_USO, 
+						END_RANDOM_NUMBER_PROTOCOLO_AUTORIZACAO_USO));
+		dacte.setDataHoraGeracaoProtocolo(LocalDateTime.now());
+		
+		NaturezaPrestacao naturezaPrestacao = new NaturezaPrestacao();
+		naturezaPrestacao.setCodigoNomeNaturezaPrestacao(entrega.getNaturezaPrestacao());
+		naturezaPrestacao.setLocalInicioPrestacao(getCidadeUf(entrega, TIPO_ENDERECO_ORIGEM));
+		naturezaPrestacao.setLocalTerminoPrestacao(getCidadeUf(entrega, TIPO_ENDERECO_DESTINO));
+		
+		DadosAtorCte dadosEmitente = GeneralUtils.getDadosBoaEntrega();
+
+		Cliente cliente = getCliente(entrega.getCnpjCliente());
+		EnderecoAtorCte enderecoRemetente = new EnderecoAtorCte();
+		enderecoRemetente.setLogradouro(cliente.getEndereco().getLogradouro());
+		enderecoRemetente.setNumero(cliente.getEndereco().getNumero());
+		enderecoRemetente.setComplemento(cliente.getEndereco().getComplemento());
+		enderecoRemetente.setBairro(cliente.getEndereco().getBairro());
+		enderecoRemetente.setCidade(cliente.getEndereco().getCidade());
+		enderecoRemetente.setUf(cliente.getEndereco().getUf());
+		enderecoRemetente.setCep(cliente.getEndereco().getCep());
+		DadosAtorCte dadosRemetente = new DadosAtorCte();
+		dadosRemetente.setTipoDocumento(TipoDocumento.CNPJ);
+		dadosRemetente.setCpfCnpj(entrega.getCnpjCliente());
+		dadosRemetente.setNomeRazaoSocial(cliente.getRazaoSocial());
+		dadosRemetente.setInscricaoEstadual(cliente.getInscricaoEstadual());
+		dadosRemetente.setTelefone(cliente.getTelefone());
+		dadosRemetente.setEndereco(enderecoRemetente);
+
+		EnderecoAtorCte enderecoDestinatario = new EnderecoAtorCte();
+		enderecoDestinatario.setLogradouro(entrega.getEnderecoDestino().getLogradouro());
+		enderecoDestinatario.setNumero(entrega.getEnderecoDestino().getNumero());
+		enderecoDestinatario.setComplemento(entrega.getEnderecoDestino().getComplemento());
+		enderecoDestinatario.setBairro(entrega.getEnderecoDestino().getBairro());
+		enderecoDestinatario.setCidade(entrega.getEnderecoDestino().getCidade());
+		enderecoDestinatario.setUf(entrega.getEnderecoDestino().getUf());
+		enderecoDestinatario.setCep(entrega.getEnderecoDestino().getCep());
+		DadosAtorCte dadosDestinatario = new DadosAtorCte();
+		dadosDestinatario.setTipoDocumento(entrega.getTipoDocumentoDestinatario());
+		dadosDestinatario.setCpfCnpj(entrega.getDocumentoDestinatario());
+		dadosDestinatario.setNomeRazaoSocial(TipoDocumento.CPF.equals(entrega.getTipoDocumentoDestinatario()) ?
+				MockUtils.getNomeDestinatario() : MockUtils.getRazaoSocialDestinatario());
+		dadosDestinatario.setInscricaoEstadual(MockUtils.getInscricaoEstadual());
+		dadosDestinatario.setTelefone(MockUtils.getTelefone());
+		dadosDestinatario.setEndereco(enderecoRemetente);
+
+		/* Nesta POC não estamos considerando estes 2 atores */
+		DadosAtorCte dadosExpedidor = null; 
+		DadosAtorCte dadosRecebedor = null;
+
+		DadosSeguroCarga dadosSeguroCarga = new DadosSeguroCarga();
+		dadosSeguroCarga.setNomeResponsavel(MockUtils.getNomeResponsavelSeguradora());
+		dadosSeguroCarga.setNumeroApolice(entrega.getNumeroApoliceSeguroCarga());
+		dadosSeguroCarga.setNumeroAverbacao(entrega.getNumeroAverbacaoSeguroCarga());
+		
+		ComponentesValorPrestacaoServico cvps = new ComponentesValorPrestacaoServico();
+		ComponenteValor componenteValor= new ComponenteValor();
+		componenteValor.setNome(FRETE_VALOR);
+		componenteValor.setValor(entrega.getValorFrete());
+		List<ComponenteValor> componentesValores = Arrays.asList(componenteValor);
+		cvps.setComponenteValor(componentesValores);
+		
+		EmissaoCteResponse emissaoCteResponse = new EmissaoCteResponse();
+		
+		return null;
+	}
+
+	private String getCidadeUf(Entrega entrega, int tipoEndereco) {
+		return (tipoEndereco == TIPO_ENDERECO_ORIGEM) 
+				? entrega.getEnderecoOrigem().getCidade() + " - " 
+					+ entrega.getEnderecoOrigem().getUf().getSigla()
+				: entrega.getEnderecoDestino().getCidade() + " - " + 
+					entrega.getEnderecoDestino().getUf().getSigla();
 	}
 }

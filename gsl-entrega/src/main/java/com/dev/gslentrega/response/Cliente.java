@@ -23,6 +23,7 @@ public class Cliente {
 	private String nomeComercial;
 	private String email;
 	private String telefone;
+	private String inscricaoEstadual;
 	private StatusCliente status;
 	private LocalDateTime dataInclusao;
 	private LocalDateTime dataExclusao;

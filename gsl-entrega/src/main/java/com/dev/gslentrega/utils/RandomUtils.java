@@ -1,7 +1,6 @@
 package com.dev.gslentrega.utils;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Random;
 
@@ -34,4 +33,12 @@ public class RandomUtils {
    			   .round(new MathContext(2, RoundingMode.HALF_UP));
     }
 */
+	public static int getNonZeroRandomNumber(int limit) {
+		int number = 0;
+		do {
+			number = RandomUtils.getRandomNumber(limit);
+		} while (number == 0);
+		return number;
+	}
+    
 }

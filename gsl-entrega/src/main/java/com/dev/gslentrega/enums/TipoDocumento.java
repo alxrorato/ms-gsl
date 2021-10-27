@@ -6,8 +6,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum TipoDocumento {
-	CPF(1),
-	CNPJ(2);
+	CPF(1, "CPF"),
+	CNPJ(2, "CNPJ");
 	
-	public int tipoDocumento;
+	public int codigo;
+	public String descricao;
 }
