@@ -104,7 +104,7 @@ public class EntregaController {
 		return new ResponseEntity<>(entregaService.efetuarPagamento(codigoSolicitacao), HttpStatus.OK);
 	}
 	
-	@PostMapping("emitirCte")
+	@PostMapping("emitirCte/{codigoSolicitacao}")
 	@Transactional(rollbackFor = Exception.class)
 	public ResponseEntity<?> emitirCte(@PathVariable Long codigoSolicitacao) {
 		return new ResponseEntity<>(entregaService.emitirCte(codigoSolicitacao), HttpStatus.CREATED);

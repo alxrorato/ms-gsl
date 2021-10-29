@@ -22,10 +22,14 @@ import com.dev.gslentrega.entities.Carga;
 import com.dev.gslentrega.entities.EnderecoDestino;
 import com.dev.gslentrega.entities.EnderecoOrigem;
 import com.dev.gslentrega.entities.Entrega;
+import com.dev.gslentrega.enums.FormaPagamento;
 import com.dev.gslentrega.enums.StatusEntrega;
 import com.dev.gslentrega.enums.StatusPagamento;
+import com.dev.gslentrega.enums.TipoCte;
 import com.dev.gslentrega.enums.TipoDocumento;
 import com.dev.gslentrega.enums.TipoModal;
+import com.dev.gslentrega.enums.TipoServico;
+import com.dev.gslentrega.enums.TipoTomadorServico;
 import com.dev.gslentrega.enums.UF;
 import com.dev.gslentrega.errors.ClienteNotFoundException;
 import com.dev.gslentrega.errors.EntregaNotFoundException;
@@ -45,6 +49,7 @@ import com.dev.gslentrega.response.ComponentesValorPrestacaoServico;
 import com.dev.gslentrega.response.ConfirmacaoEntregaResponse;
 import com.dev.gslentrega.response.Dacte;
 import com.dev.gslentrega.response.DadosAtorCte;
+import com.dev.gslentrega.response.DadosCarga;
 import com.dev.gslentrega.response.DadosSeguroCarga;
 import com.dev.gslentrega.response.EmissaoCteResponse;
 import com.dev.gslentrega.response.EnderecoAtorCte;
@@ -82,6 +87,8 @@ public class EntregaServiceImpl implements EntregaService {
 	private static final long END_RANDOM_NUMBER_APOLICE = 9999999999L;	
 	private static final long START_RANDOM_NUMBER_AVERBACAO = 100000L;
 	private static final long END_RANDOM_NUMBER_AVERBACAO = 9999999L;	
+	private static final long START_RANDOM_NUMBER_DACTE = 1111L;
+	private static final long END_RANDOM_NUMBER_DACTE = 9999L;	
 	private static final long START_RANDOM_NUMBER_PROTOCOLO_AUTORIZACAO_USO = 100000000000000L;
 	private static final long END_RANDOM_NUMBER_PROTOCOLO_AUTORIZACAO_USO = 999999999999999L;	
 	private static final String SITUACAO_TRIBUTARIA = "00 - Tributação normal ICMS";
@@ -93,7 +100,7 @@ public class EntregaServiceImpl implements EntregaService {
 	private static final String PESO_CUBADO = "peso cubado";
 	private static final String PESO_TOTAL = "peso total";
 	private static final String TITULO_DACTE = "Documento Auxiliar do Conhecimento de Transporte Eletrônico";
-	private static final int LIMIT_RANDOM_MODELO_DACTE = 60;
+	private static final int MODELO_DACTE_57 = 57;
 	private static final int SERIE_DACTE = 1;
 	private static final String FOLHA_DACTE = "1/1";
 	private static final String TEXTO_CHAVE_ACESSO = "Consulta de autenticidade no portal nacional do CT-2, no site da Sefaz Autorizadora, ou em http://cte.fazenda.gov.br";
@@ -541,11 +548,16 @@ public class EntregaServiceImpl implements EntregaService {
 	@Override
 	public EmissaoCteResponse emitirCte(Long codigoSolicitacao) {
 		Entrega entrega = buscarEntregaByCodigoSolicitacao(codigoSolicitacao);
+		if (entrega.isCteEmitido()) {
+			throw new OperacaoNaoEfetuadaException("O CT-e já foi emitido para a entrega " + codigoSolicitacao);
+		}
+
 		/* O Dacte é a Receita Federal quem devolve essas informações junto com as do CT-e */
 		Dacte dacte = new Dacte();
 		dacte.setTitulo(TITULO_DACTE);
-		dacte.setModelo(RandomUtils.getNonZeroRandomNumber(LIMIT_RANDOM_MODELO_DACTE));
+		dacte.setModelo(MODELO_DACTE_57);
 		dacte.setSerie(SERIE_DACTE);
+		dacte.setNumero(RandomUtils.getRandomNumber(START_RANDOM_NUMBER_DACTE, END_RANDOM_NUMBER_DACTE));
 		dacte.setFolha(FOLHA_DACTE);
 		dacte.setDataHoraEmissao(LocalDateTime.now());
 		dacte.setInscricaoSulframa(null);
@@ -572,6 +584,7 @@ public class EntregaServiceImpl implements EntregaService {
 		enderecoRemetente.setCidade(cliente.getEndereco().getCidade());
 		enderecoRemetente.setUf(cliente.getEndereco().getUf());
 		enderecoRemetente.setCep(cliente.getEndereco().getCep());
+		
 		DadosAtorCte dadosRemetente = new DadosAtorCte();
 		dadosRemetente.setTipoDocumento(TipoDocumento.CNPJ);
 		dadosRemetente.setCpfCnpj(entrega.getCnpjCliente());
@@ -588,6 +601,7 @@ public class EntregaServiceImpl implements EntregaService {
 		enderecoDestinatario.setCidade(entrega.getEnderecoDestino().getCidade());
 		enderecoDestinatario.setUf(entrega.getEnderecoDestino().getUf());
 		enderecoDestinatario.setCep(entrega.getEnderecoDestino().getCep());
+		
 		DadosAtorCte dadosDestinatario = new DadosAtorCte();
 		dadosDestinatario.setTipoDocumento(entrega.getTipoDocumentoDestinatario());
 		dadosDestinatario.setCpfCnpj(entrega.getDocumentoDestinatario());
@@ -597,10 +611,28 @@ public class EntregaServiceImpl implements EntregaService {
 		dadosDestinatario.setTelefone(MockUtils.getTelefone());
 		dadosDestinatario.setEndereco(enderecoRemetente);
 
-		/* Nesta POC não estamos considerando estes 2 atores */
+		// Nesta POC está sendo não estão sendo considerados estes 2 atores
 		DadosAtorCte dadosExpedidor = null; 
 		DadosAtorCte dadosRecebedor = null;
 
+		// Nesta POC o tomador será o próprio remetente
+		DadosAtorCte dadosTomador = new DadosAtorCte();
+		dadosTomador.setTipoDocumento(dadosRemetente.getTipoDocumento());
+		dadosTomador.setCpfCnpj(dadosRemetente.getCpfCnpj());
+		dadosTomador.setNomeRazaoSocial(dadosRemetente.getNomeRazaoSocial());
+		dadosTomador.setInscricaoEstadual(dadosRemetente.getInscricaoEstadual());
+		dadosTomador.setTelefone(dadosRemetente.getTelefone());
+		dadosTomador.setEndereco(dadosRemetente.getEndereco());
+		
+		DadosCarga dadosCarga = new DadosCarga();
+		dadosCarga.setProdutoPredominante("obter da lista da carga oq que tem mais qtde.");
+		dadosCarga.setOutrasCaracteristicasCarga("informar outro tipo de produto da lista da carga");
+		dadosCarga.setValorTotalMercadoria(entrega.getValorTotal());
+		dadosCarga.setPesoBruto(getPesoTotalCarga(entrega.getCargas()));
+		dadosCarga.setPesoAferido(getPesoTotalCarga(entrega.getCargas()));
+		dadosCarga.setVolume(getVolumeTotalCarga(entrega.getCargas()));
+		dadosCarga.setCubagemM3(getPesoCubadoCarga(dadosCarga.getVolume()));
+		
 		DadosSeguroCarga dadosSeguroCarga = new DadosSeguroCarga();
 		dadosSeguroCarga.setNomeResponsavel(MockUtils.getNomeResponsavelSeguradora());
 		dadosSeguroCarga.setNumeroApolice(entrega.getNumeroApoliceSeguroCarga());
@@ -614,8 +646,27 @@ public class EntregaServiceImpl implements EntregaService {
 		cvps.setComponenteValor(componentesValores);
 		
 		EmissaoCteResponse emissaoCteResponse = new EmissaoCteResponse();
+		emissaoCteResponse.setTipoModal(TipoModal.RODOVIARIO.getDescricao());
+		emissaoCteResponse.setTipoCte(TipoCte.NORMAL.getDescricao());
+		emissaoCteResponse.setTipoTomadorServico(TipoTomadorServico.DESTINATARIO.getDescricao());
+		emissaoCteResponse.setTipoServico(TipoServico.NORMAL.getDescricao());
+		emissaoCteResponse.setFormaPagamento(FormaPagamento.A_PAGAR.getDescricao());
+		emissaoCteResponse.setDacte(dacte);
+		emissaoCteResponse.setNaturezaPrestacao(naturezaPrestacao);
+		emissaoCteResponse.setDadosEmitente(dadosEmitente);
+		emissaoCteResponse.setDadosRemetente(dadosRemetente);
+		emissaoCteResponse.setDadosDestinatario(dadosDestinatario);
+		emissaoCteResponse.setDadosExpedidor(dadosExpedidor);
+		emissaoCteResponse.setDadosRecebedor(dadosRecebedor);
+		emissaoCteResponse.setDadosTomador(dadosTomador);
+		emissaoCteResponse.setDadosCarga(dadosCarga);
+		emissaoCteResponse.setDadosSeguroCarga(dadosSeguroCarga);
+		emissaoCteResponse.setComponentesValorPrestacaoServico(cvps);
 		
-		return null;
+		entrega.setCteEmitido(true);
+		entregaRepository.save(entrega);
+		
+		return emissaoCteResponse;
 	}
 
 	private String getCidadeUf(Entrega entrega, int tipoEndereco) {

@@ -1,9 +1,7 @@
 package com.dev.gslentrega.response;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import com.dev.gslentrega.enums.TipoModal;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;

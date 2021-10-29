@@ -1,11 +1,12 @@
 package com.dev.gslentrega.response;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
+import com.dev.gslentrega.enums.FormaPagamento;
+import com.dev.gslentrega.enums.TipoCte;
 import com.dev.gslentrega.enums.TipoModal;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.dev.gslentrega.enums.TipoServico;
+import com.dev.gslentrega.enums.TipoTomadorServico;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -22,7 +23,7 @@ public class EmissaoCteResponse implements Serializable {
 
 	private static final long serialVersionUID = 6959228635049410801L;
 
-	private TipoModal tipoModal;
+	private String tipoModal;
 	
 	private String tipoCte;
 	private String tipoServico; //Ex.: normal, redespacho intermediario, servico vinculado a multimodal
@@ -54,16 +55,7 @@ public class EmissaoCteResponse implements Serializable {
 	// quem paga o frete da operação do transporte, pode ser o remetente, destinatário, recebedor ou outra empresa
 	private DadosAtorCte dadosTomador;
 
-	private String produtoPredominante; //combustivel
-	
-	private String outrasCaracteristicasCarga; //granel
-	
-	private BigDecimal valorTotalMercadoria; // soma dos valores de cada carga
-	
-	private BigDecimal pesoBruto;
-	private BigDecimal pesoAferido;
-	private BigDecimal cubagemM3; //pesoCubado
-	private BigDecimal volume;
+	private DadosCarga dadosCarga;
 	
 	private DadosSeguroCarga dadosSeguroCarga; //nomeResponsavel, numeroApolice e numeroAverbacao
 	

@@ -1045,7 +1045,7 @@
 									"response": []
 								},
 								{
-									"name": "Emitir Cte com Envio ao SFC",
+									"name": "03 - Emitir CT-e",
 									"request": {
 										"auth": {
 											"type": "bearer",
