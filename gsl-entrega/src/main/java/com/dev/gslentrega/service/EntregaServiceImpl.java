@@ -21,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 import com.dev.gslentrega.entities.Carga;
 import com.dev.gslentrega.entities.EnderecoDestino;
 import com.dev.gslentrega.entities.EnderecoOrigem;
+import com.dev.gslentrega.entities.EnderecoParceira;
 import com.dev.gslentrega.entities.Entrega;
 import com.dev.gslentrega.enums.FormaPagamento;
 import com.dev.gslentrega.enums.StatusEntrega;
@@ -201,6 +202,19 @@ public class EntregaServiceImpl implements EntregaService {
 				entrega.setCnpjParceira(parceiraResponse.getCnpj());
 				entrega.setRazaoSocialParceira(parceiraResponse.getRazaoSocial());
 				entrega.setNomeComercialParceira(parceiraResponse.getNomeComercial());
+				entrega.setInscricaoEstadualParceira(parceiraResponse.getInscricaoEstadual());
+				entrega.setTelefoneParceira(parceiraResponse.getTelefone());
+				
+				EnderecoParceira enderecoParceira = new EnderecoParceira();
+				enderecoParceira.setLogradouro(parceiraResponse.getEnderecoParceiraResponse().getLogradouro());
+				enderecoParceira.setNumero(parceiraResponse.getEnderecoParceiraResponse().getNumero());
+				enderecoParceira.setComplemento(parceiraResponse.getEnderecoParceiraResponse().getComplemento());
+				enderecoParceira.setBairro(parceiraResponse.getEnderecoParceiraResponse().getBairro());
+				enderecoParceira.setCidade(parceiraResponse.getEnderecoParceiraResponse().getCidade());
+				enderecoParceira.setUf(parceiraResponse.getEnderecoParceiraResponse().getUf());
+				enderecoParceira.setCep(parceiraResponse.getEnderecoParceiraResponse().getCep());
+				
+				entrega.setEnderecoParceira(enderecoParceira);
 			}
 		}
 

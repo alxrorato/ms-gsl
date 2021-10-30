@@ -21,7 +21,7 @@ public class GeneralUtils {
 	public static final String CPF = "CPF";
 	public static final String CNPJ = "CNPJ";
 	
-	private static final Long CNPJ_BOA_ENTREGA = 44507211000190L;
+	private static final Long CNPJ_BOA_ENTREGA = 13814889000192L;
 	private static final String RAZAO_SOCIAL_BOA_ENTREGA = "BOA ENTREGA LTDA.";
 	private static final String INSCRICAO_ESTADUAL_BOA_ENTREGA = "518.208.406.485";
 	private static final String TELEFONE_BOA_ENTREGA = "(11)5773-8532";

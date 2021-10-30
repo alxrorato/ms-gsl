@@ -20,5 +20,8 @@ public class ParceiraResponse implements Serializable {
 	private Long cnpj;
 	private String razaoSocial;
 	private String nomeComercial;
+	private String inscricaoEstadual;
+	private String telefone;
+	private EnderecoParceiraResponse enderecoParceiraResponse;
 	private boolean solicitacaoAceita;
 }

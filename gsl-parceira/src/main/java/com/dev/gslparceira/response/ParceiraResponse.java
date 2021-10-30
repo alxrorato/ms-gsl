@@ -14,5 +14,8 @@ public class ParceiraResponse {
 	private Long cnpj;
 	private String razaoSocial;
 	private String nomeComercial;
+	private String inscricaoEstadual;
+	private String telefone;
+	private EnderecoParceira enderecoParceira;
 	private boolean solicitacaoAceita;
 }

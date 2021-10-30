@@ -157,6 +157,15 @@ public class Entrega implements Serializable {
 	private String razaoSocialParceira;
 	
 	private String nomeComercialParceira;
+
+	private String inscricaoEstadualParceira;
+	
+	private String telefoneParceira;
+	
+	@Valid
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "endereco_parceira_id_fk")
+	private EnderecoParceira enderecoParceira;
 	
 	private String recebedorEntrega;
 	
