@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EnderecoParceira {
+public class EnderecoParceiraResponse {
 
 	private String logradouro;
 	private String bairro;

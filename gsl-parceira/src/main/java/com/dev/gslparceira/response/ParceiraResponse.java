@@ -16,6 +16,6 @@ public class ParceiraResponse {
 	private String nomeComercial;
 	private String inscricaoEstadual;
 	private String telefone;
-	private EnderecoParceira enderecoParceira;
+	private EnderecoParceiraResponse enderecoParceiraResponse;
 	private boolean solicitacaoAceita;
 }

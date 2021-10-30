@@ -52,6 +52,7 @@ public class EmissaoCteResponse implements Serializable {
 	  * sendo o responsável por receber a carga do transportador.	
 	  */
 	private DadosAtorCte dadosRecebedor;
+	
 	// quem paga o frete da operação do transporte, pode ser o remetente, destinatário, recebedor ou outra empresa
 	private DadosAtorCte dadosTomador;
 

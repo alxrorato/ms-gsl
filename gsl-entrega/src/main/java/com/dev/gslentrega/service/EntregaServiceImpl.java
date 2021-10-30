@@ -8,8 +8,11 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -625,9 +628,41 @@ public class EntregaServiceImpl implements EntregaService {
 		dadosDestinatario.setTelefone(MockUtils.getTelefone());
 		dadosDestinatario.setEndereco(enderecoRemetente);
 
-		// Nesta POC está sendo não estão sendo considerados estes 2 atores
-		DadosAtorCte dadosExpedidor = null; 
-		DadosAtorCte dadosRecebedor = null;
+		// Nesta POC está o expedidor será considerado o próprio remetente
+		DadosAtorCte dadosExpedidor = new DadosAtorCte();
+		dadosExpedidor.setTipoDocumento(dadosRemetente.getTipoDocumento());
+		dadosExpedidor.setCpfCnpj(dadosRemetente.getCpfCnpj());
+		dadosExpedidor.setNomeRazaoSocial(dadosRemetente.getNomeRazaoSocial());
+		dadosExpedidor.setInscricaoEstadual(dadosRemetente.getInscricaoEstadual());
+		dadosExpedidor.setTelefone(dadosRemetente.getTelefone());
+		EnderecoAtorCte enderecoExpedidor = new EnderecoAtorCte();
+		enderecoExpedidor.setLogradouro(dadosRemetente.getEndereco().getLogradouro());
+		enderecoExpedidor.setNumero(dadosRemetente.getEndereco().getNumero());
+		enderecoExpedidor.setComplemento(dadosRemetente.getEndereco().getComplemento());
+		enderecoExpedidor.setBairro(dadosRemetente.getEndereco().getBairro());
+		enderecoExpedidor.setCidade(dadosRemetente.getEndereco().getCidade());
+		enderecoExpedidor.setUf(dadosRemetente.getEndereco().getUf());
+		enderecoExpedidor.setCep(dadosRemetente.getEndereco().getCep());
+		dadosExpedidor.setEndereco(enderecoExpedidor);
+		
+		// Quando a entrega for via transportadora parceira, esta será considerado o "Recebedor"
+		DadosAtorCte dadosRecebedor = new DadosAtorCte();
+		if (entrega.isEntregaEmParceria()) {
+			dadosRecebedor.setTipoDocumento(TipoDocumento.CNPJ);
+			dadosRecebedor.setCpfCnpj(entrega.getCnpjParceira());
+			dadosRecebedor.setNomeRazaoSocial(entrega.getRazaoSocialParceira());
+			dadosRecebedor.setInscricaoEstadual(entrega.getInscricaoEstadualParceira());
+			dadosRecebedor.setTelefone(entrega.getTelefoneParceira());
+			EnderecoAtorCte enderecoRecebedor = new EnderecoAtorCte();
+			enderecoRecebedor.setLogradouro(entrega.getEnderecoParceira().getLogradouro());
+			enderecoRecebedor.setNumero(entrega.getEnderecoParceira().getNumero());
+			enderecoRecebedor.setComplemento(entrega.getEnderecoParceira().getComplemento());
+			enderecoRecebedor.setBairro(entrega.getEnderecoParceira().getBairro());
+			enderecoRecebedor.setCidade(entrega.getEnderecoParceira().getCidade());
+			enderecoRecebedor.setUf(entrega.getEnderecoParceira().getUf());
+			enderecoRecebedor.setCep(entrega.getEnderecoParceira().getCep());
+			dadosRecebedor.setEndereco(enderecoRecebedor);
+		}
 
 		// Nesta POC o tomador será o próprio remetente
 		DadosAtorCte dadosTomador = new DadosAtorCte();
@@ -639,8 +674,8 @@ public class EntregaServiceImpl implements EntregaService {
 		dadosTomador.setEndereco(dadosRemetente.getEndereco());
 		
 		DadosCarga dadosCarga = new DadosCarga();
-		dadosCarga.setProdutoPredominante("obter da lista da carga oq que tem mais qtde.");
-		dadosCarga.setOutrasCaracteristicasCarga("informar outro tipo de produto da lista da carga");
+		dadosCarga.setProdutoPredominante(getEspeciePredominante(entrega.getCargas()));
+		dadosCarga.setOutrasCaracteristicasCarga("informar outro tipo de produto da lista da carga - getNaturezaPredominante");
 		dadosCarga.setValorTotalMercadoria(entrega.getValorTotal());
 		dadosCarga.setPesoBruto(getPesoTotalCarga(entrega.getCargas()));
 		dadosCarga.setPesoAferido(getPesoTotalCarga(entrega.getCargas()));
@@ -681,6 +716,30 @@ public class EntregaServiceImpl implements EntregaService {
 		entregaRepository.save(entrega);
 		
 		return emissaoCteResponse;
+	}
+
+	private String getEspeciePredominante(List<Carga> cargas) {
+		Map <String, Integer> especies = new HashMap<>();
+		for (Carga c : cargas) {
+			if (especies.containsKey(c.getEspecie())) {
+				Integer valorItem = especies.get(c.getEspecie());
+				especies.put(c.getEspecie(), c.getQuantidade() + valorItem);
+			} else {
+				especies.put(c.getEspecie(), c.getQuantidade());
+			}
+		}
+		Integer valueBase = 0;
+		String maxKey = null;
+		for ( Map.Entry<String, Integer> entry : especies.entrySet()) {
+		    String key = entry.getKey();
+		    Integer value = entry.getValue();
+		    System.out.println("Key: " + key + " - Value: " + value);
+		    if (value > valueBase) {
+		    	maxKey = key;
+		    	valueBase = value;
+		    }
+		}
+		return maxKey;
 	}
 
 	private String getCidadeUf(Entrega entrega, int tipoEndereco) {

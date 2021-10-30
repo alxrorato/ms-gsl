@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.dev.gslparceira.enums.UF;
-import com.dev.gslparceira.response.EnderecoParceira;
+import com.dev.gslparceira.response.EnderecoParceiraResponse;
 import com.dev.gslparceira.response.ParceiraResponse;
 
 @Service
@@ -39,16 +39,16 @@ public class ParceiraServiceImpl implements ParceiraService {
 		response.setInscricaoEstadual(INSCRICAO_ESTADUAL_PARCEIRA);
 		response.setTelefone(TELEFONE_PARCEIRA);
 		
-		EnderecoParceira enderecoParceira = new EnderecoParceira();
-		enderecoParceira.setLogradouro(LOGRADOURO_PARCEIRA);
-		enderecoParceira.setNumero(NUMERO_PARCEIRA);
-		enderecoParceira.setComplemento(COMPLEMENTO_PARCEIRA);
-		enderecoParceira.setBairro(BAIRRO_PARCEIRA);
-		enderecoParceira.setCidade(CIDADE_PARCEIRA);
-		enderecoParceira.setUf(UF_PARCEIRA);
-		enderecoParceira.setCep(CEP_PARCEIRA);
+		EnderecoParceiraResponse enderecoParceiraResponse = new EnderecoParceiraResponse();
+		enderecoParceiraResponse.setLogradouro(LOGRADOURO_PARCEIRA);
+		enderecoParceiraResponse.setNumero(NUMERO_PARCEIRA);
+		enderecoParceiraResponse.setComplemento(COMPLEMENTO_PARCEIRA);
+		enderecoParceiraResponse.setBairro(BAIRRO_PARCEIRA);
+		enderecoParceiraResponse.setCidade(CIDADE_PARCEIRA);
+		enderecoParceiraResponse.setUf(UF_PARCEIRA);
+		enderecoParceiraResponse.setCep(CEP_PARCEIRA);
 		
-		response.setEnderecoParceira(enderecoParceira);
+		response.setEnderecoParceiraResponse(enderecoParceiraResponse);
 		response.setSolicitacaoAceita(CNPJ_PARCEIROS.contains(cnpjSolicitante) ? true : false);
 		return response;
 	}

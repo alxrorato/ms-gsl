@@ -984,7 +984,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"cnpjCliente\": 80200396000150,\r\n  \"tipoDocumentoDestinatario\": \"CPF\",\r\n  \"documentoDestinatario\": 27365467096,\r\n  \"enderecoOrigem\": {\r\n        \"logradouro\": \"Rua Origem\",\r\n        \"numero\": 111,\r\n        \"complemento\": \"esquina\",\r\n        \"bairro\": \"Centro\",\r\n        \"cidade\": \"Manaus\",\r\n        \"uf\": \"AM\",\r\n        \"cep\": \"69000001\"\r\n  },\r\n  \"enderecoDestino\": {\r\n        \"logradouro\": \"Rua Correa Neto\",\r\n        \"numero\": 999,\r\n        \"complemento\": \"\",\r\n        \"bairro\": \"Alvorada\",\r\n        \"cidade\": \"Parintins\",\r\n        \"uf\": \"AM\",\r\n        \"cep\": \"69111400\"\r\n  },\r\n  \"cargaRequests\": [\r\n      {\r\n    \t\"natureza\": \"granel\",\r\n\t    \"quantidade\": 5,\r\n\t    \"especie\": \"alimentos\",\r\n\t    \"peso\": 3,\r\n        \"volume\": 2,\r\n\t    \"valor\": 57.0,\r\n\t    \"notaFiscal\": \"NF0005\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"geral\",\r\n\t    \"quantidade\": 1,\r\n\t    \"especie\": \"brinquedos\",\r\n\t    \"peso\": 1,\r\n        \"volume\": 2,\r\n\t    \"valor\": 78.0,\r\n\t    \"notaFiscal\": \"NF0006\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"perigosa\",\r\n\t    \"quantidade\": 1,\r\n\t    \"especie\": \"substancias oxidantes\",\r\n\t    \"peso\": 4,\r\n        \"volume\": 2,\r\n\t    \"valor\": 150.0,\r\n\t    \"notaFiscal\": \"NF0007\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"frigorificada\",\r\n\t    \"quantidade\": 11,\r\n\t    \"especie\": \"frutas\",\r\n\t    \"peso\": 3,\r\n        \"volume\": 2,\r\n\t    \"valor\": 127.0,\r\n\t    \"notaFiscal\": \"NF0008\"\r\n      }\r\n  ],\r\n  \"naturezaPrestacao\": \"16556 - Transporte a estabelecimento comercial\",\r\n  \"observacoes\": \"contem produtos perecíveis\"\r\n}",
+											"raw": "{\r\n  \"cnpjCliente\": 80200396000150,\r\n  \"tipoDocumentoDestinatario\": \"CPF\",\r\n  \"documentoDestinatario\": 27365467096,\r\n  \"enderecoOrigem\": {\r\n        \"logradouro\": \"Rua Origem\",\r\n        \"numero\": 111,\r\n        \"complemento\": \"esquina\",\r\n        \"bairro\": \"Centro\",\r\n        \"cidade\": \"Manaus\",\r\n        \"uf\": \"AM\",\r\n        \"cep\": \"69000001\"\r\n  },\r\n  \"enderecoDestino\": {\r\n        \"logradouro\": \"Rua Correa Neto\",\r\n        \"numero\": 999,\r\n        \"complemento\": \"\",\r\n        \"bairro\": \"Alvorada\",\r\n        \"cidade\": \"Parintins\",\r\n        \"uf\": \"AM\",\r\n        \"cep\": \"69111400\"\r\n  },\r\n  \"cargaRequests\": [\r\n      {\r\n    \t\"natureza\": \"granel\",\r\n\t    \"quantidade\": 5,\r\n\t    \"especie\": \"alimentos\",\r\n\t    \"peso\": 3,\r\n        \"volume\": 2,\r\n\t    \"valor\": 57.0,\r\n\t    \"notaFiscal\": \"NF0005\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"geral\",\r\n\t    \"quantidade\": 1,\r\n\t    \"especie\": \"brinquedos\",\r\n\t    \"peso\": 1,\r\n        \"volume\": 2,\r\n\t    \"valor\": 78.0,\r\n\t    \"notaFiscal\": \"NF0006\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"perigosa\",\r\n\t    \"quantidade\": 1,\r\n\t    \"especie\": \"substancias oxidantes\",\r\n\t    \"peso\": 4,\r\n        \"volume\": 2,\r\n\t    \"valor\": 150.0,\r\n\t    \"notaFiscal\": \"NF0007\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"frigorificada\",\r\n\t    \"quantidade\": 11,\r\n\t    \"especie\": \"frutas\",\r\n\t    \"peso\": 3,\r\n        \"volume\": 2,\r\n\t    \"valor\": 127.0,\r\n\t    \"notaFiscal\": \"NF0008\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"geral\",\r\n\t    \"quantidade\": 2,\r\n\t    \"especie\": \"alimentos\",\r\n\t    \"peso\": 3,\r\n        \"volume\": 2,\r\n\t    \"valor\": 57.0,\r\n\t    \"notaFiscal\": \"NF0005\"\r\n      }\r\n  ],\r\n  \"naturezaPrestacao\": \"16556 - Transporte a estabelecimento comercial\",\r\n  \"observacoes\": \"contem produtos perecíveis\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -1567,7 +1567,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:7001/parceira/solicitarParceria/13814889000192",
+									"raw": "http://localhost:7001/parceira/solicitarParceria/{{cnpj-boa-entrega}}",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -1576,7 +1576,7 @@
 									"path": [
 										"parceira",
 										"solicitarParceria",
-										"13814889000192"
+										"{{cnpj-boa-entrega}}"
 									]
 								}
 							},
