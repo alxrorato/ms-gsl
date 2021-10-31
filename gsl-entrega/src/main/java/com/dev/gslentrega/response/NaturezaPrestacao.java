@@ -1,9 +1,5 @@
 package com.dev.gslentrega.response;
 
-import java.math.BigDecimal;
-
-import com.dev.gslentrega.enums.TipoModal;
-
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

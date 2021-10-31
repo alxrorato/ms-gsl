@@ -95,6 +95,8 @@ public class EntregaServiceImpl implements EntregaService {
 	private static final long END_RANDOM_NUMBER_DACTE = 9999L;	
 	private static final long START_RANDOM_NUMBER_PROTOCOLO_AUTORIZACAO_USO = 100000000000000L;
 	private static final long END_RANDOM_NUMBER_PROTOCOLO_AUTORIZACAO_USO = 999999999999999L;	
+	private static final long START_RANDOM_NUMBER_INSCRICAO_SULFRAMA = 10000000L;
+	private static final long END_RANDOM_NUMBER_INSCRICAO_SULFRAMA = 99999999L;	
 	private static final String SITUACAO_TRIBUTARIA = "00 - Tributação normal ICMS";
 	private static final BigDecimal PESO_CUBADO_EM_KG_PARA_1M3 = new BigDecimal(300.0);
 	private static final BigDecimal ALIQUOTA_ICMS = new BigDecimal(12.0);
@@ -577,7 +579,7 @@ public class EntregaServiceImpl implements EntregaService {
 		dacte.setNumero(RandomUtils.getRandomNumber(START_RANDOM_NUMBER_DACTE, END_RANDOM_NUMBER_DACTE));
 		dacte.setFolha(FOLHA_DACTE);
 		dacte.setDataHoraEmissao(LocalDateTime.now());
-		dacte.setInscricaoSulframa(null);
+		dacte.setInscricaoSulframa(RandomUtils.getRandomNumber(START_RANDOM_NUMBER_INSCRICAO_SULFRAMA, END_RANDOM_NUMBER_INSCRICAO_SULFRAMA));
 		dacte.setChaveAcesso(MockUtils.getChaveAcesoDacte());
 		dacte.setTextoChaveAcesso(TEXTO_CHAVE_ACESSO);
 		dacte.setNumeroProtocoloAutorizacaoUso(
@@ -624,9 +626,8 @@ public class EntregaServiceImpl implements EntregaService {
 		dadosDestinatario.setCpfCnpj(entrega.getDocumentoDestinatario());
 		dadosDestinatario.setNomeRazaoSocial(TipoDocumento.CPF.equals(entrega.getTipoDocumentoDestinatario()) ?
 				MockUtils.getNomeDestinatario() : MockUtils.getRazaoSocialDestinatario());
-		dadosDestinatario.setInscricaoEstadual(MockUtils.getInscricaoEstadual());
 		dadosDestinatario.setTelefone(MockUtils.getTelefone());
-		dadosDestinatario.setEndereco(enderecoRemetente);
+		dadosDestinatario.setEndereco(enderecoDestinatario);
 
 		// Nesta POC está o expedidor será considerado o próprio remetente
 		DadosAtorCte dadosExpedidor = new DadosAtorCte();
@@ -675,7 +676,7 @@ public class EntregaServiceImpl implements EntregaService {
 		
 		DadosCarga dadosCarga = new DadosCarga();
 		dadosCarga.setProdutoPredominante(getEspeciePredominante(entrega.getCargas()));
-		dadosCarga.setOutrasCaracteristicasCarga("informar outro tipo de produto da lista da carga - getNaturezaPredominante");
+		dadosCarga.setOutrasCaracteristicasCarga(getNaturezaPredominante(entrega.getCargas()));
 		dadosCarga.setValorTotalMercadoria(entrega.getValorTotal());
 		dadosCarga.setPesoBruto(getPesoTotalCarga(entrega.getCargas()));
 		dadosCarga.setPesoAferido(getPesoTotalCarga(entrega.getCargas()));
@@ -728,18 +729,36 @@ public class EntregaServiceImpl implements EntregaService {
 				especies.put(c.getEspecie(), c.getQuantidade());
 			}
 		}
+		return highestValueKey(especies);
+	}
+	
+	private String getNaturezaPredominante(List<Carga> cargas) {
+		Map <String, Integer> naturezas = new HashMap<>();
+		for (Carga c : cargas) {
+			if (naturezas.containsKey(c.getEspecie())) {
+				Integer valorItem = naturezas.get(c.getEspecie());
+				naturezas.put(c.getNatureza(), c.getQuantidade() + valorItem);
+			} else {
+				naturezas.put(c.getNatureza(), c.getQuantidade());
+			}
+		}
+		return highestValueKey(naturezas);
+	}
+
+	private String highestValueKey(Map <String, Integer> map) {
 		Integer valueBase = 0;
-		String maxKey = null;
-		for ( Map.Entry<String, Integer> entry : especies.entrySet()) {
+		String maxValueKey = null;
+		for ( Map.Entry<String, Integer> entry : map.entrySet()) {
 		    String key = entry.getKey();
 		    Integer value = entry.getValue();
 		    System.out.println("Key: " + key + " - Value: " + value);
 		    if (value > valueBase) {
-		    	maxKey = key;
+		    	maxValueKey = key;
 		    	valueBase = value;
 		    }
 		}
-		return maxKey;
+		return maxValueKey;
+		
 	}
 
 	private String getCidadeUf(Entrega entrega, int tipoEndereco) {
