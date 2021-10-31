@@ -23,10 +23,10 @@ import com.dev.gslentrega.errors.ServicoIndisponivelException;
 import com.dev.gslentrega.request.CalculoFreteRequest;
 import com.dev.gslentrega.request.EntregaRequest;
 import com.dev.gslentrega.request.SolicitacaoRequest;
-import com.dev.gslentrega.request.StatusEntregaRequest;
 import com.dev.gslentrega.response.AndamentoEntregaResponse;
 import com.dev.gslentrega.response.CalculoFreteResponse;
 import com.dev.gslentrega.response.Cliente;
+import com.dev.gslentrega.response.EmissaoCteResponse;
 import com.dev.gslentrega.service.EntregaService;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
@@ -107,7 +107,8 @@ public class EntregaController {
 	@PostMapping("emitirCte/{codigoSolicitacao}")
 	@Transactional(rollbackFor = Exception.class)
 	public ResponseEntity<?> emitirCte(@PathVariable Long codigoSolicitacao) {
-		return new ResponseEntity<>(entregaService.emitirCte(codigoSolicitacao), HttpStatus.CREATED);
+		EmissaoCteResponse emissaoCteResponse = entregaService.emitirCte(codigoSolicitacao);
+		return new ResponseEntity<>(emissaoCteResponse, emissaoCteResponse.isEmissaoOk() ? HttpStatus.CREATED : HttpStatus.UNPROCESSABLE_ENTITY);
 	}
 
 	@PatchMapping("coletarCarga/{codigoSolicitacao}")

@@ -1061,7 +1061,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"enderecoRemetente\": {\r\n        \"logradouro\": \"Av. Ipiranga\",\r\n        \"numero\": 111,\r\n        \"complemento\": \"esquina\",\r\n        \"bairro\": \"Centro\",\r\n        \"cidade\": \"São Paulo\",\r\n        \"uf\": \"SP\",\r\n        \"cep\": \"01113500\"\r\n  },\r\n  \"enderecoDestinatario\": {\r\n        \"logradouro\": \"Rua Carlos Vasconcelos\",\r\n        \"numero\": 999,\r\n        \"complemento\": \"apto. 111-b\",\r\n        \"bairro\": \"Meireles\",\r\n        \"cidade\": \"Fortaleza\",\r\n        \"uf\": \"CE\",\r\n        \"cep\": \"92333400\"\r\n  },\r\n}",
+											"raw": "",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -1577,6 +1577,40 @@
 										"parceira",
 										"solicitarParceria",
 										"{{cnpj-boa-entrega}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "gsl-sfc (Legado - Sist. Fat. e Controle)",
+					"item": [
+						{
+							"name": "Cadastrar CT-e",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"tipoModal\": \"rodoviário\",\r\n    \"tipoCte\": \"Normal\",\r\n    \"tipoServico\": \"Normal\",\r\n    \"tipoTomadorServico\": \"Destinatário\",\r\n    \"formaPagamento\": \"A pagar\",\r\n    \"dacte\": {\r\n        \"titulo\": \"Documento Auxiliar do Conhecimento de Transporte Eletrônico\",\r\n        \"modelo\": 57,\r\n        \"serie\": 1,\r\n        \"numero\": 8757,\r\n        \"folha\": \"1/1\",\r\n        \"dataHoraEmissao\":\"2021-10-31T11:58:16\",\r\n        \"inscricaoSulframa\": 76349099,\r\n        \"chaveAcesso\": \"3.1111.33.333.444/2222-99-44-000-000.000.222-300.001.222-7\",\r\n        \"textoChaveAcesso\": \"Consulta de autenticidade no portal nacional do CT-2, no site da Sefaz Autorizadora, ou em http://cte.fazenda.gov.br\",\r\n        \"numeroProtocoloAutorizacaoUso\": 492334681062750,\r\n        \"dataHoraGeracaoProtocolo\": \"2021-10-31T11:58:44\"\r\n    },\r\n    \"naturezaPrestacao\": {\r\n        \"codigoNomeNaturezaPrestacao\": \"16556 - Transporte a estabelecimento comercial\",\r\n        \"localInicioPrestacao\": \"Manaus - AM\",\r\n        \"localTerminoPrestacao\": \"Parintins - AM\"\r\n    },\r\n    \"dadosEmitente\": {\r\n        \"tipoDocumento\": \"CNPJ\",\r\n        \"cpfCnpj\": 13814889000192,\r\n        \"nomeRazaoSocial\": \"BOA ENTREGA LTDA.\",\r\n        \"inscricaoEstadual\": \"518.208.406.485\",\r\n        \"telefone\": \"(11)5773-8532\",\r\n        \"endereco\": {\r\n            \"logradouro\": \"Rua Duque de Caxias\",\r\n            \"bairro\": \"CENTRO\",\r\n            \"cidade\": \"SÃO PAULO\",\r\n            \"uf\": \"SP\",\r\n            \"cep\": \"01958-050\",\r\n            \"numero\": \"225\",\r\n            \"complemento\": \"Galpão\"\r\n        }\r\n    },\r\n    \"dadosRemetente\": {\r\n        \"tipoDocumento\": \"CNPJ\",\r\n        \"cpfCnpj\": 80200396000150,\r\n        \"nomeRazaoSocial\": \"Supermercado Manaus Ltda.\",\r\n        \"inscricaoEstadual\": \"475.209.639.488\",\r\n        \"telefone\": \"(92)97878-8989\",\r\n        \"endereco\": {\r\n            \"logradouro\": \"Rua Leonardo Malcher\",\r\n            \"bairro\": \"Centro\",\r\n            \"cidade\": \"Manaus\",\r\n            \"uf\": \"AM\",\r\n            \"cep\": \"69010170\",\r\n            \"numero\": \"888\",\r\n            \"complemento\": \"esquina\"\r\n        }\r\n    },\r\n    \"dadosDestinatario\": {\r\n        \"tipoDocumento\": \"CPF\",\r\n        \"cpfCnpj\": 27365467096,\r\n        \"nomeRazaoSocial\": \"Emilly Barros Azevedo\",\r\n        \"inscricaoEstadual\": null,\r\n        \"telefone\": \"(11)96761-9263\",\r\n        \"endereco\": {\r\n            \"logradouro\": \"Rua Correa Neto\",\r\n            \"bairro\": \"Alvorada\",\r\n            \"cidade\": \"Parintins\",\r\n            \"uf\": \"AM\",\r\n            \"cep\": \"69111400\",\r\n            \"numero\": \"999\",\r\n            \"complemento\": \"casa 2\"\r\n        }\r\n    },\r\n    \"dadosExpedidor\": {\r\n        \"tipoDocumento\": \"CNPJ\",\r\n        \"cpfCnpj\": 80200396000150,\r\n        \"nomeRazaoSocial\": \"Supermercado Manaus Ltda.\",\r\n        \"inscricaoEstadual\": \"475.209.639.488\",\r\n        \"telefone\": \"(92)97878-8989\",\r\n        \"endereco\": {\r\n            \"logradouro\": \"Rua Leonardo Malcher\",\r\n            \"bairro\": \"Centro\",\r\n            \"cidade\": \"Manaus\",\r\n            \"uf\": \"AM\",\r\n            \"cep\": \"69010170\",\r\n            \"numero\": \"888\",\r\n            \"complemento\": \"esquina\"\r\n        }\r\n    },\r\n    \"dadosRecebedor\": {\r\n        \"tipoDocumento\": \"CNPJ\",\r\n        \"cpfCnpj\": 32614634000120,\r\n        \"nomeRazaoSocial\": \"Transportadora Entrega Rápida Ltda.\",\r\n        \"inscricaoEstadual\": \"67.375.056-6\",\r\n        \"telefone\": \"(11)5773-8532\",\r\n        \"endereco\": {\r\n            \"logradouro\": \"Rua Paraíso do Norte\",\r\n            \"bairro\": \"COROADO\",\r\n            \"cidade\": \"MANAUS\",\r\n            \"uf\": \"AM\",\r\n            \"cep\": \"69080-350\",\r\n            \"numero\": \"817\",\r\n            \"complemento\": \"Galpão\"\r\n        }\r\n    },\r\n    \"dadosTomador\": {\r\n        \"tipoDocumento\": \"CNPJ\",\r\n        \"cpfCnpj\": 80200396000150,\r\n        \"nomeRazaoSocial\": \"Supermercado Manaus Ltda.\",\r\n        \"inscricaoEstadual\": \"475.209.639.488\",\r\n        \"telefone\": \"(92)97878-8989\",\r\n        \"endereco\": {\r\n            \"logradouro\": \"Rua Leonardo Malcher\",\r\n            \"bairro\": \"Centro\",\r\n            \"cidade\": \"Manaus\",\r\n            \"uf\": \"AM\",\r\n            \"cep\": \"69010170\",\r\n            \"numero\": \"888\",\r\n            \"complemento\": \"esquina\"\r\n        }\r\n    },\r\n    \"dadosCarga\": {\r\n        \"produtoPredominante\": \"frutas\",\r\n        \"outrasCaracteristicasCarga\": \"frigorificada\",\r\n        \"valorTotalMercadoria\": 4500.00,\r\n        \"pesoBruto\": 14.00,\r\n        \"pesoAferido\": 14.00,\r\n        \"cubagemM3\": 3000.00,\r\n        \"volume\": 10.00\r\n    },\r\n    \"dadosSeguroCarga\": {\r\n        \"nomeResponsavel\": \"Clara Pereira Silva\",\r\n        \"numeroApolice\": 9157735515,\r\n        \"numeroAverbacao\": 8917861\r\n    },\r\n    \"componentesValorPrestacaoServico\": {\r\n        \"componenteValor\": [\r\n            {\r\n                \"nome\": \"Frete Valor\",\r\n                \"valor\": 4500.00\r\n            }\r\n        ]\r\n   }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8500/sfc/cadastrarCte",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8500",
+									"path": [
+										"sfc",
+										"cadastrarCte"
 									]
 								}
 							},

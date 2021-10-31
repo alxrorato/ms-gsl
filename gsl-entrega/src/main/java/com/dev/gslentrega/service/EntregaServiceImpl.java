@@ -8,11 +8,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -42,7 +39,16 @@ import com.dev.gslentrega.feignclients.ClienteFeignClient;
 import com.dev.gslentrega.repositories.EntregaRepository;
 import com.dev.gslentrega.request.CalculoFreteRequest;
 import com.dev.gslentrega.request.CargaRequest;
+import com.dev.gslentrega.request.ComponenteValorRequest;
+import com.dev.gslentrega.request.ComponentesValorPrestacaoServicoRequest;
+import com.dev.gslentrega.request.CteRequest;
+import com.dev.gslentrega.request.DacteRequest;
+import com.dev.gslentrega.request.DadosAtorCteRequest;
+import com.dev.gslentrega.request.DadosCargaRequest;
+import com.dev.gslentrega.request.DadosSeguroCargaRequest;
+import com.dev.gslentrega.request.EnderecoAtorCteRequest;
 import com.dev.gslentrega.request.EntregaRequest;
+import com.dev.gslentrega.request.NaturezaPrestacaoRequest;
 import com.dev.gslentrega.request.SolicitacaoRequest;
 import com.dev.gslentrega.response.AndamentoEntregaResponse;
 import com.dev.gslentrega.response.CalculoFreteResponse;
@@ -51,6 +57,8 @@ import com.dev.gslentrega.response.Cliente;
 import com.dev.gslentrega.response.ComponenteValor;
 import com.dev.gslentrega.response.ComponentesValorPrestacaoServico;
 import com.dev.gslentrega.response.ConfirmacaoEntregaResponse;
+import com.dev.gslentrega.response.Cte;
+import com.dev.gslentrega.response.CteResponse;
 import com.dev.gslentrega.response.Dacte;
 import com.dev.gslentrega.response.DadosAtorCte;
 import com.dev.gslentrega.response.DadosCarga;
@@ -70,6 +78,9 @@ import com.dev.gslentrega.utils.UFUtils;
 @Service
 public class EntregaServiceImpl implements EntregaService {
 
+	@Value("${gsl-sfc.host}")
+	private String sfcHost;
+	
 	@Value("${gsl-parceira.host}")
 	private String parceiraHost;
 	
@@ -695,30 +706,236 @@ public class EntregaServiceImpl implements EntregaService {
 		List<ComponenteValor> componentesValores = Arrays.asList(componenteValor);
 		cvps.setComponenteValor(componentesValores);
 		
+		Cte cte = new Cte();
+		cte.setTipoModal(TipoModal.RODOVIARIO.getDescricao());
+		cte.setTipoCte(TipoCte.NORMAL.getDescricao());
+		cte.setTipoTomadorServico(TipoTomadorServico.DESTINATARIO.getDescricao());
+		cte.setTipoServico(TipoServico.NORMAL.getDescricao());
+		cte.setFormaPagamento(FormaPagamento.A_PAGAR.getDescricao());
+		cte.setDacte(dacte);
+		cte.setNaturezaPrestacao(naturezaPrestacao);
+		cte.setDadosEmitente(dadosEmitente);
+		cte.setDadosRemetente(dadosRemetente);
+		cte.setDadosDestinatario(dadosDestinatario);
+		cte.setDadosExpedidor(dadosExpedidor);
+		cte.setDadosRecebedor(dadosRecebedor);
+		cte.setDadosTomador(dadosTomador);
+		cte.setDadosCarga(dadosCarga);
+		cte.setDadosSeguroCarga(dadosSeguroCarga);
+		cte.setComponentesValorPrestacaoServico(cvps);
+		
+		//Enviodo CT-e ao SFC
+		CteRequest cteRequest = montaCteRequest(cte);
+		CteResponse cteResponse = sendCteToSfc(cteRequest);
+		
 		EmissaoCteResponse emissaoCteResponse = new EmissaoCteResponse();
-		emissaoCteResponse.setTipoModal(TipoModal.RODOVIARIO.getDescricao());
-		emissaoCteResponse.setTipoCte(TipoCte.NORMAL.getDescricao());
-		emissaoCteResponse.setTipoTomadorServico(TipoTomadorServico.DESTINATARIO.getDescricao());
-		emissaoCteResponse.setTipoServico(TipoServico.NORMAL.getDescricao());
-		emissaoCteResponse.setFormaPagamento(FormaPagamento.A_PAGAR.getDescricao());
-		emissaoCteResponse.setDacte(dacte);
-		emissaoCteResponse.setNaturezaPrestacao(naturezaPrestacao);
-		emissaoCteResponse.setDadosEmitente(dadosEmitente);
-		emissaoCteResponse.setDadosRemetente(dadosRemetente);
-		emissaoCteResponse.setDadosDestinatario(dadosDestinatario);
-		emissaoCteResponse.setDadosExpedidor(dadosExpedidor);
-		emissaoCteResponse.setDadosRecebedor(dadosRecebedor);
-		emissaoCteResponse.setDadosTomador(dadosTomador);
-		emissaoCteResponse.setDadosCarga(dadosCarga);
-		emissaoCteResponse.setDadosSeguroCarga(dadosSeguroCarga);
-		emissaoCteResponse.setComponentesValorPrestacaoServico(cvps);
+		emissaoCteResponse.setCte(cte);
+		emissaoCteResponse.setEmissaoOk(cteResponse.isCteRecebido());
+		emissaoCteResponse.setMensagemDoSfc(cteResponse.getMensagem() + (cteResponse.isCteRecebido() 
+				? " Protocolo de recebimento pelo SFC: " + cteResponse.getProtocoloRecebimentoSfc(): ""));
 		
-		entrega.setCteEmitido(true);
+		entrega.setCteEmitido(cteResponse.isCteRecebido());
 		entregaRepository.save(entrega);
-		
+
 		return emissaoCteResponse;
 	}
 
+	private CteResponse sendCteToSfc(CteRequest cteRequest) {
+		
+		CteResponse cteResponse = restTemplate.postForObject(sfcHost + "/sfc/cadastrarCte", cteRequest, CteResponse.class);
+		return cteResponse;
+	}
+	
+	private CteRequest montaCteRequest(Cte cte) {
+		CteRequest cteRequest = new CteRequest();
+		
+		cteRequest.setTipoModal(cte.getTipoModal());
+		cteRequest.setTipoCte(cte.getTipoCte());
+		cteRequest.setTipoTomadorServico(cte.getTipoTomadorServico());
+		cteRequest.setTipoServico(cte.getTipoServico());
+		cteRequest.setFormaPagamento(cte.getFormaPagamento());
+		
+		//----------
+		DacteRequest dacteRequest = new DacteRequest();
+		dacteRequest.setTitulo(cte.getDacte().getTitulo());
+		dacteRequest.setModelo(cte.getDacte().getModelo());
+		dacteRequest.setSerie(cte.getDacte().getSerie());
+		dacteRequest.setNumero(cte.getDacte().getNumero());
+		dacteRequest.setFolha(cte.getDacte().getFolha());
+		dacteRequest.setDataHoraEmissao(cte.getDacte().getDataHoraEmissao());
+		dacteRequest.setInscricaoSulframa(cte.getDacte().getInscricaoSulframa());
+		dacteRequest.setChaveAcesso(cte.getDacte().getChaveAcesso());
+		dacteRequest.setTextoChaveAcesso(cte.getDacte().getTitulo());
+		dacteRequest.setNumeroProtocoloAutorizacaoUso(cte.getDacte().getNumeroProtocoloAutorizacaoUso());
+		dacteRequest.setDataHoraGeracaoProtocolo(cte.getDacte().getDataHoraGeracaoProtocolo());
+		cteRequest.setDacte(dacteRequest);
+		
+		//-----------------
+		NaturezaPrestacaoRequest naturezaPrestacaoRequest = new NaturezaPrestacaoRequest();
+		naturezaPrestacaoRequest.setCodigoNomeNaturezaPrestacao(cte.getNaturezaPrestacao().getCodigoNomeNaturezaPrestacao());
+		naturezaPrestacaoRequest.setLocalInicioPrestacao(cte.getNaturezaPrestacao().getLocalInicioPrestacao());
+		naturezaPrestacaoRequest.setLocalTerminoPrestacao(cte.getNaturezaPrestacao().getLocalTerminoPrestacao());
+		cteRequest.setNaturezaPrestacao(naturezaPrestacaoRequest);
+
+		//----------
+		EnderecoAtorCteRequest enderecoEmitenteRequest = new EnderecoAtorCteRequest();
+		enderecoEmitenteRequest.setLogradouro(cte.getDadosEmitente().getEndereco().getLogradouro());
+		enderecoEmitenteRequest.setNumero(cte.getDadosEmitente().getEndereco().getNumero());
+		enderecoEmitenteRequest.setComplemento(cte.getDadosEmitente().getEndereco().getComplemento());
+		enderecoEmitenteRequest.setBairro(cte.getDadosEmitente().getEndereco().getBairro());
+		enderecoEmitenteRequest.setCidade(cte.getDadosEmitente().getEndereco().getCidade());
+		enderecoEmitenteRequest.setUf(cte.getDadosEmitente().getEndereco().getUf());
+		enderecoEmitenteRequest.setCep(cte.getDadosEmitente().getEndereco().getCep());
+		
+		DadosAtorCteRequest dadosEmitenteRequest = new DadosAtorCteRequest();
+		dadosEmitenteRequest.setTipoDocumento(cte.getDadosEmitente().getTipoDocumento());
+		dadosEmitenteRequest.setCpfCnpj(cte.getDadosEmitente().getCpfCnpj());
+		dadosEmitenteRequest.setNomeRazaoSocial(cte.getDadosEmitente().getNomeRazaoSocial());
+		dadosEmitenteRequest.setInscricaoEstadual(cte.getDadosEmitente().getInscricaoEstadual());
+		dadosEmitenteRequest.setTelefone(cte.getDadosEmitente().getTelefone());
+		dadosEmitenteRequest.setEndereco(enderecoEmitenteRequest);
+		
+		cteRequest.setDadosEmitente(dadosEmitenteRequest);
+		
+		//------------
+		EnderecoAtorCteRequest enderecoRemetenteRequest = new EnderecoAtorCteRequest();
+		enderecoRemetenteRequest.setLogradouro(cte.getDadosRemetente().getEndereco().getLogradouro());
+		enderecoRemetenteRequest.setNumero(cte.getDadosRemetente().getEndereco().getNumero());
+		enderecoRemetenteRequest.setComplemento(cte.getDadosRemetente().getEndereco().getComplemento());
+		enderecoRemetenteRequest.setBairro(cte.getDadosRemetente().getEndereco().getBairro());
+		enderecoRemetenteRequest.setCidade(cte.getDadosRemetente().getEndereco().getCidade());
+		enderecoRemetenteRequest.setUf(cte.getDadosRemetente().getEndereco().getUf());
+		enderecoRemetenteRequest.setCep(cte.getDadosRemetente().getEndereco().getCep());
+		
+		DadosAtorCteRequest dadosRemetenteRequest = new DadosAtorCteRequest();
+		dadosRemetenteRequest.setTipoDocumento(cte.getDadosRemetente().getTipoDocumento());
+		dadosRemetenteRequest.setCpfCnpj(cte.getDadosRemetente().getCpfCnpj());
+		dadosRemetenteRequest.setNomeRazaoSocial(cte.getDadosRemetente().getNomeRazaoSocial());
+		dadosRemetenteRequest.setInscricaoEstadual(cte.getDadosRemetente().getInscricaoEstadual());
+		dadosRemetenteRequest.setTelefone(cte.getDadosRemetente().getTelefone());
+		dadosRemetenteRequest.setEndereco(enderecoRemetenteRequest);
+		
+		cteRequest.setDadosRemetente(dadosRemetenteRequest);
+		
+		//------------
+		EnderecoAtorCteRequest enderecoDestinatarioRequest = new EnderecoAtorCteRequest();
+		enderecoDestinatarioRequest.setLogradouro(cte.getDadosDestinatario().getEndereco().getLogradouro());
+		enderecoDestinatarioRequest.setNumero(cte.getDadosDestinatario().getEndereco().getNumero());
+		enderecoDestinatarioRequest.setComplemento(cte.getDadosDestinatario().getEndereco().getComplemento());
+		enderecoDestinatarioRequest.setBairro(cte.getDadosDestinatario().getEndereco().getBairro());
+		enderecoDestinatarioRequest.setCidade(cte.getDadosDestinatario().getEndereco().getCidade());
+		enderecoDestinatarioRequest.setUf(cte.getDadosDestinatario().getEndereco().getUf());
+		enderecoDestinatarioRequest.setCep(cte.getDadosDestinatario().getEndereco().getCep());
+		
+		DadosAtorCteRequest dadosDestinatarioRequest = new DadosAtorCteRequest();
+		dadosDestinatarioRequest.setTipoDocumento(cte.getDadosDestinatario().getTipoDocumento());
+		dadosDestinatarioRequest.setCpfCnpj(cte.getDadosDestinatario().getCpfCnpj());
+		dadosDestinatarioRequest.setNomeRazaoSocial(cte.getDadosDestinatario().getNomeRazaoSocial());
+		dadosDestinatarioRequest.setInscricaoEstadual(cte.getDadosDestinatario().getInscricaoEstadual());
+		dadosDestinatarioRequest.setTelefone(cte.getDadosDestinatario().getTelefone());
+		dadosDestinatarioRequest.setEndereco(enderecoDestinatarioRequest);
+		
+		cteRequest.setDadosDestinatario(dadosDestinatarioRequest);
+	
+		//---------
+		EnderecoAtorCteRequest enderecoExpedidorRequest = new EnderecoAtorCteRequest();
+		enderecoExpedidorRequest.setLogradouro(cte.getDadosExpedidor().getEndereco().getLogradouro());
+		enderecoExpedidorRequest.setNumero(cte.getDadosExpedidor().getEndereco().getNumero());
+		enderecoExpedidorRequest.setComplemento(cte.getDadosExpedidor().getEndereco().getComplemento());
+		enderecoExpedidorRequest.setBairro(cte.getDadosExpedidor().getEndereco().getBairro());
+		enderecoExpedidorRequest.setCidade(cte.getDadosExpedidor().getEndereco().getCidade());
+		enderecoExpedidorRequest.setUf(cte.getDadosExpedidor().getEndereco().getUf());
+		enderecoExpedidorRequest.setCep(cte.getDadosExpedidor().getEndereco().getCep());
+		
+		DadosAtorCteRequest dadosExpedidorRequest = new DadosAtorCteRequest();
+		dadosExpedidorRequest.setTipoDocumento(cte.getDadosExpedidor().getTipoDocumento());
+		dadosExpedidorRequest.setCpfCnpj(cte.getDadosExpedidor().getCpfCnpj());
+		dadosExpedidorRequest.setNomeRazaoSocial(cte.getDadosExpedidor().getNomeRazaoSocial());
+		dadosExpedidorRequest.setInscricaoEstadual(cte.getDadosExpedidor().getInscricaoEstadual());
+		dadosExpedidorRequest.setTelefone(cte.getDadosExpedidor().getTelefone());
+		dadosExpedidorRequest.setEndereco(enderecoExpedidorRequest);
+		
+		cteRequest.setDadosExpedidor(dadosExpedidorRequest);
+
+		//------------------
+		EnderecoAtorCteRequest enderecoRecebedorRequest = new EnderecoAtorCteRequest();
+		enderecoRecebedorRequest.setLogradouro(cte.getDadosRecebedor().getEndereco().getLogradouro());
+		enderecoRecebedorRequest.setNumero(cte.getDadosRecebedor().getEndereco().getNumero());
+		enderecoRecebedorRequest.setComplemento(cte.getDadosRecebedor().getEndereco().getComplemento());
+		enderecoRecebedorRequest.setBairro(cte.getDadosRecebedor().getEndereco().getBairro());
+		enderecoRecebedorRequest.setCidade(cte.getDadosRecebedor().getEndereco().getCidade());
+		enderecoRecebedorRequest.setUf(cte.getDadosRecebedor().getEndereco().getUf());
+		enderecoRecebedorRequest.setCep(cte.getDadosRecebedor().getEndereco().getCep());
+		
+		DadosAtorCteRequest dadosRecebedorRequest = new DadosAtorCteRequest();
+		dadosRecebedorRequest.setTipoDocumento(cte.getDadosRecebedor().getTipoDocumento());
+		dadosRecebedorRequest.setCpfCnpj(cte.getDadosRecebedor().getCpfCnpj());
+		dadosRecebedorRequest.setNomeRazaoSocial(cte.getDadosRecebedor().getNomeRazaoSocial());
+		dadosRecebedorRequest.setInscricaoEstadual(cte.getDadosRecebedor().getInscricaoEstadual());
+		dadosRecebedorRequest.setTelefone(cte.getDadosRecebedor().getTelefone());
+		dadosRecebedorRequest.setEndereco(enderecoRecebedorRequest);
+		
+		cteRequest.setDadosRecebedor(dadosRecebedorRequest);
+		
+		//---------------------
+		EnderecoAtorCteRequest enderecoTomadorRequest = new EnderecoAtorCteRequest();
+		enderecoTomadorRequest.setLogradouro(cte.getDadosTomador().getEndereco().getLogradouro());
+		enderecoTomadorRequest.setNumero(cte.getDadosTomador().getEndereco().getNumero());
+		enderecoTomadorRequest.setComplemento(cte.getDadosTomador().getEndereco().getComplemento());
+		enderecoTomadorRequest.setBairro(cte.getDadosTomador().getEndereco().getBairro());
+		enderecoTomadorRequest.setCidade(cte.getDadosTomador().getEndereco().getCidade());
+		enderecoTomadorRequest.setUf(cte.getDadosTomador().getEndereco().getUf());
+		enderecoTomadorRequest.setCep(cte.getDadosTomador().getEndereco().getCep());
+		
+		DadosAtorCteRequest dadosTomadorRequest = new DadosAtorCteRequest();
+		dadosTomadorRequest.setTipoDocumento(cte.getDadosTomador().getTipoDocumento());
+		dadosTomadorRequest.setCpfCnpj(cte.getDadosTomador().getCpfCnpj());
+		dadosTomadorRequest.setNomeRazaoSocial(cte.getDadosTomador().getNomeRazaoSocial());
+		dadosTomadorRequest.setInscricaoEstadual(cte.getDadosTomador().getInscricaoEstadual());
+		dadosTomadorRequest.setTelefone(cte.getDadosTomador().getTelefone());
+		dadosTomadorRequest.setEndereco(enderecoTomadorRequest);
+		
+		cteRequest.setDadosTomador(dadosTomadorRequest);
+		
+		//-------------------
+		DadosCargaRequest dadosCargaRequest = new DadosCargaRequest();
+		dadosCargaRequest.setProdutoPredominante(cte.getDadosCarga().getProdutoPredominante());
+		dadosCargaRequest.setOutrasCaracteristicasCarga(cte.getDadosCarga().getOutrasCaracteristicasCarga());
+		dadosCargaRequest.setValorTotalMercadoria(cte.getDadosCarga().getValorTotalMercadoria());
+		dadosCargaRequest.setPesoBruto(cte.getDadosCarga().getPesoBruto());
+		dadosCargaRequest.setPesoAferido(cte.getDadosCarga().getPesoAferido());
+		dadosCargaRequest.setVolume(cte.getDadosCarga().getVolume());
+		dadosCargaRequest.setCubagemM3(cte.getDadosCarga().getCubagemM3());
+		
+		cteRequest.setDadosCarga(dadosCargaRequest);
+		
+		//----------------------
+		DadosSeguroCargaRequest dadosSeguroCargaRequest = new DadosSeguroCargaRequest();
+		dadosSeguroCargaRequest.setNomeResponsavel(cte.getDadosSeguroCarga().getNomeResponsavel());
+		dadosSeguroCargaRequest.setNumeroApolice(cte.getDadosSeguroCarga().getNumeroApolice());
+		dadosSeguroCargaRequest.setNumeroAverbacao(cte.getDadosSeguroCarga().getNumeroAverbacao());
+
+		cteRequest.setDadosSeguroCarga(dadosSeguroCargaRequest);
+		
+		//-------------
+		List<ComponenteValorRequest> componentesValoresRequests = new ArrayList<ComponenteValorRequest>();
+		for (int i = 0; i < cte.getComponentesValorPrestacaoServico().getComponenteValor().size(); i++) {
+			
+			ComponenteValor cv = cte.getComponentesValorPrestacaoServico().getComponenteValor().get(i);
+			
+			ComponenteValorRequest componenteValorRequest = new ComponenteValorRequest();
+			componenteValorRequest.setNome(cv.getNome());
+			componenteValorRequest.setValor(cv.getValor());
+			componentesValoresRequests.add(componenteValorRequest);
+		}
+		ComponentesValorPrestacaoServicoRequest cvpsRequest = new ComponentesValorPrestacaoServicoRequest();
+		cvpsRequest.setComponenteValor(componentesValoresRequests);
+		
+		cteRequest.setComponentesValorPrestacaoServico(cvpsRequest);
+		
+		return cteRequest;
+	}
+	
 	private String getEspeciePredominante(List<Carga> cargas) {
 		Map <String, Integer> especies = new HashMap<>();
 		for (Carga c : cargas) {
