@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
@@ -43,6 +44,13 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	public void configure(HttpSecurity http) throws Exception {
 
 		http.authorizeRequests()
+        .antMatchers(
+                "/",
+                "/actuator/**",
+                "/v2/api-docs/**",
+                "/swagger*/**",
+                "/swagger-resources/**",
+                "/webjars/**").permitAll()
 		.antMatchers(PUBLIC).permitAll() //antMatchers: pra definir autorizações
 		.antMatchers(HttpMethod.GET, CLIENTE).hasAnyRole("CLIENTE", "ADMIN", "COLABORADOR")
 		.antMatchers(HttpMethod.POST, CLIENTE).hasRole("CLIENTE")

@@ -30,23 +30,42 @@ import com.dev.gslentrega.response.EmissaoCteResponse;
 import com.dev.gslentrega.service.EntregaService;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping(value = "/entregas")
 @Slf4j
+@Api(value = "Endpoints do módulo de Entregas")
 public class EntregaController {
 
 	@Autowired
 	private EntregaService entregaService;
 	
 	@GetMapping
+	@ApiOperation(value = "Return all Items available in the System", response = List.class)
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Lista de todas as entregas retornada com sucesso"),
+			@ApiResponse(code = 401, message = "Operação não autorizada"),
+			@ApiResponse(code = 403, message = "Accesso ao recurso não permitido"),
+			@ApiResponse(code = 404, message = "Não foram encontradas entregas")
+    })
 	public ResponseEntity<List<Entrega>> findAll() {
 		List<Entrega> list = entregaService.buscarEntregas();
 		return ResponseEntity.ok(list);
 	}	
 
 	@GetMapping(value = "/buscarPorId/{id}")
+	@ApiOperation(value = "Retorna uma entrega ao ser informado um id", response = Entrega.class)
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Lista de todas as entregas retornada com sucesso"),
+			@ApiResponse(code = 401, message = "Operação não autorizada"),
+			@ApiResponse(code = 403, message = "Accesso ao recurso não permitido"),
+			@ApiResponse(code = 404, message = "Entrega não encontrada")
+    })
 	public ResponseEntity<Entrega> findById(@PathVariable Long id) {
 		Entrega entrega = entregaService.buscarEntregaById(id);
 		return ResponseEntity.ok(entrega);
