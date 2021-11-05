@@ -62,8 +62,6 @@ public class EntregaController {
 	@ApiOperation(value = "Retorna uma entrega ao ser informado um id", response = Entrega.class)
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Lista de todas as entregas retornada com sucesso"),
-			@ApiResponse(code = 401, message = "Operação não autorizada"),
-			@ApiResponse(code = 403, message = "Accesso ao recurso não permitido"),
 			@ApiResponse(code = 404, message = "Entrega não encontrada")
     })
 	public ResponseEntity<Entrega> findById(@PathVariable Long id) {

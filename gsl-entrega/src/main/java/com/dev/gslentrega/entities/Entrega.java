@@ -32,6 +32,8 @@ import com.dev.gslentrega.enums.TipoDocumento;
 import com.dev.gslentrega.enums.TipoModal;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -46,12 +48,14 @@ import lombok.Setter;
 @Entity
 @Table(name = "tb_entrega", uniqueConstraints = 
 	@UniqueConstraint(columnNames = "codigoSolicitacao", name = "cod_solic_uk"))
+@ApiModel(description = "Resposta da consulta a uma entrega")
 public class Entrega implements Serializable {
 
 	private static final long serialVersionUID = -6034382672775937921L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) //pra que o id seja gerado automaticamente pelo banco de dados 
+	@ApiModelProperty(name = "id", value = "identificador da entrega (uso interno")
 	private Long id;
 	
 	private Long codigoSolicitacao;

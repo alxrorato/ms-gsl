@@ -3,18 +3,12 @@ package com.dev.gslentrega.config;
 import static java.util.Collections.singleton;
 import static springfox.documentation.builders.RequestHandlerSelectors.basePackage;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
 
 import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
@@ -23,15 +17,18 @@ import springfox.documentation.spring.web.plugins.Docket;
 @Configuration
 public class SwaggerConfig {
 
-	@Value(value = "${gslentrega.base.package}")
+	@Value(value = "${base.package}")
 	private String basePackage;
 	
+	@Value(value = "${swagger.enabled}")
+	private boolean swaggerEnabled;
+
 	@Bean
 	public Docket api() {
         
         return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(basePackage((basePackage)))
+        		.enable(swaggerEnabled).select()
+                .apis(basePackage(basePackage))
                 .build()
         		.apiInfo(apiInfo())
                 .useDefaultResponseMessages(false)
@@ -49,8 +46,4 @@ public class SwaggerConfig {
     					
     }
 
-    private Object apiKey() {
-        // TODO Auto-generated method stub
-        return null;
-    }	
 }
