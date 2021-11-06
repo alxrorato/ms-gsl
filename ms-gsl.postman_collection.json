@@ -1505,44 +1505,6 @@
 								}
 							},
 							"response": []
-						},
-						{
-							"name": "Atualizar Por Código de Solicitação (distância percorrida e data de alteração)",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n  \"codigoSolicitacao\": 340836361259\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{api-gateway}}/gsl-entrega/entregas/atualizarEntrega",
-									"host": [
-										"{{api-gateway}}"
-									],
-									"path": [
-										"gsl-entrega",
-										"entregas",
-										"atualizarEntrega"
-									]
-								}
-							},
-							"response": []
 						}
 					]
 				},

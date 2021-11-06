@@ -24,8 +24,8 @@ public class MockUtils {
 	private static final List<String> RECEBEDORES_MERCADORIAS = Arrays.asList("Beatriz Cavalcanti Souza", "Carla Martins Souza", "portaria do condomínio",
 			"Carlos Castro Gonçalves", "Sofia Araujo Lima", "Luan Silva Pereira", "Bruna Lima Azevedo", "Ryan Dias Costa",
 			"Enzo Rocha Oliveira", "Brenda Castro Alves", "Luana Pereira Azevedo", "André Martins Barbosa",
-			"Matilde Pereira Melo", "Vitoria Rocha Barros", "Júlio Goncalves Barbosa", "Pedro Ribeiro Carvalho",
-			"Felipe Carvalho Goncalves", "Caio Dias Sousa", "João Gomes Oliveira", "Vitória Silva Rocha", "Mateus Melo Cunha",
+			"Matilde Pereira Melo", "Vitoria Rocha Barros", "Júlio Gonçalves Barbosa", "Pedro Ribeiro Carvalho",
+			"Felipe Carvalho Gonçalves", "Caio Dias Sousa", "João Gomes Oliveira", "Vitória Silva Rocha", "Mateus Melo Cunha",
 			"Lucas Silva Lima", "Vitória Melo Dias", "Gabrielle Ferreira Rodrigues", "Isabela Correia Castro", "Mateus Martins Araujo", 
 			"Tiago Alves Carvalho", "Anna Barros Fernandes", "Sophia Gomes Oliveira", "Camila Rodrigues Ribeiro");
 	

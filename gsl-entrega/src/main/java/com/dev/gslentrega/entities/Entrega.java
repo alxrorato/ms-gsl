@@ -107,7 +107,7 @@ public class Entrega implements Serializable {
 	
 	@NotNull
 	@Enumerated(EnumType.STRING)
-	@ApiModelProperty(name = "statusEntrega", value = "Status do andamento da entrega (SOLICITAÇÃO, COLETA, ROTEIRIZAÇÃO, "
+	@ApiModelProperty(name = "statusEntrega", value = "Situação do andamento da entrega (SOLICITAÇÃO, COLETA, ROTEIRIZAÇÃO, "
 			+ "TRANSPORTE, DISTRIBUIÇÃO, LAST_MILE, FINALIZADA ou CANCELADA", example = "SOLICITACAO")
 	private StatusEntrega statusEntrega;
 	

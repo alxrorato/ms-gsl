@@ -274,7 +274,7 @@ public class EntregaServiceImpl implements EntregaService {
 	/* Calcular:
 	 * 1) Peso cubado: considerar que 1m3 <==> 300kg
 	 * 				 volumeTotalCarga * fator de cubagem (300 kg/m3)
-	 * 2) Valor Frete peso: 1,50 * (MAX(peso total da Carga, peso Cubado))
+	 * 2) Valor Frete peso: 1,50(preco por Kg) * (MAX(peso total da Carga, peso Cubado))
 	 * Ex.: VolumeTotalCarga = 20m3, pesoTotalCarga=500Kg, PrecoPorkg=1,50
 	 *      Peso Cubado = 20 * 300 = 6000Kg. pesoCubado ficou maior que o pesoTotalCarga
 	 *      ValorFretePeso = 1,50 * 6000 = 9.000 
@@ -372,10 +372,12 @@ public class EntregaServiceImpl implements EntregaService {
 		return entregaRepository.findByCodigoSolicitacao(codigoSolicitacao) != null ? true : false;
 	}
 
+	/*
 	@Override
 	public void atualizarEntrega(SolicitacaoRequest solicitacaoRequest) {
 		atualizarPercurso(solicitacaoRequest.getCodigoSolicitacao());
 	}
+	*/
 
 	@Override
 	public AndamentoEntregaResponse findProgressByRequestCode(Long codigoSolicitacao) {
@@ -434,6 +436,8 @@ public class EntregaServiceImpl implements EntregaService {
 		Entrega entrega = buscarEntregaByCodigoSolicitacao(codigoSolicitacao);
 		if (StatusPagamento.CONFIRMADO.equals(entrega.getStatusPagamento())) {
 			throw new OperacaoNaoEfetuadaException("Pagamento já foi efetuado.");
+		} else if (StatusEntrega.CANCELADA.equals(entrega.getStatusEntrega())) {
+			throw new OperacaoNaoEfetuadaException("A solicitação para a entrega " + codigoSolicitacao + " foi cancelada");
 		}
 		entrega.setStatusPagamento(StatusPagamento.CONFIRMADO);
 		entrega.setDataPagamento(LocalDateTime.now());
@@ -459,7 +463,8 @@ public class EntregaServiceImpl implements EntregaService {
 		} else if (StatusEntrega.COLETA.equals(entrega.getStatusEntrega())) {
 			throw new OperacaoNaoEfetuadaException("Esta etapa já foi iniciada");
 		} else {
-			throw new OperacaoNaoEfetuadaException("Esta etapa já foi concluída");
+			//throw new OperacaoNaoEfetuadaException("Esta etapa já foi concluída");
+			throw new OperacaoNaoEfetuadaException("Operação não efetuada. Motivo: " + entrega.getStatusEntrega().getDescricao());
 		}
 		return new OperacaoEtapaResponse(codigoSolicitacao, entrega.getDataStatusEntrega(), "Coleta da carga efetuada");
 	}
@@ -482,8 +487,12 @@ public class EntregaServiceImpl implements EntregaService {
 	public OperacaoEtapaResponse iniciarTransporte(Long codigoSolicitacao) {
 		Entrega entrega = buscarEntregaByCodigoSolicitacao(codigoSolicitacao);
 		if (StatusEntrega.ROTEIRIZACAO.equals(entrega.getStatusEntrega())) {
-			alterarStatusEntrega(entrega, StatusEntrega.TRANSPORTE);
-			entregaRepository.save(entrega);
+			if (entrega.isCteEmitido()) {
+				alterarStatusEntrega(entrega, StatusEntrega.TRANSPORTE);
+				entregaRepository.save(entrega);
+			} else {
+				throw new OperacaoNaoEfetuadaException("Operação não efetuada. Motivo: CT-e ainda não foi emitido.");
+			}
 		} else if (StatusEntrega.TRANSPORTE.equals(entrega.getStatusEntrega())) {
 			throw new OperacaoNaoEfetuadaException("Operação não efetuada. Motivo: transporte já foi iniciado.");
 		} else {
@@ -528,6 +537,8 @@ public class EntregaServiceImpl implements EntregaService {
 			entregaRepository.save(entrega);
 		} else if (StatusEntrega.FINALIZADA.equals(entrega.getStatusEntrega())) {
 			throw new OperacaoNaoEfetuadaException("Operação não efetuada. Motivo: entrega já foi finalizada.");
+		} else if (StatusEntrega.CANCELADA.equals(entrega.getStatusEntrega())) {
+			throw new OperacaoNaoEfetuadaException("A solicitação para a entrega " + codigoSolicitacao + " foi cancelada");
 		} else {
 			throw new OperacaoNaoEfetuadaException("Operação não efetuada porque o transporte da entrega [" + codigoSolicitacao + "] ainda não foi iniciado.");
 		}
@@ -540,8 +551,10 @@ public class EntregaServiceImpl implements EntregaService {
 		Entrega entrega = buscarEntregaByCodigoSolicitacao(codigoSolicitacao);
 		if (StatusEntrega.FINALIZADA.equals(entrega.getStatusEntrega())) {
 			throw new OperacaoNaoEfetuadaException("Cancelamento não permitido porque a entrega já foi finalizada. Favor contactar o atendimento ao cliente em caso de dúvidas.");
+		} else if (StatusEntrega.CANCELADA.equals(entrega.getStatusEntrega())) {
+			throw new OperacaoNaoEfetuadaException("A solicitação para a entrega " + codigoSolicitacao + " já foi cancelada");
 		}
-		alterarStatusEntrega(entrega, StatusEntrega.FINALIZADA);
+		alterarStatusEntrega(entrega, StatusEntrega.CANCELADA);
 		entregaRepository.save(entrega);
 		return new CancelamentoResponse(codigoSolicitacao, entrega.getDataCancelamento(), "Cancelamento efetuado com sucesso.", entrega.getMotivoCancelamento());
 	}
@@ -580,6 +593,8 @@ public class EntregaServiceImpl implements EntregaService {
 		Entrega entrega = buscarEntregaByCodigoSolicitacao(codigoSolicitacao);
 		if (entrega.isCteEmitido()) {
 			throw new OperacaoNaoEfetuadaException("O CT-e já foi emitido para a entrega " + codigoSolicitacao);
+		}  else if (StatusEntrega.CANCELADA.equals(entrega.getStatusEntrega())) {
+			throw new OperacaoNaoEfetuadaException("A solicitação para a entrega " + codigoSolicitacao + " foi cancelada");
 		}
 
 		/* O Dacte é a Receita Federal quem devolve essas informações junto com as do CT-e */

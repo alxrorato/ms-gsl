@@ -29,7 +29,7 @@ public interface EntregaService {
 
 	AndamentoEntregaResponse findProgressByRequestCode(Long codigoSolicitacao);
 
-	void atualizarEntrega(SolicitacaoRequest solicitacaoRequest);
+	//void atualizarEntrega(SolicitacaoRequest solicitacaoRequest);
 
 	Entrega cadastrarEntrega(@Valid EntregaRequest entregaRequest);
 

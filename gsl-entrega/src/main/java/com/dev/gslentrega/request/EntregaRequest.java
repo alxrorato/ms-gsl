@@ -33,7 +33,7 @@ public class EntregaRequest {
 	@ApiModelProperty(name = "enderecoDestino", value = "Endereço de destino do transporte")
 	private EnderecoRequest enderecoDestino;
 	
-	@ApiModelProperty(name = "enderecoDestino", value = "Carga contendo as informações das mercadorias a serem transportadas")
+	@ApiModelProperty(name = "cargaRequests", value = "Lista das cargas a serem transportadas")
 	private List<CargaRequest> cargaRequests;
 
 	@ApiModelProperty(name = "naturezaPrestacao", value = "Natureza da prestação do serviço", 

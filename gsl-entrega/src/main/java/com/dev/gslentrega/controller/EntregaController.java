@@ -25,8 +25,12 @@ import com.dev.gslentrega.request.EntregaRequest;
 import com.dev.gslentrega.request.SolicitacaoRequest;
 import com.dev.gslentrega.response.AndamentoEntregaResponse;
 import com.dev.gslentrega.response.CalculoFreteResponse;
+import com.dev.gslentrega.response.CancelamentoResponse;
 import com.dev.gslentrega.response.Cliente;
+import com.dev.gslentrega.response.ConfirmacaoEntregaResponse;
 import com.dev.gslentrega.response.EmissaoCteResponse;
+import com.dev.gslentrega.response.OperacaoEtapaResponse;
+import com.dev.gslentrega.response.PagamentoResponse;
 import com.dev.gslentrega.service.EntregaService;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
@@ -101,22 +105,20 @@ public class EntregaController {
 		throw new ServicoIndisponivelException("Serviço de clientes indisponível. Tente mais tarde.");
 	}
 	
+	/* No momento não é necessário 
 	@PutMapping("atualizarEntrega")
-	@ApiOperation(value = "Atualiza dados do andamento de uma entrega")
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "Entrega atualizada"),
-			@ApiResponse(code = 404, message = "Entrega não encontrada")
-    })
+	//@ApiOperation(value = "Atualiza dados do andamento de uma entrega")
 	public ResponseEntity<?> atualizarEntrega(@RequestBody SolicitacaoRequest solicitacaoRequest) {
 		entregaService.atualizarEntrega(solicitacaoRequest);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+	*/
 	
 	@GetMapping(value = "/findProgressByRequestCode/{codigoSolicitacao}")
 	@ApiOperation(value = "Consulta o andamento de uma entrega ao ser informado seu código de solicitação", 
-		response = Entrega.class)
+		response = AndamentoEntregaResponse.class)
 	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "Entrega retornada com sucesso"),
+			@ApiResponse(code = 200, message = "Andamento da entrega retornado com sucesso"),
 			@ApiResponse(code = 404, message = "Entrega não encontrada")
     })
 	public ResponseEntity<AndamentoEntregaResponse> findProgressByRequestCode(
@@ -127,6 +129,8 @@ public class EntregaController {
 	}
 
 	@GetMapping(value = "/estimarCalculoFrete")
+	@ApiOperation(value = "Estimar cálculo do frete", response = CalculoFreteResponse.class)
+	@ApiResponse(code = 200, message = "Solicitação de entrega criada", response = CalculoFreteResponse.class)
 	public ResponseEntity<CalculoFreteResponse> estimarCalculoFrete(@Valid @RequestBody CalculoFreteRequest calculoFreteRequest) {
 		CalculoFreteResponse calculoFreteResponse = entregaService.estimarCalculoFrete(calculoFreteRequest);
 		return ResponseEntity.ok(calculoFreteResponse);
@@ -135,55 +139,142 @@ public class EntregaController {
 	@PostMapping("solicitar")
 	@Transactional(rollbackFor = Exception.class)
 	@ApiOperation(value = "Solicitar entrega", response = Entrega.class)
-	@ApiResponse(code = 201, message = "Solicitação de entrega criada", response = Entrega.class)
-	public ResponseEntity<?> solicitarEntrega(@Valid @RequestBody EntregaRequest entregaRequest) {
+	@ApiResponses(value = {
+			@ApiResponse(code = 201, message = "Solicitação de entrega cadastrada"),
+			@ApiResponse(code = 404, message = "Cliente não encontrado")
+		})
+	public ResponseEntity<Entrega> solicitarEntrega(@Valid @RequestBody EntregaRequest entregaRequest) {
 		return new ResponseEntity<>(entregaService.cadastrarEntrega(entregaRequest), HttpStatus.CREATED);
 	}
 
 	@PatchMapping("efetuarPagamento/{codigoSolicitacao}")
-	public ResponseEntity<?> efetuarPagamento(@PathVariable Long codigoSolicitacao) {
-		return new ResponseEntity<>(entregaService.efetuarPagamento(codigoSolicitacao), HttpStatus.OK);
+	@ApiOperation(value = "Efetuar o pagamento do serviço de transporte solicitado", response = PagamentoResponse.class)
+	@ApiResponses(value = {
+		@ApiResponse(code = 200, message = "Pagamento efetuado com sucesso"),
+		@ApiResponse(code = 404, message = "Entrega não encontrada"),
+		@ApiResponse(code = 422, message = "Pagamento já efetuado")
+	})
+	public ResponseEntity<PagamentoResponse> efetuarPagamento(
+			@ApiParam(name = "codigoSolicitacao", value = "Código de solicitação da entrega") 
+			@PathVariable Long codigoSolicitacao) {
+		
+		PagamentoResponse pagamentoResponse = entregaService.efetuarPagamento(codigoSolicitacao);
+		return ResponseEntity.ok(pagamentoResponse);
 	}
 	
 	@PostMapping("emitirCte/{codigoSolicitacao}")
 	@Transactional(rollbackFor = Exception.class)
-	public ResponseEntity<?> emitirCte(@PathVariable Long codigoSolicitacao) {
+	@ApiOperation(value = "Emitir o CT-e do transporte a ser realizado ao sistema legado SFC para que ele "
+			+ "realize os devidos controles.", response = EmissaoCteResponse.class)
+	@ApiResponses(value = {
+		@ApiResponse(code = 201, message = "CT-e emitido ao SFC"),
+		@ApiResponse(code = 404, message = "Entrega não encontrada"),
+		@ApiResponse(code = 422, message = "Operação não efetuada")
+	})
+	public ResponseEntity<EmissaoCteResponse> emitirCte(
+			@ApiParam(name = "codigoSolicitacao", value = "Código de solicitação da entrega")
+			@PathVariable Long codigoSolicitacao) {
+		
 		EmissaoCteResponse emissaoCteResponse = entregaService.emitirCte(codigoSolicitacao);
 		return new ResponseEntity<>(emissaoCteResponse, emissaoCteResponse.isEmissaoOk() ? HttpStatus.CREATED : HttpStatus.UNPROCESSABLE_ENTITY);
 	}
 
 	@PatchMapping("coletarCarga/{codigoSolicitacao}")
-	public ResponseEntity<?> coletarCarga(@PathVariable Long codigoSolicitacao) {
+	@ApiOperation(value = "Efetuar a etapa de coleta da carga", response = OperacaoEtapaResponse.class)
+	@ApiResponses(value = {
+		@ApiResponse(code = 200, message = "Operação efetuada"),
+		@ApiResponse(code = 404, message = "Entrega não encontrada"),
+		@ApiResponse(code = 422, message = "Operação não efetuada")
+	})
+	public ResponseEntity<OperacaoEtapaResponse> coletarCarga(
+			@ApiParam(name = "codigoSolicitacao", value = "Código de solicitação da entrega") 
+			@PathVariable Long codigoSolicitacao) {
+		
 		return new ResponseEntity<>(entregaService.coletarCarga(codigoSolicitacao), HttpStatus.OK);
 	}
 	
 	@PatchMapping("efetuarRoteirizacao/{codigoSolicitacao}")
-	public ResponseEntity<?> efetuarRoteirizacao(@PathVariable Long codigoSolicitacao) {
+	@ApiOperation(value = "Efetuar a etapa de roteirização do transporte da carga", response = OperacaoEtapaResponse.class)
+	@ApiResponses(value = {
+		@ApiResponse(code = 200, message = "Operação efetuada"),
+		@ApiResponse(code = 404, message = "Entrega não encontrada"),
+		@ApiResponse(code = 422, message = "Operação não efetuada")
+	})
+	public ResponseEntity<OperacaoEtapaResponse> efetuarRoteirizacao(
+			@ApiParam(name = "codigoSolicitacao", value = "Código de solicitação da entrega")
+			@PathVariable Long codigoSolicitacao) {
 		return new ResponseEntity<>(entregaService.efetuarRoteirizacao(codigoSolicitacao), HttpStatus.OK);
 	}
 
 	@PatchMapping("iniciarTransporte/{codigoSolicitacao}")
-	public ResponseEntity<?> iniciarTransporte(@PathVariable Long codigoSolicitacao) {
+	@ApiOperation(value = "Efetuar a etapa de iniciar o transporte até o CD (centro de distribuição) "
+			+ "mais próximo do cliente", response = OperacaoEtapaResponse.class)
+	@ApiResponses(value = {
+		@ApiResponse(code = 200, message = "Operação efetuada"),
+		@ApiResponse(code = 404, message = "Entrega não encontrada"),
+		@ApiResponse(code = 422, message = "Operação não efetuada")
+	})
+	public ResponseEntity<OperacaoEtapaResponse> iniciarTransporte(
+			@ApiParam(name = "codigoSolicitacao", value = "Código de solicitação da entrega")
+			@PathVariable Long codigoSolicitacao) {
+		
 		return new ResponseEntity<>(entregaService.iniciarTransporte(codigoSolicitacao), HttpStatus.OK);
 	}
 	
 	@PatchMapping("distribuirNosCds/{codigoSolicitacao}")
-	public ResponseEntity<?> distribuirNosCds(@PathVariable Long codigoSolicitacao) {
+	@ApiOperation(value = "Efetuar a etapa de distribuição da carga no CD mais próximo do cliente final", 
+		response = OperacaoEtapaResponse.class)
+	@ApiResponses(value = {
+		@ApiResponse(code = 200, message = "Operação efetuada"),
+		@ApiResponse(code = 404, message = "Entrega não encontrada"),
+		@ApiResponse(code = 422, message = "Operação não efetuada")
+	})
+	public ResponseEntity<OperacaoEtapaResponse> distribuirNosCds(
+			@ApiParam(name = "codigoSolicitacao", value = "Código de solicitação da entrega")
+			@PathVariable Long codigoSolicitacao) {
 		return new ResponseEntity<>(entregaService.distribuirNosCds(codigoSolicitacao), HttpStatus.OK);
 	}
 	
 	@PatchMapping("iniciarLastMile/{codigoSolicitacao}")
-	public ResponseEntity<?> iniciarLastMile(@PathVariable Long codigoSolicitacao) {
+	@ApiOperation(value = "Efetuar a etapa de iniciar o Last-mile (última milha de transporte até o cliente final)", 
+		response = OperacaoEtapaResponse.class)
+	@ApiResponses(value = {
+		@ApiResponse(code = 200, message = "Operação efetuada"),
+		@ApiResponse(code = 404, message = "Entrega não encontrada"),
+		@ApiResponse(code = 422, message = "Operação não efetuada")
+	})
+	public ResponseEntity<OperacaoEtapaResponse> iniciarLastMile(
+			@ApiParam(name = "codigoSolicitacao", value = "Código de solicitação da entrega")
+			@PathVariable Long codigoSolicitacao) {
+		
 		return new ResponseEntity<>(entregaService.iniciarLastMile(codigoSolicitacao), HttpStatus.OK);
 	}
 	
 	@PatchMapping("finalizarEntrega/{codigoSolicitacao}")
-	public ResponseEntity<?> finalizarEntrega(@PathVariable Long codigoSolicitacao) {
+	@ApiOperation(value = "Efetuar a etapa de entrega da mercadoria ao cliente final", response = ConfirmacaoEntregaResponse.class)
+	@ApiResponses(value = {
+		@ApiResponse(code = 200, message = "Operação efetuada"),
+		@ApiResponse(code = 404, message = "Entrega não encontrada"),
+		@ApiResponse(code = 422, message = "Operação não efetuada")
+	})
+	public ResponseEntity<ConfirmacaoEntregaResponse> finalizarEntrega(
+			@ApiParam(name = "codigoSolicitacao", value = "Código de solicitação da entrega")
+			@PathVariable Long codigoSolicitacao) {
+		
 		return new ResponseEntity<>(entregaService.finalizarEntrega(codigoSolicitacao), HttpStatus.OK);
 	}
 	
 	@DeleteMapping("cancelarEntrega/{codigoSolicitacao}")
-	public ResponseEntity<?> cancelarEntrega(@PathVariable Long codigoSolicitacao) {
+	@ApiOperation(value = "Cancelar o processo de entrega ao cliente final", response = OperacaoEtapaResponse.class)
+	@ApiResponses(value = {
+		@ApiResponse(code = 200, message = "Operação efetuada"),
+		@ApiResponse(code = 404, message = "Entrega não encontrada"),
+		@ApiResponse(code = 422, message = "Operação não efetuada")
+	})
+	public ResponseEntity<CancelamentoResponse> cancelarEntrega(
+			@ApiParam(name = "codigoSolicitacao", value = "Código de solicitação da entrega")
+			@PathVariable Long codigoSolicitacao) {
+		
 		return new ResponseEntity<>(entregaService.cancelarEntrega(codigoSolicitacao), HttpStatus.OK);
 	}
 }
