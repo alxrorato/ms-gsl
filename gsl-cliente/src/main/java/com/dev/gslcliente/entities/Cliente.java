@@ -17,6 +17,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.dev.gslcliente.enums.StatusCliente;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -37,20 +38,30 @@ public class Cliente {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) 
 	private Long id;
+	
 	@NotNull
 	private Long cnpj;
+	
 	@NotNull
 	private String razaoSocial;
+	
 	private String nomeComercial;
+	
 	private String email;
+	
 	private String telefone;
+	
 	private String inscricaoEstadual;
+	
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private StatusCliente status;
+	
 	@NotNull
 	private LocalDateTime dataInclusao;
+
 	private LocalDateTime dataExclusao;
+	
 	@Valid
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "endereco_id_fk")

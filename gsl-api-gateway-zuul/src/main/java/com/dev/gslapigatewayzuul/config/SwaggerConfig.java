@@ -62,11 +62,11 @@ public class SwaggerConfig implements SwaggerResourcesProvider {
 	public List<SwaggerResource> get() {
 		//Dynamic introduction of micro services using routeLocator
 		List<SwaggerResource> resources = new ArrayList<>();
-		resources.add(swaggerResource(springApplicationName,"/v2/api-docs","1.0"));
+		resources.add(swaggerResource(springApplicationName,"/v2/api-docs","2.0"));
 		//Recycling Lambda expressions to simplify code
 		routeLocator.getRoutes().forEach(route ->{
 			//Dynamic acquisition
-			resources.add(swaggerResource(route.getId(),route.getFullPath().replace("**", "v2/api-docs"), "1.0"));
+			resources.add(swaggerResource(route.getId(), route.getFullPath().replace("**", "v2/api-docs"), "2.0"));
 		});
 		//You can also directly inherit the Consumer interface
 //		routeLocator.getRoutes().forEach(new Consumer<Route>() {

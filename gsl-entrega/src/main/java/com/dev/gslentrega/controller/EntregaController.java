@@ -31,6 +31,7 @@ import com.dev.gslentrega.service.EntregaService;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -46,13 +47,8 @@ public class EntregaController {
 	private EntregaService entregaService;
 	
 	@GetMapping
-	@ApiOperation(value = "Return all Items available in the System", response = List.class)
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "Lista de todas as entregas retornada com sucesso"),
-			@ApiResponse(code = 401, message = "Operação não autorizada"),
-			@ApiResponse(code = 403, message = "Accesso ao recurso não permitido"),
-			@ApiResponse(code = 404, message = "Não foram encontradas entregas")
-    })
+	@ApiOperation(value = "Retorna todas as solicitacoes de entregas cadastradas no sistema", response = List.class)
+	@ApiResponse(code = 200, message = "Lista de todas as entregas retornada com sucesso")
 	public ResponseEntity<List<Entrega>> findAll() {
 		List<Entrega> list = entregaService.buscarEntregas();
 		return ResponseEntity.ok(list);
@@ -61,45 +57,71 @@ public class EntregaController {
 	@GetMapping(value = "/buscarPorId/{id}")
 	@ApiOperation(value = "Retorna uma entrega ao ser informado um id", response = Entrega.class)
 	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "Lista de todas as entregas retornada com sucesso"),
+			@ApiResponse(code = 200, message = "Entrega retornada com sucesso"),
 			@ApiResponse(code = 404, message = "Entrega não encontrada")
     })
-	public ResponseEntity<Entrega> findById(@PathVariable Long id) {
+	public ResponseEntity<Entrega> findById(
+			@ApiParam(name = "id", value = "Id do registro no banco de dados") @PathVariable Long id) {
+		
 		Entrega entrega = entregaService.buscarEntregaById(id);
 		return ResponseEntity.ok(entrega);
 	}
 
 	@GetMapping(value = "/buscarPorCodigoSolicitacao/{codigoSolicitacao}")
-	public ResponseEntity<Entrega> findByCodigoSolicitacao(@PathVariable Long codigoSolicitacao) {
+	@ApiOperation(value = "Retorna uma entrega ao ser informado um código de solicitação", response = Entrega.class)
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Entrega retornada com sucesso"),
+			@ApiResponse(code = 404, message = "Entrega não encontrada")
+    })
+	public ResponseEntity<Entrega> findByCodigoSolicitacao(
+			@ApiParam(name = "codigoSolicitacao", value = "Código de solicitação da entrega") 
+			@PathVariable Long codigoSolicitacao) {
+		
 		Entrega entrega = entregaService.buscarEntregaByCodigoSolicitacao(codigoSolicitacao);
 		return ResponseEntity.ok(entrega);
 	}
 	
 	@HystrixCommand(fallbackMethod = "getClienteAlternativo")
 	@GetMapping(value = "/getCliente/{cnpj}")
-	public ResponseEntity<Cliente> getCliente(@PathVariable Long cnpj) {
+	@ApiOperation(value = "Retorna um cliente ao ser informado um CNPJ", response = Cliente.class)
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Cliente retornado com sucesso"),
+			@ApiResponse(code = 404, message = "Cliente não encontrado")
+    })
+	public ResponseEntity<Cliente> getCliente(
+			@ApiParam(name = "cnpj", value = "CNPJ do cliente") 
+			@PathVariable Long cnpj) {
 		log.info("Dentro do endpoint getCliente no gsl-entrega buscando pelo cnpj [{}]", cnpj);
 		Cliente cliente = entregaService.getCliente(cnpj);
 		return ResponseEntity.ok(cliente);
 	}
 
-	//TODO implementar resposta amigavel de serviço indisponivel
 	public ResponseEntity<Cliente> getClienteAlternativo(Long cnpj) {
 		log.info("Dentro do metodo endpoint getCliente getClienteAlternativo");
-		//Cliente cliente = new Cliente();
-		//return ResponseEntity.ok(cliente);
 		throw new ServicoIndisponivelException("Serviço de clientes indisponível. Tente mais tarde.");
-		//return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE);
 	}
 	
 	@PutMapping("atualizarEntrega")
+	@ApiOperation(value = "Atualiza dados do andamento de uma entrega")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Entrega atualizada"),
+			@ApiResponse(code = 404, message = "Entrega não encontrada")
+    })
 	public ResponseEntity<?> atualizarEntrega(@RequestBody SolicitacaoRequest solicitacaoRequest) {
 		entregaService.atualizarEntrega(solicitacaoRequest);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/findProgressByRequestCode/{codigoSolicitacao}")
-	public ResponseEntity<AndamentoEntregaResponse> findProgressByRequestCode(@PathVariable Long codigoSolicitacao) {
+	@ApiOperation(value = "Consulta o andamento de uma entrega ao ser informado seu código de solicitação", 
+		response = Entrega.class)
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Entrega retornada com sucesso"),
+			@ApiResponse(code = 404, message = "Entrega não encontrada")
+    })
+	public ResponseEntity<AndamentoEntregaResponse> findProgressByRequestCode(
+			@ApiParam(name = "codigoSolicitacao", value = "Código de solicitação da entrega")
+			@PathVariable Long codigoSolicitacao) {
 		AndamentoEntregaResponse andamentoEntregaResponse = entregaService.findProgressByRequestCode(codigoSolicitacao);
 		return ResponseEntity.ok(andamentoEntregaResponse);
 	}
@@ -112,6 +134,8 @@ public class EntregaController {
 	
 	@PostMapping("solicitar")
 	@Transactional(rollbackFor = Exception.class)
+	@ApiOperation(value = "Solicitar entrega", response = Entrega.class)
+	@ApiResponse(code = 201, message = "Solicitação de entrega criada", response = Entrega.class)
 	public ResponseEntity<?> solicitarEntrega(@Valid @RequestBody EntregaRequest entregaRequest) {
 		return new ResponseEntity<>(entregaService.cadastrarEntrega(entregaRequest), HttpStatus.CREATED);
 	}
