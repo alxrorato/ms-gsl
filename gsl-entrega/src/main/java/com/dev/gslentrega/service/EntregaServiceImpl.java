@@ -120,7 +120,7 @@ public class EntregaServiceImpl implements EntregaService {
 	private static final int MODELO_DACTE_57 = 57;
 	private static final int SERIE_DACTE = 1;
 	private static final String FOLHA_DACTE = "1/1";
-	private static final String TEXTO_CHAVE_ACESSO = "Consulta de autenticidade no portal nacional do CT-2, no site da Sefaz Autorizadora, ou em http://cte.fazenda.gov.br";
+	private static final String TEXTO_CHAVE_ACESSO = "Consulta de autenticidade no portal nacional do CT-e, no site da Sefaz Autorizadora, ou em http://cte.fazenda.gov.br";
 	private static final int TIPO_ENDERECO_ORIGEM = 1;
 	private static final int TIPO_ENDERECO_DESTINO = 2;
 	private static final String FRETE_VALOR = "Frete Valor";
@@ -673,8 +673,9 @@ public class EntregaServiceImpl implements EntregaService {
 		dadosExpedidor.setEndereco(enderecoExpedidor);
 		
 		// Quando a entrega for via transportadora parceira, esta será considerado o "Recebedor"
-		DadosAtorCte dadosRecebedor = new DadosAtorCte();
+		DadosAtorCte dadosRecebedor;
 		if (entrega.isEntregaEmParceria()) {
+			dadosRecebedor = new DadosAtorCte();
 			dadosRecebedor.setTipoDocumento(TipoDocumento.CNPJ);
 			dadosRecebedor.setCpfCnpj(entrega.getCnpjParceira());
 			dadosRecebedor.setNomeRazaoSocial(entrega.getRazaoSocialParceira());
@@ -689,6 +690,8 @@ public class EntregaServiceImpl implements EntregaService {
 			enderecoRecebedor.setUf(entrega.getEnderecoParceira().getUf());
 			enderecoRecebedor.setCep(entrega.getEnderecoParceira().getCep());
 			dadosRecebedor.setEndereco(enderecoRecebedor);
+		} else {
+			dadosRecebedor = null;
 		}
 
 		// Nesta POC o tomador será o próprio remetente
@@ -873,24 +876,32 @@ public class EntregaServiceImpl implements EntregaService {
 		cteRequest.setDadosExpedidor(dadosExpedidorRequest);
 
 		//------------------
-		EnderecoAtorCteRequest enderecoRecebedorRequest = new EnderecoAtorCteRequest();
-		enderecoRecebedorRequest.setLogradouro(cte.getDadosRecebedor().getEndereco().getLogradouro());
-		enderecoRecebedorRequest.setNumero(cte.getDadosRecebedor().getEndereco().getNumero());
-		enderecoRecebedorRequest.setComplemento(cte.getDadosRecebedor().getEndereco().getComplemento());
-		enderecoRecebedorRequest.setBairro(cte.getDadosRecebedor().getEndereco().getBairro());
-		enderecoRecebedorRequest.setCidade(cte.getDadosRecebedor().getEndereco().getCidade());
-		enderecoRecebedorRequest.setUf(cte.getDadosRecebedor().getEndereco().getUf());
-		enderecoRecebedorRequest.setCep(cte.getDadosRecebedor().getEndereco().getCep());
 		
-		DadosAtorCteRequest dadosRecebedorRequest = new DadosAtorCteRequest();
-		dadosRecebedorRequest.setTipoDocumento(cte.getDadosRecebedor().getTipoDocumento());
-		dadosRecebedorRequest.setCpfCnpj(cte.getDadosRecebedor().getCpfCnpj());
-		dadosRecebedorRequest.setNomeRazaoSocial(cte.getDadosRecebedor().getNomeRazaoSocial());
-		dadosRecebedorRequest.setInscricaoEstadual(cte.getDadosRecebedor().getInscricaoEstadual());
-		dadosRecebedorRequest.setTelefone(cte.getDadosRecebedor().getTelefone());
-		dadosRecebedorRequest.setEndereco(enderecoRecebedorRequest);
+		DadosAtorCteRequest dadosRecebedorRequest;
 		
-		cteRequest.setDadosRecebedor(dadosRecebedorRequest);
+		if (cte.getDadosRecebedor() != null) { //entrega em parceria
+			EnderecoAtorCteRequest enderecoRecebedorRequest = new EnderecoAtorCteRequest();
+			enderecoRecebedorRequest.setLogradouro(cte.getDadosRecebedor().getEndereco().getLogradouro());
+			enderecoRecebedorRequest.setNumero(cte.getDadosRecebedor().getEndereco().getNumero());
+			enderecoRecebedorRequest.setComplemento(cte.getDadosRecebedor().getEndereco().getComplemento());
+			enderecoRecebedorRequest.setBairro(cte.getDadosRecebedor().getEndereco().getBairro());
+			enderecoRecebedorRequest.setCidade(cte.getDadosRecebedor().getEndereco().getCidade());
+			enderecoRecebedorRequest.setUf(cte.getDadosRecebedor().getEndereco().getUf());
+			enderecoRecebedorRequest.setCep(cte.getDadosRecebedor().getEndereco().getCep());
+		
+			dadosRecebedorRequest = new DadosAtorCteRequest();
+			dadosRecebedorRequest.setTipoDocumento(cte.getDadosRecebedor().getTipoDocumento());
+			dadosRecebedorRequest.setCpfCnpj(cte.getDadosRecebedor().getCpfCnpj());
+			dadosRecebedorRequest.setNomeRazaoSocial(cte.getDadosRecebedor().getNomeRazaoSocial());
+			dadosRecebedorRequest.setInscricaoEstadual(cte.getDadosRecebedor().getInscricaoEstadual());
+			dadosRecebedorRequest.setTelefone(cte.getDadosRecebedor().getTelefone());
+			dadosRecebedorRequest.setEndereco(enderecoRecebedorRequest);
+			
+			cteRequest.setDadosRecebedor(dadosRecebedorRequest);
+		
+		} else {
+			dadosRecebedorRequest = null;
+		}
 		
 		//---------------------
 		EnderecoAtorCteRequest enderecoTomadorRequest = new EnderecoAtorCteRequest();

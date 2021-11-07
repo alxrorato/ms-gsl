@@ -1,5 +1,7 @@
 package com.dev.gslentrega.response;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -11,15 +13,30 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@ApiModel(description = "Dados do CT-e")
 public class Cte {
 
+	@ApiModelProperty(name = "tipoModal", value = "Tipo do modal de transporte que será utilizado na entrega: "
+			+ "rodoviário, aeroviário, ferroviário, hidroviário ou dutoviário", example = "rodoviário")
 	private String tipoModal;
 	
+	@ApiModelProperty(name = "tipoCte", value = "Tipo do CT-e: normal, complementar ou de substituição e anulação",
+			example = "Normal")
 	private String tipoCte;
-	private String tipoServico; //Ex.: normal, redespacho intermediario, servico vinculado a multimodal
-	private String tipoTomadorServico; // quem paga o frete da operação do transporte, pode ser o remetente, destinatário, recebedor ou outra empresa
-	private String formaPagamento; 
 	
+	@ApiModelProperty(name = "tipoServico", value = "Tipo do serviço: normal, redespacho intermediario ou servico vinculado a multimodal",
+			example = "Normal")
+	private String tipoServico;
+	
+	@ApiModelProperty(name = "tipoTomadorServico", value = "Tipo do tomador do serviço (quem paga o frete da operação do transporte), "
+			+ "podendo ser o remetente, destinatário, recebedor ou outra empresa", example = "Destinatário")
+	private String tipoTomadorServico;
+	
+	@ApiModelProperty(name = "formaPagamento", value = "Forma de pagamento do serviço: a pagar, se ainda não foi pago; ou boleto",
+			 example = "A pagar")
+	private String formaPagamento; 
+   
+	@ApiModelProperty(name = "Documento Auxiliar do Conhecimento de Transporte Eletrônico, que \"viaja\" junto com a mercadoria")
 	private Dacte dacte;
 	
 	private NaturezaPrestacao naturezaPrestacao; 

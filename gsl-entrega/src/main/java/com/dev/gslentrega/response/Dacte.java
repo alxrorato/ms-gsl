@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -15,18 +17,37 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@ApiModel(description = "Dados do DACTE")
 public class Dacte {
-	private String titulo; //Documento Auxiliar do Conhecimento de Transporte Eletrônico
+
+	@ApiModelProperty(name = "titulo", value = "Título do Dacte", example = "Documento Auxiliar do "
+			+ "Conhecimento de Transporte Eletrônico")
+	private String titulo;
+	
+	@ApiModelProperty(name = "modelo", value = "Modelo do Dacte", example = "57")
 	private int modelo;
+	
+	@ApiModelProperty(name = "serie", value = "Série do Dacte", example = "1")
 	private int serie;
+	
+	@ApiModelProperty(name = "numero", value = "Número do Dacte", example = "1")
 	private Long numero;
+	
+	@ApiModelProperty(name = "folha", value = "Número da folha do Dacte", example = "1/1")
 	private String folha;
+	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+	@ApiModelProperty(name = "dataHoraEmissao", value = "Data/hora da emissão do Dacte", example = "06-11-2021 10:43:43")
 	private LocalDateTime dataHoraEmissao;
+	
 	private Long inscricaoSulframa;
+	
 	private String chaveAcesso; // "33.4444.55.555.444/1111-88-22-000-000.000.111-100.005.111-2"
-	private String textoChaveAcesso; // "Consulta de autenticidade no portal nacional do CT-2, no site da Sefaz Autorizadora, ou em http://cte.fazenda.gov.br
+	
+	private String textoChaveAcesso; // "Consulta de autenticidade no portal nacional do CT-e, no site da Sefaz Autorizadora, ou em http://cte.fazenda.gov.br
+	
 	private Long numeroProtocoloAutorizacaoUso; // Random c/ 15 dígitos
+	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
 	private LocalDateTime dataHoraGeracaoProtocolo;
 }
