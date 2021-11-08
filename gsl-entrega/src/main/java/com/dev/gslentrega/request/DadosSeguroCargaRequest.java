@@ -13,6 +13,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class DadosSeguroCargaRequest {
 
+	private String nomeSeguradora;
 	private String nomeResponsavel;
 	private Long numeroApolice;
 	private Long numeroAverbacao;

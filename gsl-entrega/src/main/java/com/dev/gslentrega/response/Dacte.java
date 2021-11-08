@@ -40,14 +40,21 @@ public class Dacte {
 	@ApiModelProperty(name = "dataHoraEmissao", value = "Data/hora da emissão do Dacte", example = "06-11-2021 10:43:43")
 	private LocalDateTime dataHoraEmissao;
 	
+	@ApiModelProperty(name = "inscricaoSulframa", value = "Número de inscrição na Sulframa, se for o caso", example = "90068714")
 	private Long inscricaoSulframa;
 	
-	private String chaveAcesso; // "33.4444.55.555.444/1111-88-22-000-000.000.111-100.005.111-2"
+	@ApiModelProperty(name = "chaveAcesso", value = "Chave de acesso ao portal nacional do CT-e para consulta de autenticidade", 
+			example = "33.4444.55.555.444/1111-88-22-000-000.000.111-100.005.111-2")
+	private String chaveAcesso;
 	
-	private String textoChaveAcesso; // "Consulta de autenticidade no portal nacional do CT-e, no site da Sefaz Autorizadora, ou em http://cte.fazenda.gov.br
+	@ApiModelProperty(name = "textoChaveAcesso", value = "Texto impresso no Dacte logo abaixo da chave de acesso", 
+			example = "Consulta de autenticidade no portal nacional do CT-e, no site da Sefaz Autorizadora, ou em http://cte.fazenda.gov.br")
+	private String textoChaveAcesso;
 	
+	@ApiModelProperty(name = "numeroProtocoloAutorizacaoUso", value = "Protocolo de autorização de uso", example = "328448663319735")
 	private Long numeroProtocoloAutorizacaoUso; // Random c/ 15 dígitos
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+	@ApiModelProperty(name = "dataHoraGeracaoProtocolo", value = "Data/hora da geração do protocolo", example = "06-11-2021 10:43:43")
 	private LocalDateTime dataHoraGeracaoProtocolo;
 }

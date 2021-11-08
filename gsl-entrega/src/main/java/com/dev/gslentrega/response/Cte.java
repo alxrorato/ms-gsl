@@ -36,37 +36,43 @@ public class Cte {
 			 example = "A pagar")
 	private String formaPagamento; 
    
-	@ApiModelProperty(name = "Documento Auxiliar do Conhecimento de Transporte Eletrônico, que \"viaja\" junto com a mercadoria")
+	@ApiModelProperty(name = "dacte", value = "Documento Auxiliar do Conhecimento de Transporte Eletrônico, que \"viaja\" junto com a mercadoria")
 	private Dacte dacte;
 	
+	@ApiModelProperty(name = "naturezaPrestacao", value = "Dados referente a natureza da prestação do serviço")
 	private NaturezaPrestacao naturezaPrestacao; 
 	
-	//Empresa que emite o documento do CTe, geralmente é a transportadora responsável pelo gerenciamento da operação de transporte.
+	@ApiModelProperty(name = "dadosEmitente", value = "Dados do emitente (empresa que emite o CT-e), que geralmente é a transportadora responsável"
+			+ " pelo gerenciamento da operação de transporte")
 	private DadosAtorCte dadosEmitente; // razaoSocial e endereco da Boa Entrega: 
 
-	// Responsável por enviar a mercadoria, geralmente o próprio emissor da NFe, no caso o cliente da Boa Entrega
+	@ApiModelProperty(name = "dadosRemetente", value = "Dados do remetente, que é a empresa responsável por enviar a mercadoria, geralmente o "
+			+ "próprio emissor da NFe, neste caso o cliente da Boa Entrega")
 	private DadosAtorCte dadosRemetente; //razaoSocial e endereco
 	
-	// Quem recebe a mercadoria ao final do trajeto de transporte, pode ser uma pessoa física ou jurídica
+	@ApiModelProperty(name = "dadosDestinatario", value = "Dados do destinatário, que é quem recebe a mercadoria ao final do trajeto de transporte, "
+			+ "podendo ser uma pessoa física ou jurídica")
 	private DadosAtorCte dadosDestinatario; //nomeRazaoSocial e endereco
 	
-	/* É responsável por entregar a carga ao transportador quando envio não for realizado pelo remetente. 
-	 * O expedidor pode ser uma empresa de logística ou outra empresa de transporte que intermediará a operação.
-	 */
+	@ApiModelProperty(name = "dadosExpedidor", value = "Dados do expedidor, que é o responsável por entregar a carga ao transportador quando envio "
+			+ "não for realizado pelo remetente. O expedidor pode ser uma empresa de logística ou outra empresa de transporte que intermediará a operação.")
 	private DadosAtorCte dadosExpedidor;
 	
-	 /* É quem recebe a mercadoria como um intermediário entre o emitente e o destinatário final, 
-	  * sendo o responsável por receber a carga do transportador.	
-	  */
+	@ApiModelProperty(name = "dadosRecebedor", value = "Dados do recebedor, que é quem recebe a mercadoria como um intermediário entre o emitente e o"
+			+ " destinatário final, sendo o responsável por receber a carga do transportador.")
 	private DadosAtorCte dadosRecebedor;
 	
-	// quem paga o frete da operação do transporte, pode ser o remetente, destinatário, recebedor ou outra empresa
+	@ApiModelProperty(name = "dadosTomador", value = "Dados do tomador, que é quem paga o frete da operação do transporte, pode ser o remetente, "
+			+ "destinatário, recebedor ou outra empresa")
 	private DadosAtorCte dadosTomador;
 
+	@ApiModelProperty(name = "dadosCarga", value = "Dados da carga a ser transportada")
 	private DadosCarga dadosCarga;
 	
-	private DadosSeguroCarga dadosSeguroCarga; //nomeResponsavel, numeroApolice e numeroAverbacao
+	@ApiModelProperty(name = "dadosSeguroCarga", value = "Dados do seguro da carga a ser transportada")
+	private DadosSeguroCarga dadosSeguroCarga;
 	
+	@ApiModelProperty(name = "componentesValorPrestacaoServico", value = "Componentes do valor da prestação de serviços")
 	private ComponentesValorPrestacaoServico componentesValorPrestacaoServico;
 	
 }

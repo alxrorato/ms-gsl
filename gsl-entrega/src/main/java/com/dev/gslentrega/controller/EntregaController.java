@@ -85,23 +85,23 @@ public class EntregaController {
 		return ResponseEntity.ok(entrega);
 	}
 	
-	@HystrixCommand(fallbackMethod = "getClienteAlternativo")
-	@GetMapping(value = "/getCliente/{cnpj}")
+	@HystrixCommand(fallbackMethod = "buscarClienteAlternativo")
+	@GetMapping(value = "/buscarCliente/{cnpj}")
 	@ApiOperation(value = "Retorna um cliente ao ser informado um CNPJ", response = Cliente.class)
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Cliente retornado com sucesso"),
 			@ApiResponse(code = 404, message = "Cliente não encontrado")
     })
-	public ResponseEntity<Cliente> getCliente(
+	public ResponseEntity<Cliente> buscarCliente(
 			@ApiParam(name = "cnpj", value = "CNPJ do cliente") 
 			@PathVariable Long cnpj) {
-		log.info("Dentro do endpoint getCliente no gsl-entrega buscando pelo cnpj [{}]", cnpj);
-		Cliente cliente = entregaService.getCliente(cnpj);
+		log.info("Dentro do endpoint buscarCliente no gsl-entrega buscando pelo cnpj [{}]", cnpj);
+		Cliente cliente = entregaService.buscarCliente(cnpj);
 		return ResponseEntity.ok(cliente);
 	}
 
-	public ResponseEntity<Cliente> getClienteAlternativo(Long cnpj) {
-		log.info("Dentro do metodo endpoint getCliente getClienteAlternativo");
+	public ResponseEntity<Cliente> buscarClienteAlternativo(Long cnpj) {
+		log.info("Dentro do método buscarClienteAlternativo");
 		throw new ServicoIndisponivelException("Serviço de clientes indisponível. Tente mais tarde.");
 	}
 	
@@ -114,17 +114,17 @@ public class EntregaController {
 	}
 	*/
 	
-	@GetMapping(value = "/findProgressByRequestCode/{codigoSolicitacao}")
+	@GetMapping(value = "/consultarAndamentoEntrega/{codigoSolicitacao}")
 	@ApiOperation(value = "Consulta o andamento de uma entrega ao ser informado seu código de solicitação", 
 		response = AndamentoEntregaResponse.class)
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Andamento da entrega retornado com sucesso"),
 			@ApiResponse(code = 404, message = "Entrega não encontrada")
     })
-	public ResponseEntity<AndamentoEntregaResponse> findProgressByRequestCode(
+	public ResponseEntity<AndamentoEntregaResponse> consultarAndamentoEntrega(
 			@ApiParam(name = "codigoSolicitacao", value = "Código de solicitação da entrega")
 			@PathVariable Long codigoSolicitacao) {
-		AndamentoEntregaResponse andamentoEntregaResponse = entregaService.findProgressByRequestCode(codigoSolicitacao);
+		AndamentoEntregaResponse andamentoEntregaResponse = entregaService.consultarAndamentoEntrega(codigoSolicitacao);
 		return ResponseEntity.ok(andamentoEntregaResponse);
 	}
 

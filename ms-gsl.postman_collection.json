@@ -1316,6 +1316,75 @@
 										}
 									},
 									"response": []
+								},
+								{
+									"name": "02.3 - Cancelar Entrega",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{api-gateway}}/gsl-entrega/entregas/cancelarEntrega/{{codigo-solicitacao}}",
+											"host": [
+												"{{api-gateway}}"
+											],
+											"path": [
+												"gsl-entrega",
+												"entregas",
+												"cancelarEntrega",
+												"{{codigo-solicitacao}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "02.4 - Consultar Andamento da Entrega",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{api-gateway}}/gsl-entrega/entregas/consultarAndamentoEntrega/{{codigo-solicitacao}}",
+											"host": [
+												"{{api-gateway}}"
+											],
+											"path": [
+												"gsl-entrega",
+												"entregas",
+												"consultarAndamentoEntrega",
+												"{{codigo-solicitacao}}"
+											]
+										}
+									},
+									"response": []
 								}
 							]
 						},
@@ -1408,7 +1477,7 @@
 							"response": []
 						},
 						{
-							"name": "Andamento da Entrega",
+							"name": "Buscar Cliente",
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -1423,84 +1492,15 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{api-gateway}}/gsl-entrega/entregas/findProgressByRequestCode/{{codigo-solicitacao}}",
+									"raw": "{{api-gateway}}/gsl-entrega/entregas/buscarCliente/46048362000153",
 									"host": [
 										"{{api-gateway}}"
 									],
 									"path": [
 										"gsl-entrega",
 										"entregas",
-										"findProgressByRequestCode",
-										"{{codigo-solicitacao}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get Cliente",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{api-gateway}}/gsl-entrega/entregas/getCliente/46048362000153",
-									"host": [
-										"{{api-gateway}}"
-									],
-									"path": [
-										"gsl-entrega",
-										"entregas",
-										"getCliente",
+										"buscarCliente",
 										"46048362000153"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Cancelar Entrega",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{api-gateway}}/gsl-entrega/entregas/cancelarEntrega/{{codigo-solicitacao}}",
-									"host": [
-										"{{api-gateway}}"
-									],
-									"path": [
-										"gsl-entrega",
-										"entregas",
-										"cancelarEntrega",
-										"{{codigo-solicitacao}}"
 									]
 								}
 							},

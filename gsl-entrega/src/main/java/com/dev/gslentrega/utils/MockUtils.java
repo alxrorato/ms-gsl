@@ -32,6 +32,10 @@ public class MockUtils {
 	private static final List<String> MOTIVOS_CANCELAMENTOS_ENTREGAS = Arrays.asList("Desistência por parte do cliente", "Imprevisto durante o transporte", 
 			"Entrega iria demorar além do prazo previsto");
 
+	private static final List<String> NOMES_SEGURADORAS = Arrays.asList("Mapfre Seguros", "Porto Seguro", "Sul America Seguros",
+			"Tokio Marine", "Bradesco Seguras S.A.", "Allianz do Brasil ", "HDI Seguros", "Alfa Seguradora", "Argo Seguros", 
+			"Banestes Seguros", "CesBrasil Seguros");
+
 	private static final List<String> NOMES_RESPONSAVEIS_SEGURADORA = Arrays.asList("Isabela Silva Costa", "Daniel Souza Lima",
 			"Clara Pereira Silva", "Breno Castro Rodrigues", "Letícia Cardoso Oliveira", "Beatriz Fernandes Carvalho", 
 			"Douglas Fernandes Souza", "Matheus Melo Santos", "Vitoria Souza Correia", "Carolina Ribeiro Cardoso");
@@ -175,6 +179,11 @@ public class MockUtils {
 	public static String getNomeResponsavelSeguradora() {
 		return NOMES_RESPONSAVEIS_SEGURADORA.get(RandomUtils.getRandomNumber(NOMES_RESPONSAVEIS_SEGURADORA.size() - 1));
 	}
+	
+	public static String getNomeSeguradora() {
+		return NOMES_SEGURADORAS.get(RandomUtils.getRandomNumber(NOMES_SEGURADORAS.size() - 1));
+	}
+	
 	public static String getChaveAcesoDacte() {
 		return CHAVES_ACESSOS_DACTE.get(RandomUtils.getRandomNumber(CHAVES_ACESSOS_DACTE.size() - 1));
 	}

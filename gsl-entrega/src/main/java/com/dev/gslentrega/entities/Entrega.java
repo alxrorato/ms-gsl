@@ -143,6 +143,7 @@ public class Entrega implements Serializable {
 	private LocalDateTime dataPagamento;
 	
 	@OneToMany(/*mappedBy = "entrega", */fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ApiModelProperty(name = "cargas", value = "Lista das cargas a serem transportadas")
 	private List<Carga> cargas;
 	
 	@NotNull

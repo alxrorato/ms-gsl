@@ -148,7 +148,7 @@ public class EntregaServiceImpl implements EntregaService {
 	}
 	
 	@Override
-	public Cliente getCliente(Long cnpj) {
+	public Cliente buscarCliente(Long cnpj) {
 		Cliente cliente = clienteFeignClient.buscarClientesByCnpj(cnpj).getBody();
 		return cliente;
 	}
@@ -335,7 +335,7 @@ public class EntregaServiceImpl implements EntregaService {
 	}
 
 	private void verificaSeClienteExisteByCnpj(Long cnpjCliente) {
-		if (getCliente(cnpjCliente) == null) {
+		if (buscarCliente(cnpjCliente) == null) {
 			throw new ClienteNotFoundException("Cliente não cadastrado para o cnpj : " + cnpjCliente);
 		}
 		
@@ -380,7 +380,7 @@ public class EntregaServiceImpl implements EntregaService {
 	*/
 
 	@Override
-	public AndamentoEntregaResponse findProgressByRequestCode(Long codigoSolicitacao) {
+	public AndamentoEntregaResponse consultarAndamentoEntrega(Long codigoSolicitacao) {
 		atualizarPercurso(codigoSolicitacao);
 		Entrega entrega = buscarEntregaByCodigoSolicitacao(codigoSolicitacao);
 		AndamentoEntregaResponse andamentoEntregaResponse = new AndamentoEntregaResponse();
@@ -620,7 +620,7 @@ public class EntregaServiceImpl implements EntregaService {
 		
 		DadosAtorCte dadosEmitente = GeneralUtils.getDadosBoaEntrega();
 
-		Cliente cliente = getCliente(entrega.getCnpjCliente());
+		Cliente cliente = buscarCliente(entrega.getCnpjCliente());
 		EnderecoAtorCte enderecoRemetente = new EnderecoAtorCte();
 		enderecoRemetente.setLogradouro(cliente.getEndereco().getLogradouro());
 		enderecoRemetente.setNumero(cliente.getEndereco().getNumero());
@@ -707,12 +707,15 @@ public class EntregaServiceImpl implements EntregaService {
 		dadosCarga.setProdutoPredominante(getEspeciePredominante(entrega.getCargas()));
 		dadosCarga.setOutrasCaracteristicasCarga(getNaturezaPredominante(entrega.getCargas()));
 		dadosCarga.setValorTotalMercadoria(entrega.getValorTotal());
-		dadosCarga.setPesoBruto(getPesoTotalCarga(entrega.getCargas()));
-		dadosCarga.setPesoAferido(getPesoTotalCarga(entrega.getCargas()));
 		dadosCarga.setVolume(getVolumeTotalCarga(entrega.getCargas()));
-		dadosCarga.setCubagemM3(getPesoCubadoCarga(dadosCarga.getVolume()));
+		dadosCarga.setCubagemM3(PESO_CUBADO_EM_KG_PARA_1M3);
+		BigDecimal pesoBruto = getPesoTotalCarga(entrega.getCargas());
+		BigDecimal pesoCubado = getPesoCubadoCarga(dadosCarga.getVolume());
+		dadosCarga.setPesoBruto(pesoBruto);
+		dadosCarga.setPesoAferido(pesoBruto.max(pesoCubado));
 		
 		DadosSeguroCarga dadosSeguroCarga = new DadosSeguroCarga();
+		dadosSeguroCarga.setNomeSeguradora(MockUtils.getNomeSeguradora());
 		dadosSeguroCarga.setNomeResponsavel(MockUtils.getNomeResponsavelSeguradora());
 		dadosSeguroCarga.setNumeroApolice(entrega.getNumeroApoliceSeguroCarga());
 		dadosSeguroCarga.setNumeroAverbacao(entrega.getNumeroAverbacaoSeguroCarga());
@@ -937,6 +940,7 @@ public class EntregaServiceImpl implements EntregaService {
 		
 		//----------------------
 		DadosSeguroCargaRequest dadosSeguroCargaRequest = new DadosSeguroCargaRequest();
+		dadosSeguroCargaRequest.setNomeSeguradora(cte.getDadosSeguroCarga().getNomeSeguradora());
 		dadosSeguroCargaRequest.setNomeResponsavel(cte.getDadosSeguroCarga().getNomeResponsavel());
 		dadosSeguroCargaRequest.setNumeroApolice(cte.getDadosSeguroCarga().getNumeroApolice());
 		dadosSeguroCargaRequest.setNumeroAverbacao(cte.getDadosSeguroCarga().getNumeroAverbacao());

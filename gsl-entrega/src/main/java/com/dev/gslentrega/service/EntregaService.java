@@ -23,11 +23,11 @@ public interface EntregaService {
 	
 	Entrega buscarEntregaById(Long id);
 	
-	Cliente getCliente(Long cnpj);
+	Cliente buscarCliente(Long cnpj);
 
 	Entrega buscarEntregaByCodigoSolicitacao(Long codigoSolicitacao);
 
-	AndamentoEntregaResponse findProgressByRequestCode(Long codigoSolicitacao);
+	AndamentoEntregaResponse consultarAndamentoEntrega(Long codigoSolicitacao);
 
 	//void atualizarEntrega(SolicitacaoRequest solicitacaoRequest);
 

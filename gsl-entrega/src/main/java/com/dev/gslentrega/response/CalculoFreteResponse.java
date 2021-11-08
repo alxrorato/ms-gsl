@@ -22,7 +22,7 @@ public class CalculoFreteResponse {
 			example = "300")
 	private BigDecimal fatorCubagemKgPorM3;
 	
-	@ApiModelProperty(name = "pesoTotal", value = "Peso total (em Kg) da carga a ser transportada",	example = "300")
+	@ApiModelProperty(name = "pesoTotal", value = "Peso total (em Kg) da carga a ser transportada",	example = "100")
 	private BigDecimal pesoTotal;
 	
 	@ApiModelProperty(name = "volumeTotal", value = "Volume total (em m3) da carga a ser transportada",	example = "15")
