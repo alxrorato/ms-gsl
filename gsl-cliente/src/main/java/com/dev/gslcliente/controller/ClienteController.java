@@ -24,12 +24,17 @@ import com.dev.gslcliente.entities.Cliente;
 import com.dev.gslcliente.request.ClienteRequest;
 import com.dev.gslcliente.service.ClienteService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 
 @RefreshScope
 @RestController
 @RequestMapping("/clientes")
 @Slf4j
+@Api(value = "Endpoints do módulo de informações cadastrais - cadastro de clientes")
 public class ClienteController {
 
 	@Autowired
@@ -42,6 +47,7 @@ public class ClienteController {
 	private String testConfig;
 	
 	@GetMapping(value = "/configs")
+	@ApiOperation(hidden = true, value = "")
 	public ResponseEntity<Void> getConfigs() {
 		log.info("CONFIG = " + testConfig);
 		return ResponseEntity.noContent().build();
@@ -50,7 +56,12 @@ public class ClienteController {
 	
 	@PostMapping("add")
 	@Transactional(rollbackFor = Exception.class)
-	public ResponseEntity<?> adicionarCliente(@Valid @RequestBody ClienteRequest clienteRequest) {
+	@ApiOperation(value = "Cadastrar cliente", response = Cliente.class)
+	@ApiResponses(value = {
+			@ApiResponse(code = 201, message = "Cliente cadastrado"),
+			@ApiResponse(code = 422, message = "Cliente já cadastrado")
+		})
+	public ResponseEntity<Cliente> cadastrarCliente(@Valid @RequestBody ClienteRequest clienteRequest) {
 		return new ResponseEntity<>(clienteService.cadastrarCliente(clienteRequest), HttpStatus.CREATED);
 	}
 

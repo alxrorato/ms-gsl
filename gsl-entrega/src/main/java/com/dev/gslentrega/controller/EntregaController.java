@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +21,6 @@ import com.dev.gslentrega.entities.Entrega;
 import com.dev.gslentrega.errors.ServicoIndisponivelException;
 import com.dev.gslentrega.request.CalculoFreteRequest;
 import com.dev.gslentrega.request.EntregaRequest;
-import com.dev.gslentrega.request.SolicitacaoRequest;
 import com.dev.gslentrega.response.AndamentoEntregaResponse;
 import com.dev.gslentrega.response.CalculoFreteResponse;
 import com.dev.gslentrega.response.CancelamentoResponse;
@@ -44,7 +42,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping(value = "/entregas")
 @Slf4j
-@Api(value = "Endpoints do módulo de Entregas")
+@Api(value = "Endpoints do módulo de serviços aos clientes - entregas")
 public class EntregaController {
 
 	@Autowired

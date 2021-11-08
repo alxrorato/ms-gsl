@@ -19,6 +19,8 @@ import javax.validation.constraints.NotNull;
 import com.dev.gslcliente.enums.StatusCliente;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -33,33 +35,46 @@ import lombok.Setter;
 @Entity
 @Table(name = "tb_cliente", uniqueConstraints = 
 	@UniqueConstraint(columnNames = "cnpj", name = "cnpj_uk"))
+@ApiModel(description = "Resposta do cadastro de um cliente")
 public class Cliente {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) 
+	@ApiModelProperty(name = "id", value = "Identificador do registro do cliente no banco de dados", example = "1")
 	private Long id;
 	
 	@NotNull
+	@ApiModelProperty(name = "cnpj", value = "CNPJ do cliente", example = "99825101000169")
 	private Long cnpj;
 	
 	@NotNull
+	@ApiModelProperty(name = "razaoSocial", value = "Razão social do cliente", example = "Comercio de Artigos Esportivos Ltda")
 	private String razaoSocial;
 	
+	@ApiModelProperty(name = "nomeComercial", value = "Nome comercial do cliente", example = "Comercio de Artigos Esportivos")
 	private String nomeComercial;
 	
+	@ApiModelProperty(name = "email", value = "E-mail do cliente", example = "artigos.esportivos@gmail.com")
 	private String email;
 	
+	@ApiModelProperty(name = "telefone", value = "Telefone do cliente", example = "(48)98888-7777")
 	private String telefone;
 	
+	@ApiModelProperty(name = "inscricaoEstadual", value = "Número da inscrição estadual do cliente", example = "964.869.414.930")
 	private String inscricaoEstadual;
 	
 	@NotNull
 	@Enumerated(EnumType.STRING)
+	@ApiModelProperty(name = "status", value = "Situação do cliente na base de dados (A: ativo; I: inativo)", example = "A")
 	private StatusCliente status;
 	
 	@NotNull
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+	@ApiModelProperty(name = "dataSolicitacao", value = "Data/hora da inclusão do cliente no banco de dados", example = "07-11-2021 12:09:29")
 	private LocalDateTime dataInclusao;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+	@ApiModelProperty(name = "dataExclusao", value = "Data/hora da inativação do cliente no banco de dados", example = "16-11-2021 12:09:29")
 	private LocalDateTime dataExclusao;
 	
 	@Valid

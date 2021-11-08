@@ -1,4 +1,4 @@
-package com.dev.gslentrega.config;
+package com.dev.gslcliente.config;
 
 import static java.util.Collections.singleton;
 import static springfox.documentation.builders.RequestHandlerSelectors.basePackage;
@@ -39,7 +39,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
     	return new ApiInfoBuilder()
     			.title("GSL")
-    			.description("Gestão de Serviços de Logística - Serviços ao Cliente - Entregas")
+    			.description("Gestão de Serviços de Logística - Informações Cadastrais - Clientes")
     			.version("1.0")
     			.contact(new Contact("Alexandre Rorato Carneiro", null, null))
     			.build();

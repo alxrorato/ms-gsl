@@ -1673,7 +1673,7 @@
 							"response": []
 						},
 						{
-							"name": "Inserir Cliente",
+							"name": "Cadastrar Cliente",
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -1711,7 +1711,7 @@
 							"response": []
 						},
 						{
-							"name": "Inserir Cliente 2",
+							"name": "Cadastrar Cliente 2",
 							"request": {
 								"auth": {
 									"type": "bearer",
