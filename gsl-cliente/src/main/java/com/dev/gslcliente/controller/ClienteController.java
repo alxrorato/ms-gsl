@@ -26,6 +26,7 @@ import com.dev.gslcliente.service.ClienteService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
@@ -59,6 +60,7 @@ public class ClienteController {
 	@ApiOperation(value = "Cadastrar cliente", response = Cliente.class)
 	@ApiResponses(value = {
 			@ApiResponse(code = 201, message = "Cliente cadastrado"),
+			@ApiResponse(code = 400, message = "Requisição inválida"),
 			@ApiResponse(code = 422, message = "Cliente já cadastrado")
 		})
 	public ResponseEntity<Cliente> cadastrarCliente(@Valid @RequestBody ClienteRequest clienteRequest) {
@@ -66,27 +68,51 @@ public class ClienteController {
 	}
 
 	@PutMapping("atualizar")
-	public ResponseEntity<?> atualizarCliente(@Valid @RequestBody Cliente cliente) {
+	@ApiOperation(value = "Atualizar cliente", response = Cliente.class)
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Cliente atualizado com sucesso"),
+			@ApiResponse(code = 400, message = "Requisição inválida"),
+			@ApiResponse(code = 404, message = "Cliente não cadastrado")
+		})
+	public ResponseEntity<Cliente> atualizarCliente(@Valid @RequestBody Cliente cliente) {
 		clienteService.atualizarCliente(cliente);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	
 	@GetMapping("listar")
+	@ApiOperation(value = "Listar todos os clientes", response = Cliente.class)
+	@ApiResponse(code = 200, message = "Lista de clientes retornada com sucesso")
 	public ResponseEntity<List<Cliente>> listarClientes() {
 		List<Cliente> list = clienteService.buscarClientes();
 		return ResponseEntity.ok(list);
 	}	
 
 	@GetMapping(value = "buscarPorId/{id}")
-	public ResponseEntity<Cliente> buscarClienteById(@PathVariable Long id) {
+	@ApiOperation(value = "Buscar cliente por id", response = Cliente.class)
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Cliente retornado com sucesso"),
+			@ApiResponse(code = 400, message = "Requisição inválida"),
+			@ApiResponse(code = 404, message = "Cliente não cadastrado")
+		})
+	public ResponseEntity<Cliente> buscarClienteById(
+			@ApiParam(name = "id", value = "Id do registro no banco de dados")
+			@PathVariable Long id) {
 		log.info("PORT = " + env.getProperty("local.server.port"));
 		Cliente cliente = clienteService.buscarClienteById(id);
 		return ResponseEntity.ok(cliente);
 	}
 	
 	@GetMapping(path = "buscarPorCnpj/{cnpj}")
-	public ResponseEntity<Cliente> buscarClientesByCnpj(@PathVariable Long cnpj) {
+	@ApiOperation(value = "Buscar cliente por cnpj", response = Cliente.class)
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Cliente retornado com sucesso"),
+			@ApiResponse(code = 400, message = "Requisição inválida"),
+			@ApiResponse(code = 404, message = "Cliente não cadastrado")
+		})
+	public ResponseEntity<Cliente> buscarClientesByCnpj(
+			@ApiParam(name = "cnpj", value = "CNPJ do cliente")
+			@PathVariable Long cnpj) {
 		log.info("PORT = " + env.getProperty("local.server.port"));
 		log.info("Buscando cliente pelo cnpj [{}] dentro do gsl-cliente", cnpj);
 		//teste p/ estourar o timeout do balancemanto de carga, que no Ribbon o padrão é de 1s
@@ -101,18 +127,34 @@ public class ClienteController {
 	}
 
 	@GetMapping(path = "buscarPorNome/{nome}")
-	public ResponseEntity<?> buscarClientesByNome(@PathVariable String nome) {
+	@ApiOperation(value = "Buscar cliente por nome comercial", response = Cliente.class)
+	@ApiResponse(code = 200, message = "Clientes retornados com sucesso")
+	public ResponseEntity<List<Cliente>> buscarClientesByNome(
+			@ApiParam(name = "nome", value = "Nome do cliente")
+			@PathVariable String nome) {
 		return new ResponseEntity<>(clienteService.buscarClientesByNome(nome), HttpStatus.OK);
 	}
 	
 	@GetMapping(path = "buscarPorContemNome/{nome}")
-	public ResponseEntity<?> buscarClientesByContainsNome(@PathVariable String nome) {
+	@ApiOperation(value = "Buscar cliente por parte do nome comercial", response = Cliente.class)
+	@ApiResponse(code = 200, message = "Clientes retornados com sucesso")
+	public ResponseEntity<List<Cliente>> buscarClientesByContainsNome(
+			@ApiParam(name = "nome", value = "Nome ou parte do nome do cliente")
+			@PathVariable String nome) {
 		return new ResponseEntity<>(clienteService.buscarClientesByContainsNome(nome), HttpStatus.OK);
 	}
 
 	@DeleteMapping("excluir/{id}")
 	@Transactional(rollbackFor = Exception.class)
-	public ResponseEntity<?> excluirCliente(@PathVariable("id") Long id) {
+	@ApiOperation(value = "Excluir cliente", response = Cliente.class)
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Cliente excluído com sucesso"),
+			@ApiResponse(code = 400, message = "Requisição inválida"),
+			@ApiResponse(code = 404, message = "Cliente não cadastrado")
+		})
+	public ResponseEntity<?> excluirCliente(
+			@ApiParam(name = "id", value = "Id do registro no banco de dados")
+			@PathVariable("id") Long id) {
 		clienteService.excluirClienteById(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

@@ -1584,169 +1584,264 @@
 					"name": "gsl-cliente",
 					"item": [
 						{
-							"name": "All Clientes",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{token}}",
-											"type": "string"
+							"name": "Crud-Cliente",
+							"item": [
+								{
+									"name": "All Clientes",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{api-gateway}}/gsl-cliente/clientes/listar",
+											"host": [
+												"{{api-gateway}}"
+											],
+											"path": [
+												"gsl-cliente",
+												"clientes",
+												"listar"
+											]
 										}
-									]
+									},
+									"response": []
 								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{api-gateway}}/gsl-cliente/clientes/listar",
-									"host": [
-										"{{api-gateway}}"
-									],
-									"path": [
-										"gsl-cliente",
-										"clientes",
-										"listar"
-									]
+								{
+									"name": "Cliente by id",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{api-gateway}}/gsl-cliente/clientes/buscarPorId/1",
+											"host": [
+												"{{api-gateway}}"
+											],
+											"path": [
+												"gsl-cliente",
+												"clientes",
+												"buscarPorId",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Cliente by Cnpj",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{api-gateway}}/gsl-cliente/clientes/buscarPorCnpj/23871292000133",
+											"host": [
+												"{{api-gateway}}"
+											],
+											"path": [
+												"gsl-cliente",
+												"clientes",
+												"buscarPorCnpj",
+												"23871292000133"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Cliente by Nome Comercial",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{api-gateway}}/gsl-cliente/clientes/buscarPorNome/Comercio de Artigos Esportivos",
+											"host": [
+												"{{api-gateway}}"
+											],
+											"path": [
+												"gsl-cliente",
+												"clientes",
+												"buscarPorNome",
+												"Comercio de Artigos Esportivos"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Cliente by Parte do Nome Comercial",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{api-gateway}}/gsl-cliente/clientes/buscarPorContemNome/23871292000133",
+											"host": [
+												"{{api-gateway}}"
+											],
+											"path": [
+												"gsl-cliente",
+												"clientes",
+												"buscarPorContemNome",
+												"23871292000133"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Excluir Cliente do BD por Idby Parte do Nome Comercial Copy",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{api-gateway}}/gsl-cliente/clientes/excluir/1",
+											"host": [
+												"{{api-gateway}}"
+											],
+											"path": [
+												"gsl-cliente",
+												"clientes",
+												"excluir",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Cadastrar Cliente 2",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"cnpj\": 65335780000176,\r\n  \"razaoSocial\": \"Farmacia DEF Ltda.\",\r\n  \"nomeComercial\": \"Farmacia DEF\",\r\n  \"email\": \"def@gmail.com\",\r\n  \"telefone\": \"(11)95555-66666\",\r\n  \"endereco\": {\r\n        \"logradouro\": \"Av. Paulista\",\r\n        \"numero\": 2,\r\n        \"complemento\": \"\",\r\n        \"bairro\": \"Consolação\",\r\n        \"cidade\": \"São Paulo\",\r\n        \"uf\": \"SP\",\r\n        \"cep\": \"01190909\"\r\n  }\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{api-gateway}}/gsl-cliente/clientes/add",
+											"host": [
+												"{{api-gateway}}"
+											],
+											"path": [
+												"gsl-cliente",
+												"clientes",
+												"add"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Cadastrar Cliente",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"cnpj\": 65335780000176,\r\n  \"razaoSocial\": \"Supermercado ABC Ltda.\",\r\n  \"nomeComercial\": \"Supermercado ABC\",\r\n  \"email\": \"abc@gmail.com\",\r\n  \"telefone\": \"(11)98888-7777\",\r\n  \"endereco\": {\r\n        \"logradouro\": \"Rua teste\",\r\n        \"numero\": 234,\r\n        \"complemento\": \"esquina\",\r\n        \"bairro\": \"Centro\",\r\n        \"cidade\": \"São Paulo\",\r\n        \"uf\": \"SP\",\r\n        \"cep\": \"01113300\"\r\n  }\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{api-gateway}}/gsl-cliente/clientes/add",
+											"host": [
+												"{{api-gateway}}"
+											],
+											"path": [
+												"gsl-cliente",
+												"clientes",
+												"add"
+											]
+										}
+									},
+									"response": []
 								}
-							},
-							"response": []
-						},
-						{
-							"name": "Cliente by id",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{api-gateway}}/gsl-cliente/clientes/buscarPorId/1",
-									"host": [
-										"{{api-gateway}}"
-									],
-									"path": [
-										"gsl-cliente",
-										"clientes",
-										"buscarPorId",
-										"1"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Cliente by Cnpj",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{api-gateway}}/gsl-cliente/clientes/buscarPorCnpj/23871292000133",
-									"host": [
-										"{{api-gateway}}"
-									],
-									"path": [
-										"gsl-cliente",
-										"clientes",
-										"buscarPorCnpj",
-										"23871292000133"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Cadastrar Cliente",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n  \"cnpj\": 65335780000176,\r\n  \"razaoSocial\": \"Supermercado ABC Ltda.\",\r\n  \"nomeComercial\": \"Supermercado ABC\",\r\n  \"email\": \"abc@gmail.com\",\r\n  \"telefone\": \"(11)98888-7777\",\r\n  \"endereco\": {\r\n        \"logradouro\": \"Rua teste\",\r\n        \"numero\": 234,\r\n        \"complemento\": \"esquina\",\r\n        \"bairro\": \"Centro\",\r\n        \"cidade\": \"São Paulo\",\r\n        \"uf\": \"SP\",\r\n        \"cep\": \"01113300\"\r\n  }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{api-gateway}}/gsl-cliente/clientes/add",
-									"host": [
-										"{{api-gateway}}"
-									],
-									"path": [
-										"gsl-cliente",
-										"clientes",
-										"add"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Cadastrar Cliente 2",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n  \"cnpj\": 65335780000176,\r\n  \"razaoSocial\": \"Farmacia DEF Ltda.\",\r\n  \"nomeComercial\": \"Farmacia DEF\",\r\n  \"email\": \"def@gmail.com\",\r\n  \"telefone\": \"(11)95555-66666\",\r\n  \"endereco\": {\r\n        \"logradouro\": \"Av. Paulista\",\r\n        \"numero\": 2,\r\n        \"complemento\": \"\",\r\n        \"bairro\": \"Consolação\",\r\n        \"cidade\": \"São Paulo\",\r\n        \"uf\": \"SP\",\r\n        \"cep\": \"01190909\"\r\n  }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{api-gateway}}/gsl-cliente/clientes/add",
-									"host": [
-										"{{api-gateway}}"
-									],
-									"path": [
-										"gsl-cliente",
-										"clientes",
-										"add"
-									]
-								}
-							},
-							"response": []
+							]
 						},
 						{
 							"name": "Show cliente configs on console",
