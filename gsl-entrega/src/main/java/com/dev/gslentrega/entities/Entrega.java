@@ -112,7 +112,7 @@ public class Entrega implements Serializable {
 	private StatusEntrega statusEntrega;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
-	@ApiModelProperty(name = "dataFinalizacao", value = "Data/hora da atualização do status da entrega", example = "06-11-2021 19:08:45")
+	@ApiModelProperty(name = "dataStatusEntrega", value = "Data/hora da atualização do status da entrega", example = "06-11-2021 19:08:45")
 	private LocalDateTime dataStatusEntrega;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
@@ -123,7 +123,7 @@ public class Entrega implements Serializable {
 	@ApiModelProperty(name = "dataCancelamento", value = "Data/hora do cancelamento da solicitação da entrega", example = "06-11-2021 15:17:12")
 	private LocalDateTime dataCancelamento;
 	
-	@ApiModelProperty(name = "dataCancelamento", value = "Data/hora do cancelamento da solicitação da entrega", example = "Desistência por parte do cliente")
+	@ApiModelProperty(name = "motivoCancelamento", value = "Data/hora do cancelamento da solicitação da entrega", example = "Desistência por parte do cliente")
 	private String motivoCancelamento;
 	
 	@NotNull

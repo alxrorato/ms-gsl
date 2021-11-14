@@ -143,13 +143,13 @@ public class EntregaServiceImpl implements EntregaService {
 	}
 
 	public boolean clienteExists(Long cnpj) {
-		Cliente cliente = clienteFeignClient.buscarClientesByCnpj(cnpj).getBody();
+		Cliente cliente = clienteFeignClient.buscarClientePorCnpj(cnpj).getBody();
 		return (cliente != null ? true : false);
 	}
 	
 	@Override
 	public Cliente buscarCliente(Long cnpj) {
-		Cliente cliente = clienteFeignClient.buscarClientesByCnpj(cnpj).getBody();
+		Cliente cliente = clienteFeignClient.buscarClientePorCnpj(cnpj).getBody();
 		return cliente;
 	}
 

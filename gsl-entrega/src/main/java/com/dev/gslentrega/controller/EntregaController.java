@@ -48,10 +48,10 @@ public class EntregaController {
 	@Autowired
 	private EntregaService entregaService;
 	
-	@GetMapping
+	@GetMapping(value = "/buscarTodas")
 	@ApiOperation(value = "Retorna todas as solicitacoes de entregas cadastradas no sistema", response = List.class)
 	@ApiResponse(code = 200, message = "Lista de todas as entregas retornada com sucesso")
-	public ResponseEntity<List<Entrega>> findAll() {
+	public ResponseEntity<List<Entrega>> listarTodasEntregas() {
 		List<Entrega> list = entregaService.buscarEntregas();
 		return ResponseEntity.ok(list);
 	}	
@@ -62,7 +62,7 @@ public class EntregaController {
 			@ApiResponse(code = 200, message = "Entrega retornada com sucesso"),
 			@ApiResponse(code = 404, message = "Entrega não encontrada")
     })
-	public ResponseEntity<Entrega> findById(
+	public ResponseEntity<Entrega> buscarPorId(
 			@ApiParam(name = "id", value = "Id do registro no banco de dados") @PathVariable Long id) {
 		
 		Entrega entrega = entregaService.buscarEntregaById(id);
@@ -75,7 +75,7 @@ public class EntregaController {
 			@ApiResponse(code = 200, message = "Entrega retornada com sucesso"),
 			@ApiResponse(code = 404, message = "Entrega não encontrada")
     })
-	public ResponseEntity<Entrega> findByCodigoSolicitacao(
+	public ResponseEntity<Entrega> buscarPorCodigoSolicitacao(
 			@ApiParam(name = "codigoSolicitacao", value = "Código de solicitação da entrega") 
 			@PathVariable Long codigoSolicitacao) {
 		

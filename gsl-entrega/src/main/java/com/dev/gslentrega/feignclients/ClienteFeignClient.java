@@ -13,6 +13,6 @@ import com.dev.gslentrega.response.Cliente;
 public interface ClienteFeignClient {
 
 	@GetMapping(path = "buscarPorCnpj/{cnpj}")
-	public ResponseEntity<Cliente> buscarClientesByCnpj(@PathVariable Long cnpj);
+	public ResponseEntity<Cliente> buscarClientePorCnpj(@PathVariable Long cnpj);
 
 }

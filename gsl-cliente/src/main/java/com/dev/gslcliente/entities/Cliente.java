@@ -17,7 +17,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.dev.gslcliente.enums.StatusCliente;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -69,12 +68,10 @@ public class Cliente {
 	private StatusCliente status;
 	
 	@NotNull
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
-	@ApiModelProperty(name = "dataSolicitacao", value = "Data/hora da inclusão do cliente no banco de dados", example = "07-11-2021 12:09:29")
+	@ApiModelProperty(name = "dataInclusao", value = "Data/hora da inclusão do cliente no banco de dados", example = "2021-09-05T00:00:00")
 	private LocalDateTime dataInclusao;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
-	@ApiModelProperty(name = "dataExclusao", value = "Data/hora da inativação do cliente no banco de dados", example = "16-11-2021 12:09:29")
+	@ApiModelProperty(name = "dataExclusao", value = "Data/hora da inativação do cliente no banco de dados", example = "2021-09-25T00:00:00")
 	private LocalDateTime dataExclusao;
 	
 	@Valid

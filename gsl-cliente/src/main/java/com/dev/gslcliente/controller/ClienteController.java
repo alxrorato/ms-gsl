@@ -95,7 +95,7 @@ public class ClienteController {
 			@ApiResponse(code = 400, message = "Requisição inválida"),
 			@ApiResponse(code = 404, message = "Cliente não cadastrado")
 		})
-	public ResponseEntity<Cliente> buscarClienteById(
+	public ResponseEntity<Cliente> buscarClientePorId(
 			@ApiParam(name = "id", value = "Id do registro no banco de dados")
 			@PathVariable Long id) {
 		log.info("PORT = " + env.getProperty("local.server.port"));
@@ -110,7 +110,7 @@ public class ClienteController {
 			@ApiResponse(code = 400, message = "Requisição inválida"),
 			@ApiResponse(code = 404, message = "Cliente não cadastrado")
 		})
-	public ResponseEntity<Cliente> buscarClientesByCnpj(
+	public ResponseEntity<Cliente> buscarClientePorCnpj(
 			@ApiParam(name = "cnpj", value = "CNPJ do cliente")
 			@PathVariable Long cnpj) {
 		log.info("PORT = " + env.getProperty("local.server.port"));
@@ -129,7 +129,7 @@ public class ClienteController {
 	@GetMapping(path = "buscarPorNome/{nome}")
 	@ApiOperation(value = "Buscar cliente por nome comercial", response = Cliente.class)
 	@ApiResponse(code = 200, message = "Clientes retornados com sucesso")
-	public ResponseEntity<List<Cliente>> buscarClientesByNome(
+	public ResponseEntity<List<Cliente>> buscarClientesPeloNome(
 			@ApiParam(name = "nome", value = "Nome do cliente")
 			@PathVariable String nome) {
 		return new ResponseEntity<>(clienteService.buscarClientesByNome(nome), HttpStatus.OK);
@@ -138,7 +138,7 @@ public class ClienteController {
 	@GetMapping(path = "buscarPorContemNome/{nome}")
 	@ApiOperation(value = "Buscar cliente por parte do nome comercial", response = Cliente.class)
 	@ApiResponse(code = 200, message = "Clientes retornados com sucesso")
-	public ResponseEntity<List<Cliente>> buscarClientesByContainsNome(
+	public ResponseEntity<List<Cliente>> buscarClientesPorParteDoNome(
 			@ApiParam(name = "nome", value = "Nome ou parte do nome do cliente")
 			@PathVariable String nome) {
 		return new ResponseEntity<>(clienteService.buscarClientesByContainsNome(nome), HttpStatus.OK);

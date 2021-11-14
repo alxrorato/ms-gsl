@@ -1404,13 +1404,14 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{api-gateway}}/gsl-entrega/entregas",
+									"raw": "{{api-gateway}}/gsl-entrega/entregas/buscarTodas",
 									"host": [
 										"{{api-gateway}}"
 									],
 									"path": [
 										"gsl-entrega",
-										"entregas"
+										"entregas",
+										"buscarTodas"
 									]
 								}
 							},
