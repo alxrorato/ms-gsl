@@ -66,6 +66,7 @@ import com.dev.gslentrega.response.DadosSeguroCarga;
 import com.dev.gslentrega.response.EmissaoCteResponse;
 import com.dev.gslentrega.response.EnderecoAtorCte;
 import com.dev.gslentrega.response.LocalizacaoCarga;
+import com.dev.gslentrega.response.LocalizacaoGoogleResponse;
 import com.dev.gslentrega.response.NaturezaPrestacao;
 import com.dev.gslentrega.response.OperacaoEtapaResponse;
 import com.dev.gslentrega.response.PagamentoResponse;
@@ -83,6 +84,9 @@ public class EntregaServiceImpl implements EntregaService {
 	
 	@Value("${gsl-parceira.host}")
 	private String parceiraHost;
+	
+	@Value("${gsl-google-services-mock.host}")
+	private String googleServicesMockHost;
 	
 	@Value("${cnpj.boaentrega}")
 	private String cnpjBoaEntrega;
@@ -396,9 +400,17 @@ public class EntregaServiceImpl implements EntregaService {
 		andamentoEntregaResponse.setPrevisaoEntrega(montaTextoPrevisaoEntrega(entrega.getDataPrevisao(), 
 				entrega.getDataAlteracao() != null ? entrega.getDataAlteracao() : LocalDateTime.now()));
 		
+		// Busca a localização em serviço externo (mock do Google)
+		LocalizacaoGoogleResponse localizacaoGoogleResponse = 
+				restTemplate.getForObject(googleServicesMockHost + "/servicos/obterLocalizacao", LocalizacaoGoogleResponse.class);
+		
+		LocalizacaoCarga localizacao = new LocalizacaoCarga(localizacaoGoogleResponse.getLatitude(),
+				localizacaoGoogleResponse.getLongitude());
+		
+		/* busca da localização da forma anterior, com mocks locais
 		LocalizacaoCarga localizacao = new LocalizacaoCarga(MockUtils.getLatitudeLongitude(LIMITE_LATITUDE_LONGITUDE),
 				MockUtils.getLatitudeLongitude(LIMITE_LATITUDE_LONGITUDE));
-		
+		*/
 		andamentoEntregaResponse.setLocalizacaoCarga(localizacao);
 		
 		return andamentoEntregaResponse;

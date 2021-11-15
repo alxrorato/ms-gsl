@@ -1548,6 +1548,44 @@
 					]
 				},
 				{
+					"name": "gsl-google-services-mock - Externo",
+					"item": [
+						{
+							"name": "Obter Localização",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:7001/parceira/solicitarParceria/{{cnpj-boa-entrega}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7001",
+									"path": [
+										"parceira",
+										"solicitarParceria",
+										"{{cnpj-boa-entrega}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "gsl-sfc (Legado - Sist. Fat. e Controle)",
 					"item": [
 						{
