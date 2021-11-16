@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.dev.gsloauth.entities.User;
 
 @Component
-@FeignClient(name = "gsl-user", path = "/users")
+@FeignClient(name = "gsl-user", path = "/v1/users")
 public interface UserFeignClient {
 
 	@GetMapping(value = "/search")

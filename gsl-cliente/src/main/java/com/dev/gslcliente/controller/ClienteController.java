@@ -33,7 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @RefreshScope
 @RestController
-@RequestMapping("/clientes")
+@RequestMapping("/v1/clientes")
 @Slf4j
 @Api(value = "Endpoints do módulo de informações cadastrais - cadastro de clientes")
 public class ClienteController {

@@ -33,7 +33,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	private static final String[] CLIENTE = { "/gsl-cliente/**", "/gsl-entrega/**" };
 	//private static final String[] CLIENTE = { "/gsl-cliente/clientes/add/**", "/gsl-cliente/clientes/atualizar/**", "/gsl-cliente/clientes/buscarPorCnpj/**", "/gsl-entrega/**" };
 
-	private static final String[] ADMIN = { "/gsl-user/**", "/actuator/**", "/gsl-worker/actuator/**", "/gsl-oauth/actuator/**" };
+	private static final String[] ADMIN = { "/gsl-user/**", "/actuator/**", "/gsl-cliente/actuator/**", "/gsl-oauth/actuator/**", "/gsl-oauth/v1/users/**" };
 	//private static final String[] ADMIN = { "/gsl-cliente/**", "/gsl-entrega/**", "/gsl-user/**" };
 	
 	@Override

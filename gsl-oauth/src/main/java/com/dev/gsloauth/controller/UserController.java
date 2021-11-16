@@ -12,7 +12,7 @@ import com.dev.gsloauth.entities.User;
 import com.dev.gsloauth.service.UserService;
 
 @RestController
-@RequestMapping(value = "/users")
+@RequestMapping(value = "/v1/users")
 public class UserController {
 
 	@Autowired

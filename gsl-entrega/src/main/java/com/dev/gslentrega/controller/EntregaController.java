@@ -40,7 +40,7 @@ import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping(value = "/entregas")
+@RequestMapping(value = "/v1/entregas")
 @Slf4j
 @Api(value = "Endpoints do módulo de serviços aos clientes - entregas")
 public class EntregaController {
@@ -134,7 +134,7 @@ public class EntregaController {
 		return ResponseEntity.ok(calculoFreteResponse);
 	}
 	
-	@PostMapping("solicitar")
+	@PostMapping("/solicitar")
 	@Transactional(rollbackFor = Exception.class)
 	@ApiOperation(value = "Solicitar entrega", response = Entrega.class)
 	@ApiResponses(value = {

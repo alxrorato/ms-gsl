@@ -830,12 +830,13 @@
 											}
 										},
 										"url": {
-											"raw": "{{api-gateway}}/gsl-entrega/entregas/solicitar",
+											"raw": "{{api-gateway}}/gsl-entrega/v1/entregas/solicitar",
 											"host": [
 												"{{api-gateway}}"
 											],
 											"path": [
 												"gsl-entrega",
+												"v1",
 												"entregas",
 												"solicitar"
 											]
@@ -885,12 +886,13 @@
 											}
 										},
 										"url": {
-											"raw": "{{api-gateway}}/gsl-entrega/entregas/estimarCalculoFrete",
+											"raw": "{{api-gateway}}/gsl-entrega/v1/entregas/estimarCalculoFrete",
 											"host": [
 												"{{api-gateway}}"
 											],
 											"path": [
 												"gsl-entrega",
+												"v1",
 												"entregas",
 												"estimarCalculoFrete"
 											]
@@ -940,12 +942,13 @@
 											}
 										},
 										"url": {
-											"raw": "{{api-gateway}}/gsl-entrega/entregas/estimarCalculoFrete",
+											"raw": "{{api-gateway}}/gsl-entrega/v1/entregas/estimarCalculoFrete",
 											"host": [
 												"{{api-gateway}}"
 											],
 											"path": [
 												"gsl-entrega",
+												"v1",
 												"entregas",
 												"estimarCalculoFrete"
 											]
@@ -992,12 +995,13 @@
 											}
 										},
 										"url": {
-											"raw": "{{api-gateway}}/gsl-entrega/entregas/solicitar",
+											"raw": "{{api-gateway}}/gsl-entrega/v1/entregas/solicitar",
 											"host": [
 												"{{api-gateway}}"
 											],
 											"path": [
 												"gsl-entrega",
+												"v1",
 												"entregas",
 												"solicitar"
 											]
@@ -1030,12 +1034,13 @@
 											}
 										},
 										"url": {
-											"raw": "{{api-gateway}}/gsl-entrega/entregas/efetuarPagamento/{{codigo-solicitacao}}",
+											"raw": "{{api-gateway}}/gsl-entrega/v1/entregas/efetuarPagamento/{{codigo-solicitacao}}",
 											"host": [
 												"{{api-gateway}}"
 											],
 											"path": [
 												"gsl-entrega",
+												"v1",
 												"entregas",
 												"efetuarPagamento",
 												"{{codigo-solicitacao}}"
@@ -1069,12 +1074,13 @@
 											}
 										},
 										"url": {
-											"raw": "{{api-gateway}}/gsl-entrega/entregas/emitirCte/{{codigo-solicitacao}}",
+											"raw": "{{api-gateway}}/gsl-entrega/v1/entregas/emitirCte/{{codigo-solicitacao}}",
 											"host": [
 												"{{api-gateway}}"
 											],
 											"path": [
 												"gsl-entrega",
+												"v1",
 												"entregas",
 												"emitirCte",
 												"{{codigo-solicitacao}}"
@@ -1108,12 +1114,13 @@
 											}
 										},
 										"url": {
-											"raw": "{{api-gateway}}/gsl-entrega/entregas/coletarCarga/{{codigo-solicitacao}}",
+											"raw": "{{api-gateway}}/gsl-entrega/v1/entregas/coletarCarga/{{codigo-solicitacao}}",
 											"host": [
 												"{{api-gateway}}"
 											],
 											"path": [
 												"gsl-entrega",
+												"v1",
 												"entregas",
 												"coletarCarga",
 												"{{codigo-solicitacao}}"
@@ -1147,12 +1154,13 @@
 											}
 										},
 										"url": {
-											"raw": "{{api-gateway}}/gsl-entrega/entregas/efetuarRoteirizacao/{{codigo-solicitacao}}",
+											"raw": "{{api-gateway}}/gsl-entrega/v1/entregas/efetuarRoteirizacao/{{codigo-solicitacao}}",
 											"host": [
 												"{{api-gateway}}"
 											],
 											"path": [
 												"gsl-entrega",
+												"v1",
 												"entregas",
 												"efetuarRoteirizacao",
 												"{{codigo-solicitacao}}"
@@ -1186,12 +1194,13 @@
 											}
 										},
 										"url": {
-											"raw": "{{api-gateway}}/gsl-entrega/entregas/iniciarTransporte/{{codigo-solicitacao}}",
+											"raw": "{{api-gateway}}/gsl-entrega/v1/entregas/iniciarTransporte/{{codigo-solicitacao}}",
 											"host": [
 												"{{api-gateway}}"
 											],
 											"path": [
 												"gsl-entrega",
+												"v1",
 												"entregas",
 												"iniciarTransporte",
 												"{{codigo-solicitacao}}"
@@ -1225,12 +1234,13 @@
 											}
 										},
 										"url": {
-											"raw": "{{api-gateway}}/gsl-entrega/entregas/distribuirNosCds/{{codigo-solicitacao}}",
+											"raw": "{{api-gateway}}/gsl-entrega/v1/entregas/distribuirNosCds/{{codigo-solicitacao}}",
 											"host": [
 												"{{api-gateway}}"
 											],
 											"path": [
 												"gsl-entrega",
+												"v1",
 												"entregas",
 												"distribuirNosCds",
 												"{{codigo-solicitacao}}"
@@ -1264,12 +1274,13 @@
 											}
 										},
 										"url": {
-											"raw": "{{api-gateway}}/gsl-entrega/entregas/iniciarLastMile/{{codigo-solicitacao}}",
+											"raw": "{{api-gateway}}/gsl-entrega/v1/entregas/iniciarLastMile/{{codigo-solicitacao}}",
 											"host": [
 												"{{api-gateway}}"
 											],
 											"path": [
 												"gsl-entrega",
+												"v1",
 												"entregas",
 												"iniciarLastMile",
 												"{{codigo-solicitacao}}"
@@ -1303,12 +1314,13 @@
 											}
 										},
 										"url": {
-											"raw": "{{api-gateway}}/gsl-entrega/entregas/finalizarEntrega/{{codigo-solicitacao}}",
+											"raw": "{{api-gateway}}/gsl-entrega/v1/entregas/finalizarEntrega/{{codigo-solicitacao}}",
 											"host": [
 												"{{api-gateway}}"
 											],
 											"path": [
 												"gsl-entrega",
+												"v1",
 												"entregas",
 												"finalizarEntrega",
 												"{{codigo-solicitacao}}"
@@ -1342,12 +1354,13 @@
 											}
 										},
 										"url": {
-											"raw": "{{api-gateway}}/gsl-entrega/entregas/cancelarEntrega/{{codigo-solicitacao}}",
+											"raw": "{{api-gateway}}/gsl-entrega/v1/entregas/cancelarEntrega/{{codigo-solicitacao}}",
 											"host": [
 												"{{api-gateway}}"
 											],
 											"path": [
 												"gsl-entrega",
+												"v1",
 												"entregas",
 												"cancelarEntrega",
 												"{{codigo-solicitacao}}"
@@ -1372,12 +1385,13 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{api-gateway}}/gsl-entrega/entregas/consultarAndamentoEntrega/{{codigo-solicitacao}}",
+											"raw": "{{api-gateway}}/gsl-entrega/v1/entregas/consultarAndamentoEntrega/{{codigo-solicitacao}}",
 											"host": [
 												"{{api-gateway}}"
 											],
 											"path": [
 												"gsl-entrega",
+												"v1",
 												"entregas",
 												"consultarAndamentoEntrega",
 												"{{codigo-solicitacao}}"
@@ -1404,12 +1418,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{api-gateway}}/gsl-entrega/entregas/buscarTodas",
+									"raw": "{{api-gateway}}/gsl-entrega/v1/entregas/buscarTodas",
 									"host": [
 										"{{api-gateway}}"
 									],
 									"path": [
 										"gsl-entrega",
+										"v1",
 										"entregas",
 										"buscarTodas"
 									]
@@ -1433,12 +1448,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{api-gateway}}/gsl-entrega/entregas/buscarPorId/1",
+									"raw": "{{api-gateway}}/gsl-entrega/v1/entregas/buscarPorId/1",
 									"host": [
 										"{{api-gateway}}"
 									],
 									"path": [
 										"gsl-entrega",
+										"v1",
 										"entregas",
 										"buscarPorId",
 										"1"
@@ -1463,12 +1479,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{api-gateway}}/gsl-entrega/entregas/buscarPorCodigoSolicitacao/{{codigo-solicitacao}}",
+									"raw": "{{api-gateway}}/gsl-entrega/v1/entregas/buscarPorCodigoSolicitacao/{{codigo-solicitacao}}",
 									"host": [
 										"{{api-gateway}}"
 									],
 									"path": [
 										"gsl-entrega",
+										"v1",
 										"entregas",
 										"buscarPorCodigoSolicitacao",
 										"{{codigo-solicitacao}}"
@@ -1641,12 +1658,13 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{api-gateway}}/gsl-cliente/clientes/listar",
+											"raw": "{{api-gateway}}/gsl-cliente/v1/clientes/listar",
 											"host": [
 												"{{api-gateway}}"
 											],
 											"path": [
 												"gsl-cliente",
+												"v1",
 												"clientes",
 												"listar"
 											]
@@ -1670,15 +1688,16 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{api-gateway}}/gsl-cliente/clientes/buscarPorId/1",
+											"raw": "{{api-gateway}}/gsl-cliente/v1/clientes/buscarPorId/3",
 											"host": [
 												"{{api-gateway}}"
 											],
 											"path": [
 												"gsl-cliente",
+												"v1",
 												"clientes",
 												"buscarPorId",
-												"1"
+												"3"
 											]
 										}
 									},
@@ -1700,15 +1719,16 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{api-gateway}}/gsl-cliente/clientes/buscarPorCnpj/23871292000133",
+											"raw": "{{api-gateway}}/gsl-cliente/v1/clientes/buscarPorCnpj/99825101000169",
 											"host": [
 												"{{api-gateway}}"
 											],
 											"path": [
 												"gsl-cliente",
+												"v1",
 												"clientes",
 												"buscarPorCnpj",
-												"23871292000133"
+												"99825101000169"
 											]
 										}
 									},
@@ -1730,12 +1750,13 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{api-gateway}}/gsl-cliente/clientes/buscarPorNome/Comercio de Artigos Esportivos",
+											"raw": "{{api-gateway}}/gsl-cliente/v1/clientes/buscarPorNome/Comercio de Artigos Esportivos",
 											"host": [
 												"{{api-gateway}}"
 											],
 											"path": [
 												"gsl-cliente",
+												"v1",
 												"clientes",
 												"buscarPorNome",
 												"Comercio de Artigos Esportivos"
@@ -1760,15 +1781,16 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{api-gateway}}/gsl-cliente/clientes/buscarPorContemNome/23871292000133",
+											"raw": "{{api-gateway}}/gsl-cliente/v1/clientes/buscarPorContemNome/esportivos",
 											"host": [
 												"{{api-gateway}}"
 											],
 											"path": [
 												"gsl-cliente",
+												"v1",
 												"clientes",
 												"buscarPorContemNome",
-												"23871292000133"
+												"esportivos"
 											]
 										}
 									},
@@ -1790,12 +1812,13 @@
 										"method": "DELETE",
 										"header": [],
 										"url": {
-											"raw": "{{api-gateway}}/gsl-cliente/clientes/excluir/1",
+											"raw": "{{api-gateway}}/gsl-cliente/v1/clientes/excluir/1",
 											"host": [
 												"{{api-gateway}}"
 											],
 											"path": [
 												"gsl-cliente",
+												"v1",
 												"clientes",
 												"excluir",
 												"1"
@@ -1829,12 +1852,13 @@
 											}
 										},
 										"url": {
-											"raw": "{{api-gateway}}/gsl-cliente/clientes/add",
+											"raw": "{{api-gateway}}/gsl-cliente/v1/clientes/add",
 											"host": [
 												"{{api-gateway}}"
 											],
 											"path": [
 												"gsl-cliente",
+												"v1",
 												"clientes",
 												"add"
 											]
@@ -1867,12 +1891,13 @@
 											}
 										},
 										"url": {
-											"raw": "{{api-gateway}}/gsl-cliente/clientes/add",
+											"raw": "{{api-gateway}}/gsl-cliente/v1/clientes/add",
 											"host": [
 												"{{api-gateway}}"
 											],
 											"path": [
 												"gsl-cliente",
+												"v1",
 												"clientes",
 												"add"
 											]
@@ -1898,12 +1923,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{api-gateway}}/gsl-cliente/clientes/configs",
+									"raw": "{{api-gateway}}/gsl-cliente/v1/clientes/configs",
 									"host": [
 										"{{api-gateway}}"
 									],
 									"path": [
 										"gsl-cliente",
+										"v1",
 										"clientes",
 										"configs"
 									]
@@ -2022,12 +2048,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{api-gateway}}/gsl-user/users/4",
+									"raw": "{{api-gateway}}/gsl-user/v1/users/4",
 									"host": [
 										"{{api-gateway}}"
 									],
 									"path": [
 										"gsl-user",
+										"v1",
 										"users",
 										"4"
 									]
@@ -2051,12 +2078,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{api-gateway}}/gsl-user/users/search?email=lucas@gmail.com",
+									"raw": "{{api-gateway}}/gsl-user/v1/users/search?email=lucas@gmail.com",
 									"host": [
 										"{{api-gateway}}"
 									],
 									"path": [
 										"gsl-user",
+										"v1",
 										"users",
 										"search"
 									],

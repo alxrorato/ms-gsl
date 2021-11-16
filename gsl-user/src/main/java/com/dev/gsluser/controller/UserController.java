@@ -13,7 +13,7 @@ import com.dev.gsluser.service.UserService;
 
 
 @RestController
-@RequestMapping(value = "/users")
+@RequestMapping(value = "/v1/users")
 public class UserController {
 
 	@Autowired
