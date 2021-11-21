@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -385,7 +386,9 @@ public class EntregaServiceImpl implements EntregaService {
 
 	@Override
 	public AndamentoEntregaResponse consultarAndamentoEntrega(Long codigoSolicitacao) {
+		
 		atualizarPercurso(codigoSolicitacao);
+		
 		Entrega entrega = buscarEntregaByCodigoSolicitacao(codigoSolicitacao);
 		AndamentoEntregaResponse andamentoEntregaResponse = new AndamentoEntregaResponse();
 		andamentoEntregaResponse.setCodigoSolicitacao(codigoSolicitacao);
@@ -397,21 +400,34 @@ public class EntregaServiceImpl implements EntregaService {
 		andamentoEntregaResponse.setPercentualAPercorrer(GeneralUtils.percentual(entrega.getDistanciaTotal(), 
 				andamentoEntregaResponse.getDistanciaApercorrer()));
 		andamentoEntregaResponse.setStatus(entrega.getStatusEntrega().getDescricao());
-		andamentoEntregaResponse.setPrevisaoEntrega(montaTextoPrevisaoEntrega(entrega.getDataPrevisao(), 
-				entrega.getDataAlteracao() != null ? entrega.getDataAlteracao() : LocalDateTime.now()));
 		
-		// Busca a localização em serviço externo (mock do Google)
-		LocalizacaoGoogleResponse localizacaoGoogleResponse = 
-				restTemplate.getForObject(googleServicesMockHost + "/servicos/obterLocalizacao", LocalizacaoGoogleResponse.class);
-		
-		LocalizacaoCarga localizacao = new LocalizacaoCarga(localizacaoGoogleResponse.getLatitude(),
-				localizacaoGoogleResponse.getLongitude());
-		
-		/* busca da localização da forma anterior, com mocks locais
-		LocalizacaoCarga localizacao = new LocalizacaoCarga(MockUtils.getLatitudeLongitude(LIMITE_LATITUDE_LONGITUDE),
-				MockUtils.getLatitudeLongitude(LIMITE_LATITUDE_LONGITUDE));
-		*/
-		andamentoEntregaResponse.setLocalizacaoCarga(localizacao);
+		if (StatusEntrega.FINALIZADA.equals(entrega.getStatusEntrega())) {
+			andamentoEntregaResponse.setPrevisaoEntrega("Esta entrega foi realizada em " + 	entrega.getDataFinalizacao()
+				.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")) + " e recebida por " + entrega.getRecebedorEntrega());
+			andamentoEntregaResponse.setLocalizacaoCarga(null);
+		} else if (StatusEntrega.CANCELADA.equals(entrega.getStatusEntrega())) {
+			andamentoEntregaResponse.setDistanciaApercorrer(GeneralUtils.ZERO);
+			andamentoEntregaResponse.setPercentualAPercorrer(GeneralUtils.ZERO);
+			andamentoEntregaResponse.setPrevisaoEntrega("Esta entrega foi cancelada em " + 	entrega.getDataCancelamento()
+				.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
+			andamentoEntregaResponse.setLocalizacaoCarga(null);
+		} else {
+			andamentoEntregaResponse.setPrevisaoEntrega(montaTextoPrevisaoEntrega(entrega.getDataPrevisao(), 
+					entrega.getDataAlteracao() != null ? entrega.getDataAlteracao() : LocalDateTime.now()));
+
+			// Busca a localização em serviço externo (mock do Google)
+			LocalizacaoGoogleResponse localizacaoGoogleResponse = 
+					restTemplate.getForObject(googleServicesMockHost + "/servicos/obterLocalizacao", LocalizacaoGoogleResponse.class);
+			
+			LocalizacaoCarga localizacao = new LocalizacaoCarga(localizacaoGoogleResponse.getLatitude(),
+					localizacaoGoogleResponse.getLongitude());
+			
+			/* busca da localização da forma anterior, com mocks locais
+			LocalizacaoCarga localizacao = new LocalizacaoCarga(MockUtils.getLatitudeLongitude(LIMITE_LATITUDE_LONGITUDE),
+					MockUtils.getLatitudeLongitude(LIMITE_LATITUDE_LONGITUDE));
+			*/
+			andamentoEntregaResponse.setLocalizacaoCarga(localizacao);
+		}
 		
 		return andamentoEntregaResponse;
 	}

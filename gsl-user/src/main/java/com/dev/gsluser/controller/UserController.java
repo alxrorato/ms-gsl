@@ -1,5 +1,7 @@
 package com.dev.gsluser.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dev.gsluser.entities.User;
 import com.dev.gsluser.service.UserService;
-
 
 @RestController
 @RequestMapping(value = "/v1/users")
@@ -30,5 +31,11 @@ public class UserController {
 		User user = userService.findByEmail(email);
 		return ResponseEntity.ok(user);
 	}
+
+	@GetMapping("listar")
+	public ResponseEntity<List<User>> listarUsuarios() {
+		List<User> list = userService.buscarUsuarios();
+		return ResponseEntity.ok(list);
+	}	
 
 }

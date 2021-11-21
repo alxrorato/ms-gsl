@@ -5,7 +5,6 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -44,13 +43,19 @@ public class ClienteController {
 	@Autowired
 	private ClienteService clienteService;
 	
-	@Value("${test.config}") //nome do arquivo de configuração criado no Github
+	/* A variavel test.config ficava no arquivo de configuração "gsl-cliente.properties" criado no Github anteriormente para teste.
+	 * Ele foi excluído do Github para que o repositório fique organizado e "limpo". Caso seja necessário retestá-lo, basta recriá-lo
+	 * no respositório e incluir a linha abaixo que ele possuía:
+	 * test.config=Configuracao no profile default
+	 */
+	/*
+	@Value("${test.config}")
 	private String testConfig;
-	
+	*/
 	@GetMapping(value = "/configs")
 	@ApiOperation(hidden = true, value = "")
 	public ResponseEntity<Void> getConfigs() {
-		log.info("CONFIG = " + testConfig);
+		//log.info("CONFIG = " + testConfig);
 		return ResponseEntity.noContent().build();
 	}		
 
