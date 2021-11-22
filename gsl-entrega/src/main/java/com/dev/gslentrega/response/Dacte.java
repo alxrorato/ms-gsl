@@ -36,7 +36,7 @@ public class Dacte {
 	@ApiModelProperty(name = "folha", value = "Número da folha do Dacte", example = "1/1")
 	private String folha;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
 	@ApiModelProperty(name = "dataHoraEmissao", value = "Data/hora da emissão do Dacte", example = "06-11-2021 10:43:43")
 	private LocalDateTime dataHoraEmissao;
 	
@@ -54,7 +54,7 @@ public class Dacte {
 	@ApiModelProperty(name = "numeroProtocoloAutorizacaoUso", value = "Protocolo de autorização de uso", example = "328448663319735")
 	private Long numeroProtocoloAutorizacaoUso; // Random c/ 15 dígitos
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
 	@ApiModelProperty(name = "dataHoraGeracaoProtocolo", value = "Data/hora da geração do protocolo", example = "06-11-2021 10:43:43")
 	private LocalDateTime dataHoraGeracaoProtocolo;
 }

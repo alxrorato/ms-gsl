@@ -31,6 +31,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	private static final String[] COLABORADOR = { "/gsl-cliente/**"};
 
 	private static final String[] CLIENTE = { "/gsl-cliente/**", "/gsl-entrega/**" };
+	//private static final String[] CLIENTE = { "/gsl-cliente/v1/clientes/add", "/gsl-entrega/**" };
 	//private static final String[] CLIENTE = { "/gsl-cliente/clientes/add/**", "/gsl-cliente/clientes/atualizar/**", "/gsl-cliente/clientes/buscarPorCnpj/**", "/gsl-entrega/**" };
 
 	private static final String[] ADMIN = { "/gsl-user/**", "/actuator/**", "/gsl-cliente/actuator/**", "/gsl-oauth/actuator/**", "/gsl-oauth/v1/users/**" };
@@ -44,6 +45,21 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 
+//	http.authorizeRequests()
+//    .antMatchers(
+//                "/",
+//                "/actuator/**",
+//                "/v2/api-docs/**",
+//                "/swagger*/**",
+//                "/swagger-resources/**",
+//                "/webjars/**").permitAll()
+//		.antMatchers(PUBLIC).permitAll() //antMatchers: pra definir autorizações
+//		.antMatchers(CLIENTE).hasAnyRole("CLIENTE", "ADMIN", "COLABORADOR")
+//		.antMatchers(HttpMethod.POST, CLIENTE).hasRole("CLIENTE")
+//		.antMatchers(ADMIN).hasRole("ADMIN")
+//		.anyRequest().authenticated(); //qquer rota não especificada anteriormente, exige que o usuário esteja autenticado
+
+		// TODO Acrescentar os demais métodos para as devidas roles
 		http.authorizeRequests()
         .antMatchers(
                 "/",
@@ -53,7 +69,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 "/swagger-resources/**",
                 "/webjars/**").permitAll()
 		.antMatchers(PUBLIC).permitAll() //antMatchers: pra definir autorizações
-		.antMatchers(HttpMethod.GET, CLIENTE).hasAnyRole("CLIENTE", "ADMIN", "COLABORADOR")
+		.antMatchers("/gsl-entrega/v1/entregas/coletarCarga/**").hasAnyRole("ADMIN", "COLABORADOR")
 		.antMatchers(HttpMethod.POST, CLIENTE).hasRole("CLIENTE")
 		.antMatchers(ADMIN).hasRole("ADMIN")
 		.anyRequest().authenticated(); //qquer rota não especificada anteriormente, exige que o usuário esteja autenticado

@@ -33,7 +33,7 @@ public class CancelamentoResponse implements Serializable {
 			example = "116922963214")
 	private Long codigoSolicitacao;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
 	@ApiModelProperty(name = "dataCancelamento", value = "Data/hora da efetivação do cancelamento da entrega", 
 		example = "06-11-2021 06:38:48")
 	private LocalDateTime dataCancelamento;

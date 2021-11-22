@@ -33,7 +33,7 @@ public class ConfirmacaoEntregaResponse implements Serializable {
 			example = "116922963214")
 	private Long codigoSolicitacao;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
 	@ApiModelProperty(name = "dataFinalizacao", value = "Data/hora da realização da entrega", example = "06-11-2021 05:52:57")
 	private LocalDateTime dataFinalizacao;
 	

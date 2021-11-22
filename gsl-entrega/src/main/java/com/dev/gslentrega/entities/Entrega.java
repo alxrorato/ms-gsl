@@ -87,7 +87,7 @@ public class Entrega implements Serializable {
 	private EnderecoDestino enderecoDestino;
 	
 	@NotNull
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
 	@ApiModelProperty(name = "dataSolicitacao", value = "Data/hora da solicitação da entrega", example = "05-11-2021 12:09:29")
 	private LocalDateTime dataSolicitacao;
 	
@@ -95,7 +95,7 @@ public class Entrega implements Serializable {
 	@ApiModelProperty(name = "dataPrevisao", value = "Data prevista para entrega", example = "06-11-2021")
 	private LocalDateTime dataPrevisao;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
 	@ApiModelProperty(name = "dataFinalizacao", value = "Data/hora da entrega ao destinatário final", example = "06-11-2021 19:08:45")
 	private LocalDateTime dataFinalizacao;
 	
@@ -111,15 +111,15 @@ public class Entrega implements Serializable {
 			+ "TRANSPORTE, DISTRIBUIÇÃO, LAST_MILE, FINALIZADA ou CANCELADA", example = "SOLICITACAO")
 	private StatusEntrega statusEntrega;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
 	@ApiModelProperty(name = "dataStatusEntrega", value = "Data/hora da atualização do status da entrega", example = "06-11-2021 19:08:45")
 	private LocalDateTime dataStatusEntrega;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
 	@ApiModelProperty(name = "dataAlteração", value = "Data/hora de atualização deste registro no banco de dados", example = "06-11-2021 19:15:50")
 	private LocalDateTime dataAlteracao;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
 	@ApiModelProperty(name = "dataCancelamento", value = "Data/hora do cancelamento da solicitação da entrega", example = "06-11-2021 15:17:12")
 	private LocalDateTime dataCancelamento;
 	
@@ -138,7 +138,7 @@ public class Entrega implements Serializable {
 		example = "CONFIRMADO")
 	private StatusPagamento statusPagamento;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
 	@ApiModelProperty(name = "dataPagamento", value = "Data/hora do pagamento do serviço de entrega", example = "06-11-2021 16:22:31")
 	private LocalDateTime dataPagamento;
 	

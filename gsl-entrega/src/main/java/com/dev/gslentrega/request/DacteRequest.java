@@ -25,12 +25,12 @@ public class DacteRequest implements Serializable {
 	private int serie;
 	private Long numero;
 	private String folha;
-	//@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+	//@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
 	private LocalDateTime dataHoraEmissao;
 	private Long inscricaoSulframa;
 	private String chaveAcesso; // "33.4444.55.555.444/1111-88-22-000-000.000.111-100.005.111-2"
 	private String textoChaveAcesso; // "Consulta de autenticidade no portal nacional do CT-e, no site da Sefaz Autorizadora, ou em http://cte.fazenda.gov.br
 	private Long numeroProtocoloAutorizacaoUso; // Random c/ 15 dígitos
-	//@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+	//@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
 	private LocalDateTime dataHoraGeracaoProtocolo;
 }

@@ -28,7 +28,7 @@ public class PagamentoResponse implements Serializable {
 			example = "116922963214")
 	private Long codigoSolicitacaoEntrega;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
 	@ApiModelProperty(name = "dataPagamento", value = "Data/hora do pagamento à transportadora Boa Entrega", 
 		example = "06-11-2021 05:02:22")
 	private LocalDateTime dataPagamento;

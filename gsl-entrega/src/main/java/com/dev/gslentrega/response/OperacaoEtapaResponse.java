@@ -34,7 +34,7 @@ public class OperacaoEtapaResponse implements Serializable {
 			example = "116922963214")
 	private Long codigoSolicitacao;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
 	@ApiModelProperty(name = "dataOperacao", value = "Data/hora da realização da operação",	example = "06-11-2021 05:52:57")
 	private LocalDateTime dataOperacao;
 	
