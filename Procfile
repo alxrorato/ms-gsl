@@ -1,10 +1,10 @@
-web: java -jar gsl-config-server/target/gsl-config-server-0.0.1-SNAPSHOT.jar
-web: java -jar gsl-eureka-server/target/gsl-eureka-server-0.0.1-SNAPSHOT.jar
-web: java -jar gsl-api-gateway-zuul/target/gsl-api-gateway-zuul-0.0.1-SNAPSHOT.jar
-web: java -jar gsl-cliente/target/gsl-cliente-0.0.1-SNAPSHOT.jar
-web: java -jar gsl-entrega/target/gsl-entrega-0.0.1-SNAPSHOT.jar
-web: java -jar gsl-oauth/target/gsl-oauth-0.0.1-SNAPSHOT.jar
-web: java -jar gsl-parceira/target/gsl-parceira-0.0.1-SNAPSHOT.jar
-web: java -jar gsl-sfc/target/gsl-sfc-0.0.1-SNAPSHOT.jar
-web: java -jar gsl-google-services-mock/target/gsl-google-services-mock-0.0.1-SNAPSHOT.jar
-web: java -jar gsl-user/target/gsl-user-0.0.1-SNAPSHOT.jar
+web: java -Dserver.port=8888 $JAVA_OPTS -jar gsl-config-server/target/gsl-config-server-0.0.1-SNAPSHOT.jar
+web: java -Dserver.port=8761 $JAVA_OPTS -jar gsl-eureka-server/target/gsl-eureka-server-0.0.1-SNAPSHOT.jar
+web: java -Dserver.port=$PORT $JAVA_OPTS -jar gsl-api-gateway-zuul/target/gsl-api-gateway-zuul-0.0.1-SNAPSHOT.jar
+web: java -Dserver.port=$PORT $JAVA_OPTS -jar gsl-cliente/target/gsl-cliente-0.0.1-SNAPSHOT.jar
+web: java -Dserver.port=$PORT $JAVA_OPTS -jar gsl-entrega/target/gsl-entrega-0.0.1-SNAPSHOT.jar
+web: java -Dserver.port=$PORT $JAVA_OPTS -jar gsl-oauth/target/gsl-oauth-0.0.1-SNAPSHOT.jar
+web: java -Dserver.port=7001 $JAVA_OPTS -jar gsl-parceira/target/gsl-parceira-0.0.1-SNAPSHOT.jar
+web: java -Dserver.port=8500 $JAVA_OPTS -jar gsl-sfc/target/gsl-sfc-0.0.1-SNAPSHOT.jar
+web: java -Dserver.port=7002 $JAVA_OPTS -jar gsl-google-services-mock/target/gsl-google-services-mock-0.0.1-SNAPSHOT.jar
+web: java -Dserver.port=$PORT $JAVA_OPTS -jar gsl-user/target/gsl-user-0.0.1-SNAPSHOT.jar
