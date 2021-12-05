@@ -878,7 +878,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"cargas\": [\r\n      {\r\n    \t\"natureza\": \"granel\",\r\n\t    \"quantidade\": 2,\r\n\t    \"especie\": \"alimentos\",\r\n\t    \"peso\": 2,\r\n        \"volume\": 3,\r\n\t    \"valor\": 40.0,\r\n\t    \"notaFiscal\": \"NF0001\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"geral\",\r\n\t    \"quantidade\": 3,\r\n\t    \"especie\": \"brinquedos\",\r\n\t    \"peso\": 3,\r\n        \"volume\": 5,\r\n\t    \"valor\": 100.0,\r\n\t    \"notaFiscal\": \"NF0002\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"perigosa\",\r\n\t    \"quantidade\": 3,\r\n\t    \"especie\": \"substancias oxidantes\",\r\n\t    \"peso\": 50,\r\n        \"volume\": 2,\r\n\t    \"valor\": 1500.0,\r\n\t    \"notaFiscal\": \"NF0003\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"frigorificada\",\r\n\t    \"quantidade\": 20,\r\n\t    \"especie\": \"frutas\",\r\n\t    \"peso\": 45,\r\n        \"volume\": 5,\r\n\t    \"valor\": 555.0,\r\n\t    \"notaFiscal\": \"NF0004\"\r\n      }\r\n  ]\r\n}",
+											"raw": "{\r\n  \"cepOrigem\": \"01113500\",\r\n  \"cepDestino\": \"92333400\",\r\n  \"cargas\": [\r\n      {\r\n    \t\"natureza\": \"granel\",\r\n\t    \"quantidade\": 2,\r\n\t    \"especie\": \"alimentos\",\r\n\t    \"peso\": 2,\r\n        \"volume\": 3,\r\n\t    \"valor\": 40.0,\r\n\t    \"notaFiscal\": \"NF0001\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"geral\",\r\n\t    \"quantidade\": 3,\r\n\t    \"especie\": \"brinquedos\",\r\n\t    \"peso\": 3,\r\n        \"volume\": 5,\r\n\t    \"valor\": 100.0,\r\n\t    \"notaFiscal\": \"NF0002\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"perigosa\",\r\n\t    \"quantidade\": 3,\r\n\t    \"especie\": \"substancias oxidantes\",\r\n\t    \"peso\": 50,\r\n        \"volume\": 2,\r\n\t    \"valor\": 1500.0,\r\n\t    \"notaFiscal\": \"NF0003\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"frigorificada\",\r\n\t    \"quantidade\": 20,\r\n\t    \"especie\": \"frutas\",\r\n\t    \"peso\": 45,\r\n        \"volume\": 5,\r\n\t    \"valor\": 555.0,\r\n\t    \"notaFiscal\": \"NF0004\"\r\n      }\r\n  ]\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -934,7 +934,63 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"cargas\": [\r\n      {\r\n    \t\"natureza\": \"granel\",\r\n\t    \"quantidade\": 5,\r\n\t    \"especie\": \"alimentos\",\r\n\t    \"peso\": 3,\r\n        \"volume\": 2,\r\n\t    \"valor\": 57.0,\r\n\t    \"notaFiscal\": \"NF0005\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"geral\",\r\n\t    \"quantidade\": 1,\r\n\t    \"especie\": \"brinquedos\",\r\n\t    \"peso\": 1,\r\n        \"volume\": 2,\r\n\t    \"valor\": 78.0,\r\n\t    \"notaFiscal\": \"NF0006\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"perigosa\",\r\n\t    \"quantidade\": 1,\r\n\t    \"especie\": \"substancias oxidantes\",\r\n\t    \"peso\": 4,\r\n        \"volume\": 2,\r\n\t    \"valor\": 150.0,\r\n\t    \"notaFiscal\": \"NF0007\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"frigorificada\",\r\n\t    \"quantidade\": 11,\r\n\t    \"especie\": \"frutas\",\r\n\t    \"peso\": 3,\r\n        \"volume\": 2,\r\n\t    \"valor\": 127.0,\r\n\t    \"notaFiscal\": \"NF0008\"\r\n      }\r\n  ]\r\n}",
+											"raw": "{\r\n  \"cepOrigem\": \"69000001\",\r\n  \"cepDestino\": \"69111400\",\r\n  \"cargas\": [\r\n      {\r\n    \t\"natureza\": \"granel\",\r\n\t    \"quantidade\": 5,\r\n\t    \"especie\": \"alimentos\",\r\n\t    \"peso\": 3,\r\n        \"volume\": 2,\r\n\t    \"valor\": 57.0,\r\n\t    \"notaFiscal\": \"NF0005\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"geral\",\r\n\t    \"quantidade\": 1,\r\n\t    \"especie\": \"brinquedos\",\r\n\t    \"peso\": 1,\r\n        \"volume\": 2,\r\n\t    \"valor\": 78.0,\r\n\t    \"notaFiscal\": \"NF0006\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"perigosa\",\r\n\t    \"quantidade\": 1,\r\n\t    \"especie\": \"substancias oxidantes\",\r\n\t    \"peso\": 4,\r\n        \"volume\": 2,\r\n\t    \"valor\": 150.0,\r\n\t    \"notaFiscal\": \"NF0007\"\r\n      },\r\n      {\r\n    \t\"natureza\": \"frigorificada\",\r\n\t    \"quantidade\": 11,\r\n\t    \"especie\": \"frutas\",\r\n\t    \"peso\": 3,\r\n        \"volume\": 2,\r\n\t    \"valor\": 127.0,\r\n\t    \"notaFiscal\": \"NF0008\"\r\n      }\r\n  ]\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{api-gateway}}/gsl-entrega/v1/entregas/estimarCalculoFrete",
+											"host": [
+												"{{api-gateway}}"
+											],
+											"path": [
+												"gsl-entrega",
+												"v1",
+												"entregas",
+												"estimarCalculoFrete"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "01.3 - Estimar Cálculo do Frete",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"if (responseCode.code >= 200 && responseCode.code < 300) {\r",
+													"    var json = JSON.parse(responseBody);\r",
+													"    postman.setEnvironmentVariable('codigo-solicitacao', json.codigoSolicitacao);\r",
+													"}"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"cepOrigem\": \"69000001\",\r\n  \"cepDestino\": \"69111400\",\r\n  \"cargas\": [\r\n      {\r\n    \t\"natureza\": \"granel\",\r\n\t    \"quantidade\": 5,\r\n\t    \"especie\": \"alimentos\",\r\n\t    \"peso\": 3,\r\n        \"volume\": 2,\r\n\t    \"valor\": 57.0,\r\n\t    \"notaFiscal\": \"NF0005\"\r\n      }\r\n  ]\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"

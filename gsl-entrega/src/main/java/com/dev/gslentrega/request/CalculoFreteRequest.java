@@ -12,5 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CalculoFreteRequest {
+	private String cepOrigem;
+	private String cepDestino;
 	private List<CargaRequest> cargas;
 }

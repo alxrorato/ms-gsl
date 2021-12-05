@@ -23,6 +23,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Value("${oauth.client.secret}")
 	private String clientSecret;
 	
+	@Value("${access.token.validity.seconds}")
+	private String tokenValidity;
+	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 
@@ -47,7 +50,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		.secret(passwordEncoder.encode(clientSecret))
 		.scopes("read", "write")
 		.authorizedGrantTypes("password")
-		.accessTokenValiditySeconds(86400); // validade de 24h
+		.accessTokenValiditySeconds(Integer.parseInt(tokenValidity)); //Ex.: validade de 86400 seg = 24h
 	}
 
 	@Override

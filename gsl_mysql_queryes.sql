@@ -14,3 +14,17 @@ use gsl_user
 select * from tb_user
 select * from tb_role
 select * from tb_user_role
+-- Lista usuarios e suas roles
+select u.email, r.role_name
+  from tb_user u, tb_role r, tb_user_role ur
+ where ur.user_id = u.id
+   and ur.role_id = r.id
+order by 1, 2
+-- ---------------------------------------------------
+use gsl_entrega
+select * from tb_carga
+select * from tb_endereco
+select * from tb_entrega
+select * from tb_entrega_cargas
+
+
