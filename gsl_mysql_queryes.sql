@@ -25,6 +25,11 @@ use gsl_entrega
 select * from tb_carga
 select * from tb_endereco
 select * from tb_entrega
+select count(1) from tb_entrega
 select * from tb_entrega_cargas
+truncate table tb_entrega_cargas
+truncate table tb_entrega_cargas
+truncate table tb_entrega
+truncate table tb_carga
 
 
