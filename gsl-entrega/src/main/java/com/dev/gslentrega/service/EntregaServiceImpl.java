@@ -1026,7 +1026,7 @@ public class EntregaServiceImpl implements EntregaService {
 		for ( Map.Entry<String, Integer> entry : map.entrySet()) {
 		    String key = entry.getKey();
 		    Integer value = entry.getValue();
-		    System.out.println("Key: " + key + " - Value: " + value);
+		    //System.out.println("Key: " + key + " - Value: " + value);
 		    if (value > valueBase) {
 		    	maxValueKey = key;
 		    	valueBase = value;

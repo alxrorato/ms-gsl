@@ -118,8 +118,8 @@ public class ClienteController {
 	public ResponseEntity<Cliente> buscarClientePorCnpj(
 			@ApiParam(name = "cnpj", value = "CNPJ do cliente")
 			@PathVariable Long cnpj) {
-		log.info("PORT = " + env.getProperty("local.server.port"));
-		log.info("Buscando cliente pelo cnpj [{}] dentro do gsl-cliente", cnpj);
+		//log.info("PORT = " + env.getProperty("local.server.port"));
+		//log.info("Buscando cliente pelo cnpj [{}] dentro do gsl-cliente", cnpj);
 		//teste p/ estourar o timeout do balancemanto de carga, que no Ribbon o padrão é de 1s
 		/*
 		try {

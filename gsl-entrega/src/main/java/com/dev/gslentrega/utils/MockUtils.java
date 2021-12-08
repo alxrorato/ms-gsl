@@ -160,7 +160,7 @@ public class MockUtils {
 		while (i.hasNext()) {
 			BigDecimal keyPeso = (BigDecimal)i.next();
 			valuePreco = mapFretePorkgOrdenado.get(keyPeso);
-			System.out.println("Key: " + keyPeso + " - Value: " + valuePreco);
+			//System.out.println("Key: " + keyPeso + " - Value: " + valuePreco);
 			if (pesoCarga.compareTo(keyPeso) < 0) {
 				break;
 			}

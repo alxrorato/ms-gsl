@@ -93,7 +93,7 @@ public class EntregaController {
 	public ResponseEntity<Cliente> buscarCliente(
 			@ApiParam(name = "cnpj", value = "CNPJ do cliente") 
 			@PathVariable Long cnpj) {
-		log.info("Dentro do endpoint buscarCliente no gsl-entrega buscando pelo cnpj [{}]", cnpj);
+		//log.info("Dentro do endpoint buscarCliente no gsl-entrega buscando pelo cnpj [{}]", cnpj);
 		Cliente cliente = entregaService.buscarCliente(cnpj);
 		return ResponseEntity.ok(cliente);
 	}
@@ -134,8 +134,9 @@ public class EntregaController {
 		return ResponseEntity.ok(calculoFreteResponse);
 	}
 	
+	@HystrixCommand(fallbackMethod = "solicitarEntregaFallback")
 	@PostMapping("/solicitar")
-	@Transactional(rollbackFor = Exception.class)
+	//@Transactional(rollbackFor = Exception.class)
 	@ApiOperation(value = "Solicitar entrega", response = Entrega.class)
 	@ApiResponses(value = {
 			@ApiResponse(code = 201, message = "Solicitação de entrega cadastrada"),
@@ -145,6 +146,15 @@ public class EntregaController {
 		return new ResponseEntity<>(entregaService.cadastrarEntrega(entregaRequest), HttpStatus.CREATED);
 	}
 
+	public ResponseEntity<Entrega> solicitarEntregaFallback(EntregaRequest entregaRequest) {
+		log.info("Dentro do método de fallback da funcionalidade <Solicitar Entrega>");
+		Entrega entregaFallback = new Entrega();
+		entregaFallback.setObservacoes("Serviço indisponível. Tente mais tarde!");
+		return new ResponseEntity<>(entregaFallback, HttpStatus.CREATED);
+		//throw new ServicoIndisponivelException("Serviço de solicitação de entregas indisponível no momento. Tente mais tarde.");
+		//return null;
+	}
+	
 	@PatchMapping("efetuarPagamento/{codigoSolicitacao}")
 	@ApiOperation(value = "Efetuar o pagamento do serviço de transporte solicitado", response = PagamentoResponse.class)
 	@ApiResponses(value = {
