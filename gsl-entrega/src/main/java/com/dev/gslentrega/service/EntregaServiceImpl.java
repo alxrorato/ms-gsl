@@ -621,8 +621,10 @@ public class EntregaServiceImpl implements EntregaService {
 		Entrega entrega = buscarEntregaByCodigoSolicitacao(codigoSolicitacao);
 		if (entrega.isCteEmitido()) {
 			throw new OperacaoNaoEfetuadaException("O CT-e já foi emitido para a entrega " + codigoSolicitacao);
-		}  else if (StatusEntrega.CANCELADA.equals(entrega.getStatusEntrega())) {
+		} else if (StatusEntrega.CANCELADA.equals(entrega.getStatusEntrega())) {
 			throw new OperacaoNaoEfetuadaException("A solicitação para a entrega " + codigoSolicitacao + " foi cancelada");
+		} else if (StatusPagamento.PENDENTE.equals(entrega.getStatusPagamento())) {
+			throw new OperacaoNaoEfetuadaException("Pagamento pendente. O CT-e só poderá ser emitido após o pagamento ter sido confirmado.");
 		}
 
 		/* O Dacte é a Receita Federal quem devolve essas informações junto com as do CT-e */
