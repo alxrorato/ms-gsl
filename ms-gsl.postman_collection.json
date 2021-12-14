@@ -1664,6 +1664,21 @@
 						{
 							"name": "Cadastrar CT-e",
 							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "as54%4$#",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "system01",
+											"type": "string"
+										}
+									]
+								},
 								"method": "POST",
 								"header": [],
 								"body": {

@@ -1,6 +1,6 @@
 package com.dev.gslentrega.errors;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,10 +75,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.SERVICE_UNAVAILABLE);
     }
 
+	@ExceptionHandler(AcessoNaoAutorizadoException.class)
+    public ResponseEntity<Object> handleResourceUnauthorizedException(
+    		AcessoNaoAutorizadoException ex, WebRequest request) {
+
+        Map<String, Object> body = bodyResponse(HttpStatus.UNAUTHORIZED, ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.UNAUTHORIZED);
+    }
+
 	private Map<String, Object> bodyResponse(HttpStatus status, String message) {
 
     	Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", new Date());
+        body.put("timestamp", LocalDateTime.now());
         body.put("status", status.toString());
         body.put("message",message);
         

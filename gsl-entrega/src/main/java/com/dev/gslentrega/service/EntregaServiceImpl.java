@@ -18,7 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import com.dev.gslentrega.entities.Carga;
@@ -35,6 +37,7 @@ import com.dev.gslentrega.enums.TipoModal;
 import com.dev.gslentrega.enums.TipoServico;
 import com.dev.gslentrega.enums.TipoTomadorServico;
 import com.dev.gslentrega.enums.UF;
+import com.dev.gslentrega.errors.AcessoNaoAutorizadoException;
 import com.dev.gslentrega.errors.ClienteNotFoundException;
 import com.dev.gslentrega.errors.EntregaNotFoundException;
 import com.dev.gslentrega.errors.OperacaoNaoEfetuadaException;
@@ -807,8 +810,16 @@ public class EntregaServiceImpl implements EntregaService {
 		// constroi requisição com basic authentication no header
 		HttpEntity<CteRequest> request = new HttpEntity<>(cteRequest, headers);
 
-		CteResponse cteResponse = restTemplate.postForObject(sfcHost + "/sfc/cadastrarCte", request, CteResponse.class);
+		CteResponse cteResponse = null;
+		try {
+			cteResponse = restTemplate.postForObject(sfcHost + "/sfc/cadastrarCte", request, CteResponse.class);
+		} catch (HttpClientErrorException e) {
+			if (HttpStatus.UNAUTHORIZED.equals(e.getStatusCode())) {
+				throw new AcessoNaoAutorizadoException("Acesso não autorizado ao cadastro do CT-e no sistema SFC");
+			}
+		}
 		return cteResponse;
+		
 	}
 	
 	private CteRequest montaCteRequest(Cte cte) {
