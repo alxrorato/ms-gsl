@@ -16,6 +16,8 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -50,7 +52,6 @@ import com.dev.gslentrega.request.DadosSeguroCargaRequest;
 import com.dev.gslentrega.request.EnderecoAtorCteRequest;
 import com.dev.gslentrega.request.EntregaRequest;
 import com.dev.gslentrega.request.NaturezaPrestacaoRequest;
-import com.dev.gslentrega.request.SolicitacaoRequest;
 import com.dev.gslentrega.response.AndamentoEntregaResponse;
 import com.dev.gslentrega.response.CalculoFreteResponse;
 import com.dev.gslentrega.response.CancelamentoResponse;
@@ -82,6 +83,12 @@ public class EntregaServiceImpl implements EntregaService {
 
 	@Value("${gsl-sfc.host}")
 	private String sfcHost;
+	
+	@Value("${gsl-sfc.user}")
+	private String sfcUser;
+	
+	@Value("${gsl-sfc.password}")
+	private String sfcPassword;
 	
 	@Value("${gsl-parceira.host}")
 	private String parceiraHost;
@@ -793,7 +800,14 @@ public class EntregaServiceImpl implements EntregaService {
 
 	private CteResponse sendCteToSfc(CteRequest cteRequest) {
 		
-		CteResponse cteResponse = restTemplate.postForObject(sfcHost + "/sfc/cadastrarCte", cteRequest, CteResponse.class);
+		// adiciona basic authentication
+		HttpHeaders headers = new HttpHeaders();
+		headers.setBasicAuth(sfcUser, sfcPassword);
+
+		// constroi requisição com basic authentication no header
+		HttpEntity<CteRequest> request = new HttpEntity<>(cteRequest, headers);
+
+		CteResponse cteResponse = restTemplate.postForObject(sfcHost + "/sfc/cadastrarCte", request, CteResponse.class);
 		return cteResponse;
 	}
 	

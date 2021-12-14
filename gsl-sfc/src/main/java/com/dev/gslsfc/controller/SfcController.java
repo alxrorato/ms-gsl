@@ -22,7 +22,7 @@ public class SfcController {
 	private SfcService sfcService;
 	
 	@PostMapping("/cadastrarCte")
-	public ResponseEntity<?> adicionarCliente(@Valid @RequestBody CteRequest cteRequest) {
+	public ResponseEntity<?> cadastrarCte(@Valid @RequestBody CteRequest cteRequest) {
 		CteResponse cteResponse = sfcService.cadastrarCte(cteRequest);
 		return new ResponseEntity<>(cteResponse, cteResponse.isCteRecebido() ? HttpStatus.CREATED : HttpStatus.UNPROCESSABLE_ENTITY);
 	}
