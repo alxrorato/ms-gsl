@@ -786,7 +786,7 @@
 			"name": "Fase 4",
 			"item": [
 				{
-					"name": "gsl-entrega",
+					"name": "gsl-entrega - Serviços aos Clientes",
 					"item": [
 						{
 							"name": "Jornada da Entrega",
@@ -1591,6 +1591,21 @@
 								"disableBodyPruning": true
 							},
 							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "hjg$h#3",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "transp01",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"body": {
@@ -1629,6 +1644,21 @@
 								"disableBodyPruning": true
 							},
 							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "k354#y!2",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "localiz01",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"body": {
@@ -1641,16 +1671,15 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:7001/parceira/solicitarParceria/{{cnpj-boa-entrega}}",
+									"raw": "http://localhost:7002/servicos/obterLocalizacao",
 									"protocol": "http",
 									"host": [
 										"localhost"
 									],
-									"port": "7001",
+									"port": "7002",
 									"path": [
-										"parceira",
-										"solicitarParceria",
-										"{{cnpj-boa-entrega}}"
+										"servicos",
+										"obterLocalizacao"
 									]
 								}
 							},
@@ -1708,7 +1737,7 @@
 					]
 				},
 				{
-					"name": "gsl-cliente",
+					"name": "gsl-cliente - Inf. Cadastrais",
 					"item": [
 						{
 							"name": "Crud-Cliente",

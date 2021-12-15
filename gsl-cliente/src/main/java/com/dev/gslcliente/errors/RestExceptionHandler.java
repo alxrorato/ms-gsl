@@ -1,6 +1,6 @@
 package com.dev.gslcliente.errors;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,7 +72,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     private Map<String, Object> bodyResponse(HttpStatus status, String message) {
 
     	Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", new Date());
+        body.put("timestamp", LocalDateTime.now());
         body.put("status", status.toString());
         body.put("message",message);
         

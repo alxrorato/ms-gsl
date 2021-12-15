@@ -134,7 +134,7 @@ public class EntregaController {
 		return ResponseEntity.ok(calculoFreteResponse);
 	}
 	
-	@HystrixCommand(fallbackMethod = "solicitarEntregaFallback")
+	//@HystrixCommand(fallbackMethod = "solicitarEntregaFallback") retirado, senão o fallback do buscaCliente não funcionará
 	@PostMapping("/solicitar")
 	//@Transactional(rollbackFor = Exception.class)
 	@ApiOperation(value = "Solicitar entrega", response = Entrega.class)

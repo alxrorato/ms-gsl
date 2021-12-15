@@ -18,7 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -95,10 +97,22 @@ public class EntregaServiceImpl implements EntregaService {
 	
 	@Value("${gsl-parceira.host}")
 	private String parceiraHost;
+
+	@Value("${gsl-parceira.user}")
+	private String parceiraUser;
+	
+	@Value("${gsl-parceira.password}")
+	private String parceiraPassword;
 	
 	@Value("${gsl-google-services-mock.host}")
 	private String googleServicesMockHost;
 	
+	@Value("${gsl-google-services-mock.user}")
+	private String googleServicesMockUser;
+	
+	@Value("${gsl-google-services-mock.password}")
+	private String googleServicesMockPassword;
+
 	@Value("${cnpj.boaentrega}")
 	private String cnpjBoaEntrega;
 
@@ -253,11 +267,27 @@ public class EntregaServiceImpl implements EntregaService {
 	}
 
 	private ParceiraResponse getParceriaEntrega() {
+
+		// adiciona basic authentication
+		HttpHeaders headers = new HttpHeaders();
+		headers.setBasicAuth(parceiraUser, parceiraPassword);
+		
+		// constroi requisição com basic authentication no header
+		HttpEntity<String> request = new HttpEntity<>(headers);
+		
 		Map<String, String> uriVariables = new HashMap<>();
 		uriVariables.put("cnpjSolicitante", cnpjBoaEntrega);
 		
-		ParceiraResponse parceiraResponse = restTemplate.getForObject(parceiraHost + "/parceira/solicitarParceria/{cnpjSolicitante}", ParceiraResponse.class, uriVariables);
-		return parceiraResponse;
+		ResponseEntity<ParceiraResponse> response = null;
+		try {
+			response = restTemplate.exchange(parceiraHost + "/parceira/solicitarParceria/{cnpjSolicitante}", 
+					HttpMethod.GET, request, ParceiraResponse.class, uriVariables);
+		} catch (HttpClientErrorException e) {
+			if (HttpStatus.UNAUTHORIZED.equals(e.getStatusCode())) {
+				throw new AcessoNaoAutorizadoException("Acesso não autorizado ao sistema da transportadora parceira para solicitação de parceria");
+			}
+		}
+		return response.getBody();
 	}
 
 	private List<Carga> getCargasRequest(EntregaRequest entregaRequest) {
@@ -426,8 +456,9 @@ public class EntregaServiceImpl implements EntregaService {
 					entrega.getDataAlteracao() != null ? entrega.getDataAlteracao() : LocalDateTime.now()));
 
 			// Busca a localização em serviço externo (mock do Google)
-			LocalizacaoGoogleResponse localizacaoGoogleResponse = 
-					restTemplate.getForObject(googleServicesMockHost + "/servicos/obterLocalizacao", LocalizacaoGoogleResponse.class);
+			//restTemplate.getForObject(googleServicesMockHost + "/servicos/obterLocalizacao", LocalizacaoGoogleResponse.class);
+			LocalizacaoGoogleResponse localizacaoGoogleResponse = getLocalizacaoGoogleResponse();
+					
 			
 			LocalizacaoCarga localizacao = new LocalizacaoCarga(localizacaoGoogleResponse.getLatitude(),
 					localizacaoGoogleResponse.getLongitude());
@@ -442,6 +473,27 @@ public class EntregaServiceImpl implements EntregaService {
 		return andamentoEntregaResponse;
 	}
 
+	private LocalizacaoGoogleResponse getLocalizacaoGoogleResponse() {
+
+		// adiciona basic authentication
+		HttpHeaders headers = new HttpHeaders();
+		headers.setBasicAuth(googleServicesMockUser, googleServicesMockPassword);
+		
+		// constroi requisição com basic authentication no header
+		HttpEntity<String> request = new HttpEntity<>(headers);
+		
+		ResponseEntity<LocalizacaoGoogleResponse> response = null;
+		try {
+			response = restTemplate.exchange(googleServicesMockHost + "/servicos/obterLocalizacao", 
+					HttpMethod.GET, request, LocalizacaoGoogleResponse.class);
+		} catch (HttpClientErrorException e) {
+			if (HttpStatus.UNAUTHORIZED.equals(e.getStatusCode())) {
+				throw new AcessoNaoAutorizadoException("Acesso não autorizado a funcionalidade de geo-localização do Google");
+			}
+		}
+		return response.getBody();
+	}
+	
 	private String montaTextoPrevisaoEntrega(LocalDateTime dataPrevisao, LocalDateTime dataConsulta) {
 		long dias = ChronoUnit.DAYS.between(dataConsulta.toLocalDate(), dataPrevisao.toLocalDate());
 		String textoPrevisaoEntrega = "Em " + dias + " dias";
