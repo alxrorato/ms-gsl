@@ -83,7 +83,10 @@ import com.dev.gslentrega.utils.MockUtils;
 import com.dev.gslentrega.utils.RandomUtils;
 import com.dev.gslentrega.utils.UFUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class EntregaServiceImpl implements EntregaService {
 
 	@Value("${gsl-sfc.host}")
@@ -280,8 +283,13 @@ public class EntregaServiceImpl implements EntregaService {
 		
 		ResponseEntity<ParceiraResponse> response = null;
 		try {
+			log.info("Chamando sistema da transportadora parceira: " + parceiraHost + "/parceira/solicitarParceria/{}", 
+					uriVariables.get("cnpjSolicitante"));
+			
 			response = restTemplate.exchange(parceiraHost + "/parceira/solicitarParceria/{cnpjSolicitante}", 
 					HttpMethod.GET, request, ParceiraResponse.class, uriVariables);
+			
+			log.info("Resposta do sistema da transportadora parceira: [{}]", response.getBody().toString());
 		} catch (HttpClientErrorException e) {
 			if (HttpStatus.UNAUTHORIZED.equals(e.getStatusCode())) {
 				throw new AcessoNaoAutorizadoException("Acesso não autorizado ao sistema da transportadora parceira para solicitação de parceria");
