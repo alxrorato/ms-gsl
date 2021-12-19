@@ -23,6 +23,7 @@ import com.dev.gslentrega.request.CalculoFreteRequest;
 import com.dev.gslentrega.request.EntregaRequest;
 import com.dev.gslentrega.response.AndamentoEntregaResponse;
 import com.dev.gslentrega.response.CalculoFreteResponse;
+import com.dev.gslentrega.response.CalculoFreteResponseV2;
 import com.dev.gslentrega.response.CancelamentoResponse;
 import com.dev.gslentrega.response.Cliente;
 import com.dev.gslentrega.response.ConfirmacaoEntregaResponse;
@@ -128,12 +129,20 @@ public class EntregaController {
 
 	@GetMapping(value = "/estimarCalculoFrete")
 	@ApiOperation(value = "Estimar cálculo do frete", response = CalculoFreteResponse.class)
-	@ApiResponse(code = 200, message = "Solicitação de entrega criada", response = CalculoFreteResponse.class)
+	@ApiResponse(code = 200, message = "Estimativa de cálculo realizada", response = CalculoFreteResponse.class)
 	public ResponseEntity<CalculoFreteResponse> estimarCalculoFrete(@Valid @RequestBody CalculoFreteRequest calculoFreteRequest) {
 		CalculoFreteResponse calculoFreteResponse = entregaService.estimarCalculoFrete(calculoFreteRequest);
 		return ResponseEntity.ok(calculoFreteResponse);
 	}
 	
+	@GetMapping(value = "/v2/estimarCalculoFrete")
+	@ApiOperation(value = "Estimar cálculo do frete", response = CalculoFreteResponseV2.class)
+	@ApiResponse(code = 200, message = "Estimativa de cálculo realizada", response = CalculoFreteResponseV2.class)
+	public ResponseEntity<CalculoFreteResponseV2> estimarCalculoFreteV2(@Valid @RequestBody CalculoFreteRequest calculoFreteRequest) {
+		CalculoFreteResponseV2 calculoFreteResponseV2 = entregaService.estimarCalculoFreteV2(calculoFreteRequest);
+		return ResponseEntity.ok(calculoFreteResponseV2);
+	}
+
 	//@HystrixCommand(fallbackMethod = "solicitarEntregaFallback") retirado, senão o fallback do buscaCliente não funcionará
 	@PostMapping("/solicitar")
 	//@Transactional(rollbackFor = Exception.class)

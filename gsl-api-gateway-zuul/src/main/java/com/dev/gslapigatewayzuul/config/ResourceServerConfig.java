@@ -47,7 +47,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 			"/gsl-entrega/**/entregas/solicitar",
 			"/gsl-entrega/**/entregas/cancelarEntrega/**",
 			"/gsl-entrega/**/entregas/efetuarPagamento/**",
-			"/gsl-entrega/**/entregas/estimarCalculoFrete/**"};
+			"/gsl-entrega/**/entregas/estimarCalculoFrete/**",
+			"/gsl-entrega/**/entregas/**/estimarCalculoFrete/**"};
 	
 	private static final String[] CLIENTE_E_COLABORADOR = { "/gsl-cliente/**/add/**", 
 			"/gsl-cliente/**/buscarPorCnpj/**", 

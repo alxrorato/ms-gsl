@@ -59,6 +59,7 @@ import com.dev.gslentrega.request.EntregaRequest;
 import com.dev.gslentrega.request.NaturezaPrestacaoRequest;
 import com.dev.gslentrega.response.AndamentoEntregaResponse;
 import com.dev.gslentrega.response.CalculoFreteResponse;
+import com.dev.gslentrega.response.CalculoFreteResponseV2;
 import com.dev.gslentrega.response.CancelamentoResponse;
 import com.dev.gslentrega.response.Cliente;
 import com.dev.gslentrega.response.ComponenteValor;
@@ -687,6 +688,22 @@ public class EntregaServiceImpl implements EntregaService {
 	}
 
 	@Override
+	public CalculoFreteResponseV2 estimarCalculoFreteV2(@Valid CalculoFreteRequest calculoFreteRequest) {
+		CalculoFreteResponse calculoFreteResponse = estimarCalculoFrete(calculoFreteRequest);
+		CalculoFreteResponseV2 calculoFreteResponseV2 = new CalculoFreteResponseV2();
+		calculoFreteResponseV2.setFatorCubagemKgPorM3(calculoFreteResponse.getFatorCubagemKgPorM3());
+		calculoFreteResponseV2.setPesoTotal(calculoFreteResponse.getPesoTotal());
+		calculoFreteResponseV2.setVolumeTotal(calculoFreteResponse.getVolumeTotal());
+		calculoFreteResponseV2.setPrecoPorKg(calculoFreteResponse.getPrecoPorKg());
+		calculoFreteResponseV2.setPesoCubado(calculoFreteResponse.getPesoCubado());
+		calculoFreteResponseV2.setValorFrete(calculoFreteResponse.getValorFrete());
+		calculoFreteResponseV2.setObservacao(calculoFreteResponse.getObservacao());
+		calculoFreteResponseV2.setDataPrevisaoEntrega(MockUtils.getDataPrevisaoEntrega(LocalDateTime.now(), null, 
+				null, MockUtils.getDistancia(MockUtils.DISTANCIA_LIMITE)));
+		return calculoFreteResponseV2;
+	}
+	
+	@Override
 	public EmissaoCteResponse emitirCte(Long codigoSolicitacao) {
 		Entrega entrega = buscarEntregaByCodigoSolicitacao(codigoSolicitacao);
 		if (entrega.isCteEmitido()) {
@@ -1130,4 +1147,5 @@ public class EntregaServiceImpl implements EntregaService {
 				: entrega.getEnderecoDestino().getCidade() + " - " + 
 					entrega.getEnderecoDestino().getUf().getSigla();
 	}
+
 }

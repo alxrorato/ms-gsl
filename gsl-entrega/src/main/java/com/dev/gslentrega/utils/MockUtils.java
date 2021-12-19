@@ -108,7 +108,9 @@ public class MockUtils {
 	}
 
 	private static long getDaysPrevisaoEntrega(EnderecoOrigem enderecoOrigem, EnderecoDestino enderecoDestino, BigDecimal distancia) {
-		if (enderecoOrigem.getUf().equals(enderecoDestino.getUf()) 
+		if (enderecoOrigem != null && enderecoOrigem.getUf() != null && enderecoOrigem.getCidade() != null
+				&& enderecoDestino != null && enderecoDestino.getUf() != null && enderecoDestino.getCidade() != null
+				&& enderecoOrigem.getUf().equals(enderecoDestino.getUf()) 
 				&& enderecoOrigem.getCidade().equals(enderecoDestino.getCidade())) {
 			
 				return 0;
