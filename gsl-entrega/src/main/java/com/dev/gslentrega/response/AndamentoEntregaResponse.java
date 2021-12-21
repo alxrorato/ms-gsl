@@ -61,5 +61,5 @@ public class AndamentoEntregaResponse implements Serializable {
 	private String previsaoEntrega;
 	
 	@ApiModelProperty(name = "localizacaoCarga", value = "Localização atual da carga em latitude e longitude")	
-	private LocalizacaoCarga localizacaoCarga;;
+	private LocalizacaoCarga localizacaoCarga;
 }
