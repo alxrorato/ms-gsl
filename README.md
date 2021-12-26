@@ -1,7 +1,11 @@
 # ms-gsl
 Gestão de Serviços de Logística - microsserviços
 
-# Instalação da aplicação sem uma IDE
+# Pré-requisitos
+- Java 11 instalado.
+- Spring Boot 2.3.4.RELEASE
+
+# Instalação local da aplicação sem uma IDE
 
 - Abrir uma janela do cmd e fazer o build de todos os projetos usando o pom.xml do nível raiz com o comando abaixo: 
 
@@ -15,7 +19,7 @@ Obs.: aguardar este serviço subir antes de subir o próximo.
 
 2) init-gsl-eureka-server.bat
 Inicializa o serviço gsl-eureka-server na porta 8761.
-Obs.: aguardar este serviço subir antes de subir od demais.
+Obs.: aguardar este serviço subir antes de subir os demais.
 
 3) init-demais.bat 
 

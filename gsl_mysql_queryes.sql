@@ -25,6 +25,9 @@ use gsl_entrega
 select * from tb_carga
 select * from tb_endereco
 select count(1) from tb_entrega
+select * from tb_entrega where codigo_solicitacao = 402346983175
+update tb_entrega set status_pagamento = 1 where codigo_solicitacao = 402346983175
+commit;
 select * from tb_entrega_cargas
 truncate table tb_entrega_cargas
 truncate table tb_entrega_cargas
