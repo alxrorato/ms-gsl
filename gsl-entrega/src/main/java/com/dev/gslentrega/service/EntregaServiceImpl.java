@@ -493,8 +493,13 @@ public class EntregaServiceImpl implements EntregaService {
 		
 		ResponseEntity<LocalizacaoGoogleResponse> response = null;
 		try {
+			log.info("Chamando url do serviço externo [{}/servicos/obterLocalizacao]", googleServicesMockHost);
+
 			response = restTemplate.exchange(googleServicesMockHost + "/servicos/obterLocalizacao", 
 					HttpMethod.GET, request, LocalizacaoGoogleResponse.class);
+
+			log.info("Resposta mockada do serviço externo de geo-localização: [{}]", response.getBody().toString());
+			
 		} catch (HttpClientErrorException e) {
 			if (HttpStatus.UNAUTHORIZED.equals(e.getStatusCode())) {
 				throw new AcessoNaoAutorizadoException("Acesso não autorizado a funcionalidade de geo-localização do Google");
@@ -862,7 +867,7 @@ public class EntregaServiceImpl implements EntregaService {
 		cte.setDadosSeguroCarga(dadosSeguroCarga);
 		cte.setComponentesValorPrestacaoServico(cvps);
 		
-		//Enviodo CT-e ao SFC
+		//Envio do CT-e ao SFC
 		CteRequest cteRequest = montaCteRequest(cte);
 		CteResponse cteResponse = sendCteToSfc(cteRequest);
 		
@@ -889,7 +894,13 @@ public class EntregaServiceImpl implements EntregaService {
 
 		CteResponse cteResponse = null;
 		try {
+			log.info("Enviando dados do CT-e para o sistema legado SFC [{}/sfc/cadastrarCte] no request body {}", 
+					sfcHost, cteRequest.toString());
+
 			cteResponse = restTemplate.postForObject(sfcHost + "/sfc/cadastrarCte", request, CteResponse.class);
+			
+			log.info("Resposta do SFC: [{}]", cteResponse.toString());
+
 		} catch (HttpClientErrorException e) {
 			if (HttpStatus.UNAUTHORIZED.equals(e.getStatusCode())) {
 				throw new AcessoNaoAutorizadoException("Acesso não autorizado ao cadastro do CT-e no sistema SFC");
