@@ -1,35 +1,25 @@
 # ms-gsl
 Gestão de Serviços de Logística - microsserviços
 
-# Pré-requisitos
-- Java 11 instalado.
+# Tecnologias utilizadas
+- Java 11
 - Spring Boot 2.3.4.RELEASE
+- Spring Cloud
+- Spring Data JPA
+- Maven
 
-# Instalação local da aplicação sem uma IDE
+# Sobre o projeto
 
-- Abrir uma janela do cmd e fazer o build de todos os projetos usando o pom.xml do nível raiz com o comando abaixo: 
+# Como testar
+Os testes devem ser realizados pela ferramenta Postman e para isto deve ser importada a collection ms-gsl.postman_collection.json
+que se encontra no diretório raiz do projeto
 
-mvn –Dmaven.test.skip=true clean install
+Incluir usuário e senha nas variáveis de ambiente username e password, respectivamente, conforme imagem abaixo:
 
-- Instalar os microsserviços executando os arquivos BAT abaixo nesta ordem:
 
-1) init-gls-config-server.bat
-Inicializa o serviço gsl-config-server na porta 8888. 
-Obs.: aguardar este serviço subir antes de subir o próximo.
+Usuários, senhas e roles:
 
-2) init-gsl-eureka-server.bat
-Inicializa o serviço gsl-eureka-server na porta 8761.
-Obs.: aguardar este serviço subir antes de subir os demais.
-
-3) init-demais.bat 
-
-- Inicializa os seguintes microsserviços em portas aleatórias:
-gls-user, gsl-oauth, gsl-cliente e gsl-entrega
-Caso deseje utilizar uma porta fixa, basta alterar o bat e indicar uma porta específica em "-Dserver.port".
-Ex.: start java -Dserver.port=8080 -jar gsl-entrega\target\gsl-entrega-0.0.1-SNAPSHOT.jar
-
-- Inicializa o serviço legado gsl-sfc na porta fixa 8500, que está configurada no arquivo application.properties, o qual pode ser alterado
-caso deseje utilizar outra porta.
-
-- Inicializa os serviços externos gsl-parceira e gsl-google-services-mock nas portas 7001 e 7002, respectivamente, e que podem ser alteradas
-indicando as novas portas nos respectivos arquivos application.properties desses serviços.
+jose@gmail.com	- CLIENTE		- 123456
+lucas@gmail.com	- COLABORADOR	- 123457
+cristina@gmail.com	- FORNECEDOR	- 123458
+alexandre@gmail.com	- ADMIN		- 123459
