@@ -1,35 +1,52 @@
 # ms-gsl
 Gestão de Serviços de Logística - microsserviços
 
-# Pré-requisitos
-- Java 11 instalado.
+## Tecnologias utilizadas
+- Java 11
 - Spring Boot 2.3.4.RELEASE
+- Spring Cloud
+- Spring Data JPA
+- MySQL 8.0
+- H2
+- Maven
 
-# Instalação local da aplicação sem uma IDE
+## IDE utilizada
+- Spring Tools Suite 4
 
-- Abrir uma janela do cmd e fazer o build de todos os projetos usando o pom.xml do nível raiz com o comando abaixo: 
+## Sobre o projeto
+Este projeto é uma prova de conceito para o Sistema de Gestão de Serviços de Logística (GSL), uma arquitetura baseada em microsserviços, com o objetivo de atender as necessidades de uma transportadora nas jornadas de entregas demandadas pelos sites de e-commerce, por exemplo, de supermercados, farmácias, lojas, etc.
+A figura abaixo ilustra esta implementação e contém comentários explicando os principais módulos:
+![POC](https://github.com/alxrorato/ms-gsl-images/blob/main/POC-estrutura-implementacao.png)
 
-mvn –Dmaven.test.skip=true clean install
+Esta POC teve como objetivo a implementação de 3 casos de uso:
+- UC01 - Estimar valor do frete - Ator: cliente
+- UC02 - Solicitar entrega com acionamento de transportadora parceira - Atores: cliente e transportadora parceira
+- UC03 - Emissão do CT-e (Conhecimento de Transporte Eletrônico) - Ator: colaborador da transportadora
 
-- Instalar os microsserviços executando os arquivos BAT abaixo nesta ordem:
+## Definir qual banco de dados será utilizado:
+Nos microsserviços gsl-entrega, gsl-cliente e gsl-user, acessar no projeto o arquivo bootstrap.properties, abaixo da pasta resources, e alterar o parâmetro "spring.profiles.active" para umas das duas strings abaixo:
+- prod : se desejar utilizar o MySql
+- test : se desejar utilizar o H2.
 
-1) init-gls-config-server.bat
-Inicializa o serviço gsl-config-server na porta 8888. 
-Obs.: aguardar este serviço subir antes de subir o próximo.
+## Como subir localmente os microsserviços pela IDE 
+Conforme a figura, os primeiros microsserviços a subir devem ser o gsl-config-server e o gsl-eureka-server. E em seguida os demais, em qualquer ordem
+![STS](https://github.com/alxrorato/ms-gsl-images/blob/main/STS-img.png)
 
-2) init-gsl-eureka-server.bat
-Inicializa o serviço gsl-eureka-server na porta 8761.
-Obs.: aguardar este serviço subir antes de subir os demais.
+## Como executar
+Os testes devem ser realizados pela ferramenta Postman e para isto deve ser importada a collection ms-gsl.postman_collection.json
+que se encontra no diretório raiz do projeto.
 
-3) init-demais.bat 
+Incluir usuário e senha nas variáveis de ambiente username e password, respectivamente, conforme imagem abaixo:
 
-- Inicializa os seguintes microsserviços em portas aleatórias:
-gls-user, gsl-oauth, gsl-cliente e gsl-entrega
-Caso deseje utilizar uma porta fixa, basta alterar o bat e indicar uma porta específica em "-Dserver.port".
-Ex.: start java -Dserver.port=8080 -jar gsl-entrega\target\gsl-entrega-0.0.1-SNAPSHOT.jar
 
-- Inicializa o serviço legado gsl-sfc na porta fixa 8500, que está configurada no arquivo application.properties, o qual pode ser alterado
-caso deseje utilizar outra porta.
+## Usuários, senhas e roles para testes:
 
-- Inicializa os serviços externos gsl-parceira e gsl-google-services-mock nas portas 7001 e 7002, respectivamente, e que podem ser alteradas
-indicando as novas portas nos respectivos arquivos application.properties desses serviços.
+jose@gmail.com - 123456	- CLIENTE
+lucas@gmail.com	- 123457 - COLABORADOR
+cristina@gmail.com - 123458	- FORNECEDOR
+alexandre@gmail.com	- 123459- ADMIN
+
+## Autor
+Alexandre Rorato Carneiro
+
+https://www.linkedin.com/in/alexandre-rorato-carneiro-a28a9b2b/
