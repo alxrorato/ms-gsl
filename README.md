@@ -51,6 +51,10 @@ que se encontra no diretório raiz do projeto.
 
 ![USER_PASS](https://github.com/alxrorato/ms-gsl-images/blob/main/Postman-user_pass.png)
 
+2) Efetuar o login e geração do token de autorização:
+
+![LOGIN_TOKEN](https://github.com/alxrorato/ms-gsl-images/blob/main/Postman-login-token.png)
+
 ## Usuários, senhas e roles para testes:
 
 jose@gmail.com - 123456	- CLIENTE
