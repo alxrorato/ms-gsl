@@ -26,16 +26,13 @@ Todas as requisições às funcionalidades e também o login, passam pelo micros
 - gsl-config-server: microsserviço que fornece aos demais microssesrviços, acesso ao repositório ms-gsl-configs no Github, para obtenção de dados de configurações presentes em     arquivos properties deste repositório.
 - gsl-parceira: microsserviço fora do contexto do Spring Cloud. Representa um sistema externo de uma transportadora parceira, e retorna dados mockados, quando acionado pela                     funcionalidade de solicitação de entrega (UC01).
 - gsl-sfc: microsserviço fora do contexto do Spring Cloud. Representa o sistema legado de faturamento e cobrança (SFC), que foi implementado para receber os dados de um CT-e       emitido. É acionado pela funcionalidade de emissão do CT-e (UC03)
-- gsl-google-services-mock: microsserviço que não faz parte do contexto desta POC. Representa um sistema de geo-localização, retornando dados mockados de latitude e longitute. Foi implementado pensando-se numa evolução posterior desta POC, para atender à funcionalidade de consulta do andamento de uma entrega, que também faz parte de uma jornada de entrega, e não está no escopo desta POC. Portanto, não há necessidade de subir este microsserviço para os testes dos casos de uso escopo desta POC já citados.
+- gsl-google-services-mock: microsserviço que não faz parte do contexto desta POC e por isto não consta no desenho abaixo. Representa um sistema de geo-localização, retornando     dados mockados de latitude e longitute. Foi implementado pensando-se numa evolução posterior desta POC, para atender à funcionalidade de consulta do andamento de uma entrega,   que também faz parte de uma jornada de entrega, e não está no escopo desta POC, apesar de ter sido implementada no gsl-entrega. Portanto, não há necessidade de subir este       microsserviço para os testes dos casos de uso escopo desta POC já citados.
 
 A figura abaixo ilustra esta implementação e contém comentários explicando os principais módulos:
 
 ![POC](https://github.com/alxrorato/ms-gsl-images/blob/main/POC-estrutura-implementacao.png)
 
-Esta POC teve como objetivo a implementação de 3 casos de uso:
-- UC01 - Estimar valor do frete - Ator: cliente
-- UC02 - Solicitar entrega com acionamento de transportadora parceira - Atores: cliente e transportadora parceira
-- UC03 - Emissão do CT-e (Conhecimento de Transporte Eletrônico) - Ator: colaborador da transportadora
+Esta POC teve como objetivo a implementação dos 3 casos de uso já citados e validar os requisitos funcionais de desempenho, segurança, interoperabilidade e manutenibilidade.
 
 ## Definir qual banco de dados será utilizado:
 Nos microsserviços gsl-entrega, gsl-cliente e gsl-user, acessar no projeto o arquivo bootstrap.properties, abaixo da pasta resources, e alterar o parâmetro "spring.profiles.active" para umas das duas strings abaixo:
