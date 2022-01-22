@@ -1,5 +1,4 @@
-# ms-gsl
-Sistema de Gestão de Serviços de Logística
+# Sistema de Gestão de Serviços de Logística
 
 ## Tecnologias utilizadas
 - Java 11
