@@ -1,4 +1,4 @@
-# Sistema de Gestão de Serviços de Logística
+# Sistema de Gestão de Serviços de Logística (GSL)
 
 ## Tecnologias utilizadas
 - Java 11
@@ -13,7 +13,7 @@
 - Spring Tools Suite 4
 
 ## Sobre o projeto
-Este projeto é uma prova de conceito, desenvolvida somente na camada back-end, para o __Sistema de Gestão de Serviços de Logística__ (GSL), uma arquitetura baseada em microsserviços, com o objetivo de atender as necessidades de uma transportadora nas jornadas de entregas demandadas pelos sites de e-commerce, por exemplo, de supermercados, farmácias, lojas, etc.
+Este projeto é uma prova de conceito, desenvolvida somente na camada back-end, sendo uma arquitetura baseada em microsserviços, com o objetivo de atender as necessidades de uma transportadora nas jornadas de entregas demandadas pelos sites de e-commerce, por exemplo, de supermercados, farmácias, lojas, etc.
 Todas as requisições às funcionalidades e também o login, passam pelo microsserviço __gsl-api-gateway-zuul__, que roteará as requisições aos microsserviços de destino com o auxílio do microsserviço __gsl-eureka-server__, responsável por tornar detectáveis os endereços dos microsserviços de destino sem que os aplicativos clientes possuam o endereço deles codificados. Os demais microsserviços desta implementação são:
 - __gsl-entrega__: implementa as funcionalidades referente a uma jornada de entrega, com ênfase às que são referentes aos casos de uso previstos para esta POC:
   - __UC01 - Estimar valor do frete__ - Ator: cliente
@@ -43,23 +43,39 @@ Conforme a figura, os primeiros microsserviços a subir devem ser o gsl-config-s
 ![STS](https://github.com/alxrorato/ms-gsl-images/blob/main/STS-img.png)
 
 ## Como executar os casos de uso
-Os testes devem ser realizados pela ferramenta __Postman_ e para isto deve ser importada a collection **_ms-gsl.postman_collection.json_**
-que se encontra no diretório raiz do projeto.
+Os testes devem ser realizados pela ferramenta __Postman__ e para isto deve ser importada a collection **_ms-gsl.postman_collection.json_**
+que se encontra no diretório raiz do projeto. As funcionalidades configuradas nele já estão com suas abas Body preenchidas (se aplicável) e na aba Authorization o token é automaticamente informado porque faz referência a variável de ambiente {{token}}, cujo conteúdo é sempre o token gerado no último login. Nas URLs, são referenciadas a variável de ambiente {{api-gateway}}, que é o endereço de microsserviço gsl-api-gateway-zuul; e quando aplicável, alguma variável referenciando um parâmetro, por exemplo, {{codigo-solicitacao}}
 
-1) Primeiramente, incluir usuário e senha para login nas variáveis de ambiente username e password, respectivamente, conforme imagem abaixo:
+__1)__ Antes, incluir usuário e senha para login nas variáveis de ambiente username e password, respectivamente, conforme imagem abaixo:
 
+   __Obs.:__ no tópico seguinte deste documento há alguns usuários carregados no banco no momento da inicialização do microsserviço gsl-user, com suas respectivas roles. Para os              casos de uso UC01 e UC02, o usuário logado dever possuir a role CLIENTE ou ADMIN; e para o caso de uso UC03, a role COLABORADOR ou ADMIN.
+   
 ![USER_PASS](https://github.com/alxrorato/ms-gsl-images/blob/main/Postman-user_pass.png)
 
-2) Efetuar o login e geração do token de autorização:
+__2)__ Efetuar o login e geração do token de autorização:
 
 ![LOGIN_TOKEN](https://github.com/alxrorato/ms-gsl-images/blob/main/Postman-login-token.png)
 
-## Usuários, senhas e roles para testes:
+__3)__ Executar caso de uso UC01:
 
-jose@gmail.com - 123456	- CLIENTE
-lucas@gmail.com	- 123457 - COLABORADOR
-cristina@gmail.com - 123458	- FORNECEDOR
-alexandre@gmail.com	- 123459- ADMIN
+![UC01](https://github.com/alxrorato/ms-gsl-images/blob/main/Postman-UC01.png)
+
+__4)__ Executar caso de uso UC02:
+
+![UC02](https://github.com/alxrorato/ms-gsl-images/blob/main/Postman-UC02.png)
+
+__5)__ Executar caso de uso UC03:
+
+![UC03](https://github.com/alxrorato/ms-gsl-images/blob/main/Postman-UC03.png)
+
+## Usuários para testes:
+
+Seguem usuários seguidos de suas respectivas senhas e roles
+
+- jose@gmail.com - 123456	- CLIENTE
+- lucas@gmail.com	- 123457 - COLABORADOR
+- cristina@gmail.com - 123458	- FORNECEDOR
+- alexandre@gmail.com	- 123459- ADMIN
 
 ## Autor
 Alexandre Rorato Carneiro
