@@ -77,6 +77,9 @@ Seguem usuários seguidos de suas respectivas senhas e roles
 - cristina@gmail.com - 123458	- FORNECEDOR
 - alexandre@gmail.com	- 123459- ADMIN
 
+## Documento do TCC: 
+https://github.com/alxrorato/ms-gsl-images/blob/main/TCC_Alexandre-Rorato-Carneiro.pdf
+
 ## Autor
 Alexandre Rorato Carneiro
 
