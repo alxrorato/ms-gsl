@@ -13,7 +13,7 @@
 - Spring Tools Suite 4
 
 ## Sobre o projeto
-Este projeto é uma prova de conceito que faz parte do meu TCC da pós-graduação em Arquitetura de Software Distribuído da PUC-Minas, desenvolvida somente na camada back-end, para uma arquitetura baseada em microsserviços, com o objetivo de atender as necessidades de uma transportadora nas jornadas de entregas demandadas pelos sites de e-commerce, por exemplo, de supermercados, farmácias, lojas, etc.
+Este projeto é uma prova de conceito que faz parte do meu TCC da pós-graduação em Arquitetura de Software Distribuído na PUC-Minas, desenvolvida somente na camada back-end, para uma arquitetura baseada em microsserviços, com o objetivo de atender as necessidades de uma transportadora nas jornadas de entregas demandadas pelos sites de e-commerce, por exemplo, de supermercados, farmácias, lojas, etc.
 Todas as requisições às funcionalidades e também o login, passam pelo microsserviço __gsl-api-gateway-zuul__, que roteará as requisições aos microsserviços de destino com o auxílio do microsserviço __gsl-eureka-server__, responsável por tornar detectáveis os endereços dos microsserviços de destino sem que os aplicativos clientes possuam o endereço deles codificados. Os demais microsserviços desta implementação são:
 - __gsl-entrega__: implementa as funcionalidades referente a uma jornada de entrega, com ênfase às que são referentes aos casos de uso previstos para esta POC:
   - __UC01 - Estimar valor do frete__ - Ator: cliente
